@@ -137,7 +137,7 @@
 	
 	<!-- 메일 1개 불러오기 -->
 		<select id="selectOne" parameterType="String" resultType="Mailinfo">
-		SELECT
+		SELECT 
 			P.email_code
 			, P.company_code
 			, T.email_title
