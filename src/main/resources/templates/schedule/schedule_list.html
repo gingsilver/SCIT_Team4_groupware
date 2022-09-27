@@ -90,12 +90,42 @@
                 },
                 displayEventTime: false // 시간 표시 x
                 ,eventClick: function(info) {
+                	
+                	//일정 클릭시의 해당 일정 정보를 모두 콘솔에 출력한다.
                 	console.log(info.event);
                 	
+                	//스케줄의 제목과 내용을 출력한다.
                 	$('#schedule_title2').val(info.event._def.title);
                 	$('#schedule_contents2').val(info.event._def.extendedProps.contents);
-                	$('#schedule_startDate2').val(info.event._def.start);
-                	$('#schedule_endDate2').val(info.event._def.end);
+                	
+                	//스케줄의 시작일을 출력한다. (날짜형식이 다르므로 직접 작성해야한다.)
+                	let startDate = new Date(info.event._instance.range.start);
+                	let startDateStr = startDate.getFullYear() + "-" + 
+                				((startDate.getMonth()+1)>=10 ? startDate.getMonth()+1 : "0"+(startDate.getMonth()+1)) + "-" + 
+                				(startDate.getDate()>=10 ? startDate.getDate() : "0"+startDate.getDate()) + " " + 
+                				(startDate.getHours()>=10 ? startDate.getHours() : "0"+startDate.getHours())+ ":" + 
+                				(startDate.getMinutes()>=10 ? startDate.getMinutes() : "0"+startDate.getMinutes());
+                				
+                	console.log(startDateStr);
+                	
+                	$('#schedule_startDate2').val(startDateStr);
+                	
+                	
+                	//스케줄의 종료일을 출력한다. (날짜형식이 다르므로 직접 작성해야한다.)
+                	let endDate = new Date(info.event._instance.range.end);
+                	let endDateStr = endDate.getFullYear() + "-" + 
+                				((endDate.getMonth()+1)>=10 ? endDate.getMonth()+1 : "0"+(endDate.getMonth()+1)) + "-" + 
+                				(endDate.getDate()>=10 ? endDate.getDate() : "0"+endDate.getDate()) + " " + 
+                				(endDate.getHours()>=10 ? endDate.getHours() : "0"+endDate.getHours())+ ":" + 
+                				(endDate.getMinutes()>=10 ? endDate.getMinutes() : "0"+endDate.getMinutes());
+                	
+                	
+                	
+                	console.log(endDateStr)
+                	
+                	
+                	
+                	$('#schedule_endDate2').val(endDateStr);
                 	
                 	$('#calendarModal2').modal('show');
 				}
