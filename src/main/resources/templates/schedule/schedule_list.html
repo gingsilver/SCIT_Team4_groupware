@@ -100,6 +100,7 @@
                 	
                 	//스케줄의 시작일을 출력한다. (날짜형식이 다르므로 직접 작성해야한다.)
                 	let startDate = new Date(info.event._instance.range.start);
+                	startDate.setHours(startDate.getHours()-9);
                 	let startDateStr = startDate.getFullYear() + "-" + 
                 				((startDate.getMonth()+1)>=10 ? startDate.getMonth()+1 : "0"+(startDate.getMonth()+1)) + "-" + 
                 				(startDate.getDate()>=10 ? startDate.getDate() : "0"+startDate.getDate()) + " " + 
@@ -113,6 +114,7 @@
                 	
                 	//스케줄의 종료일을 출력한다. (날짜형식이 다르므로 직접 작성해야한다.)
                 	let endDate = new Date(info.event._instance.range.end);
+                	endDate.setHours(endDate.getHours()-9);
                 	let endDateStr = endDate.getFullYear() + "-" + 
                 				((endDate.getMonth()+1)>=10 ? endDate.getMonth()+1 : "0"+(endDate.getMonth()+1)) + "-" + 
                 				(endDate.getDate()>=10 ? endDate.getDate() : "0"+endDate.getDate()) + " " + 
@@ -181,8 +183,8 @@
         		let event = new Object();
         		event.id = obj.schedule_num;
         		event.title = obj.schedule_title;
-        		if(obj.schedule_allDay === '1')
-					event.allDay = true;
+        		//if(obj.schedule_allDay === '1')
+				//	event.allDay = true;
         		event.start = obj.schedule_startDate.replace(' ', 'T');
         		event.end = obj.schedule_endDate.replace(' ', 'T');
         		event.textColor = obj.schedule_textColor;
