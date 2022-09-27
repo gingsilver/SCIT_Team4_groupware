@@ -18,6 +18,6 @@ public class Mailinfo {
 	String email_important;			//중요메일여부 0 : 보통 메일, 1 : 중요 메일
 	String email_trash;				//휴지통 여부 0 : 보관 메일, 1: 휴지통 메일
 	String email_total_receiver;	//받는 사람(다수의 수신인, 다수의 참조인)
-	String[] email_receiver;		//수신인
-	String[] email_cc_receiver;		//참조인
+	String email_receiver;		//수신인
+	String email_cc_receiver;		//참조인
 }
