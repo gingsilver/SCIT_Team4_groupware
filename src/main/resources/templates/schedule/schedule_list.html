@@ -39,10 +39,6 @@
   <!-- Template Main CSS File -->
   <link th:href="@{/assets/css/style.css}" rel="stylesheet">
 
-	
-	
-
-
     <script type="text/javascript" th:inline="javascript">
         document.addEventListener('DOMContentLoaded', function () {
         	selectScheduleList();
@@ -93,10 +89,42 @@
                     }
                 },
                 displayEventTime: false // 시간 표시 x
+                ,eventClick: function(info) {
+                	console.log(info.event);
+                	
+                	$('#schedule_title2').val(info.event._def.title);
+                	$('#schedule_contents2').val(info.event._def.extendedProps.contents);
+                	$('#schedule_startDate2').val(info.event._def.start);
+                	$('#schedule_endDate2').val(info.event._def.end);
+                	
+                	$('#calendarModal2').modal('show');
+				}
             });
             
             calendar.render();
         }
+        
+        
+        /* 클릭이벤트 추가 코드 
+        
+        
+        var calendar = new Calendar(calendarEl, {
+
+	  eventClick: function(info) {
+	    alert('Event: ' + info.event.title);
+	    alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+	    alert('View: ' + info.view.type);
+	
+	    // change the border color just for fun
+	    info.el.style.borderColor = 'red';
+	  }
+	
+	});
+        
+        
+        
+        */
+        
         
         function selectScheduleList(){
         	$.ajax({
@@ -200,10 +228,6 @@
     </div>
     
     <!-- 일정클릭 때의 modal -->
-    
-    <!--  
-    
-        
     <div class="modal fade" id="calendarModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -215,28 +239,23 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                        <label for="taskId" class="col-form-label">일정 제목</label>
-                        <input type="text" class="form-control" id="schedule_title" th:value="${scheduleList.schedule_title}">                    
-                        <label for="taskId" class="col-form-label">일정 내용</label>
-                        <input type="text" class="form-control" id="schedule_contents" th:value="${scheduleList.schedule_contents}">
-                        <label for="taskId" class="col-form-label">시작 날짜</label>
-                        <input type="datetime-local" class="form-control" id="schedule_startDate" th:value="${scheduleList.schedule_startDate}">
-                        <label for="taskId" class="col-form-label">종료 날짜</label>
-                        <input type="datetime-local" class="form-control" id="schedule_endDate" th:value="${scheduleList.schedule_endDate}">
-                    
+                        <label for="schedule_title2" class="col-form-label">일정 제목</label>
+                        <input type="text" class="form-control" id="schedule_title2" >                    
+                        <label for="schedule_contents2" class="col-form-label">일정 내용</label>
+                        <input type="text" class="form-control" id="schedule_contents2">
+                        <label for="schedule_startDate2" class="col-form-label">시작 날짜</label>
+                        <input type="datetime-local" class="form-control" id="schedule_startDate2">
+                        <label for="schedule_endDate2" class="col-form-label">종료 날짜</label>
+                        <input type="datetime-local" class="form-control" id="schedule_endDate2">
                 </div>
                 <div class="modal-footer">
+                <button type="submit" class="btn btn-warning" id="deleteCalendar">삭제</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"
-                        id="sprintSettingModalClose">취소</button>
+                        id="sprintSettingModalClose2">취소</button>
                 </div>
-              
-    
             </div>
         </div>
     </div>
-    
-    -->
-    
      <!-- 일정클릭 때의 modal 끝 -->
      
      
