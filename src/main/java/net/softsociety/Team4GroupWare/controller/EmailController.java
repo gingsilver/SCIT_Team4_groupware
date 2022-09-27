@@ -76,7 +76,7 @@ public class EmailController {
 		email.setEmail_sender(email_sender);
 		email.setCompany_code("COM0007"); //로그인 정보 받아와서 넣기 현재는 임시 정보
 
-		/*---------------------이메일 정보를 메일함에 보내기--------------------------*/
+		/*---------------------이메일 정보를 메일함에 보내기----------------------------*/
 		
 		int return_email_code = service.sendMailWithFiles(email, upload, mail_process); //성공1, 실패0으로 넘어옴
 		String new_email_code = email.getEmail_code();
