@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <title>KUROWARE 회사생성 페이지</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon : 탭 창에서 보이는 이모티콘-->
+    <link th:href="@{assets/img/favicon.png}" th:rel="icon">
+
+    <!-- Google Web Fonts -->
+  	<link href="https://fonts.gstatic.com" rel="preconnect">
+  	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link th:href="@{/assets/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
+    <link th:href="@{/assets/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css}" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link th:href="@{/assets/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+
+    <!-- Template Stylesheet -->
+    <link th:href="@{/assets/css/style2.css}" rel="stylesheet" type="text/css">
+    
+    <!-- 제이쿼리, 에이젝스 -->
+    <script th:src="@{/assets/js/jquery-3.6.0.js}"></script>
+
+	<script>
+		$(document).ready(function() {
+			$('#findcompany').hide();
+			$('#company_business_num').on('keyup', validation);
+			$('#employee_id').on('keyup', idvalidation);
+			$('#employee_pwd2').on('keyup', pwdvalidation);
+			
+			$('#findcompany').on('click', findCompany)
+			
+			$('#submitButton').on('click', joinCompany);
+		});
+		
+		function validation() {
+			let company_business_num = $(this).val();
+			
+			
+			if(company_business_num.length != 10){
+				$('#businessnummsg').html('<p>올바른 사업자 번호를 입력해주세요.</p>');
+				$('#submitButton').attr('disabled', true);
+				return;
+			} else {
+				$.ajax({
+					url : 'checkBusinessNum',
+					type : 'post',
+					data : {company_business_num : company_business_num},
+					success : function (result) {
+						if(result == 0){
+							$('#businessnummsg').html('');
+							$('#submitButton').attr('disabled', false);
+						} else{
+							$('#businessnummsg').html('<p><b style="color : red">등록된 회사</b> 입니다. 계정 찾기를 이용해주세요</p>');
+							$('#findcompany').show();
+							$('#submitButton').attr('disabled', true);
+						}
+					},
+					error : function () {
+						alert('중복체크 실패');
+					}
+				});
+				
+				$('#businessnummsg').html('');
+				$('#submitButton').attr('disabled', false);
+				}
+		}
+		
+		function findCompany() {
+			let company_business_num = $('#company_business_num').val();
+			
+			$.ajax({
+				url : 'findCompany',
+				type : 'get',
+				data : {company_business_num : company_business_num},
+				success : function (result) {
+					$('#businessnummsg').html('<span>등록된 관리자ID : </span>' + result);
+				},
+				error : function () {
+					alert('불러오기 실패');
+				}
+			});
+		}
+		
+		function idvalidation() {
+			let id = $(this).val();
+
+			if(id.length > 3){
+				$.ajax({
+					url : 'checkid',
+					type : 'post',
+					data : {employee_id : id},
+					success : function (result) {
+						if(result == 0){
+							$('#idmsg').html('');
+							$('#submitButton').attr('disabled', false);
+						} else{
+							$('#idmsg').html('<p><b style="color : red">중복된 ID</b> 입니다. 다른 ID를 입력해주세요.</p>');
+							$('#submitButton').attr('disabled', true);
+						}
+					},
+					error : function () {
+						alert('중복체크 실패');
+					}
+				});
+			}
+		}
+		
+		function idvalidation() {
+			let id = $(this).val();
+
+			if(id.length > 3){
+				$.ajax({
+					url : 'checkid',
+					type : 'post',
+					data : {employee_id : id},
+					success : function (result) {
+						if(result == 0){
+							$('#idmsg').html('');
+							$('#submitButton').attr('disabled', false);
+						} else{
+							$('#idmsg').html('<p><b style="color : red">중복된 ID</b> 입니다. 다른 ID를 입력해주세요.</p>');
+							$('#submitButton').attr('disabled', true);
+						}
+					},
+					error : function () {
+						alert('중복체크 실패');
+					}
+				});
+			}
+		}
+		
+		function pwdvalidation() {
+			let employee_pwd = $('#employee_pwd').val();
+			let employee_pwd2 = $(this).val();
+			
+			console.log(employee_pwd);
+			console.log(employee_pwd2);
+			
+			if(employee_pwd != employee_pwd2){
+				$('#passwordmsg').html('<p>올바른 비밀번호를 입력해주세요.</p>');
+				$('#submitButton').attr('disabled', true);
+				return;
+			} else {
+				$('#passwordmsg').html('');
+				$('#submitButton').attr('disabled', false);
+			}
+		}
+		
+		function joinCompany() {
+			let company_name = $('#company_name').val();
+			let company_business_num = $('#company_business_num').val();
+			let company_ceo_name = $('#company_ceo_name').val();
+			let company_postcode = $('#company_postcode').val();
+			let company_address = $('#company_address').val();
+			let company_detailaddress = $('#company_detailaddress').val();
+			
+			let employee_id = $('#employee_id').val();
+			let employee_email = $('#employee_email').val();
+			let employee_pwd = $('#employee_pwd').val();
+			let employee_pwd2 = $('#employee_pwd2').val();
+			
+			if(!(employee_id.length >= 3 && employee_id.length <= 20)){
+				alert("관리자 아이디는 3~20자 이내로 입력해주세요.");
+				employee_id.select();
+				employee_id.focus();
+		        return;
+			}
+			
+			if(!(employee_pwd.length >= 3 && employee_pwd.length <= 20 )){
+				alert("관리자 비밀번호는 3~20자 이내로 입력해주세요.");
+				employee_pwd.select();
+				employee_pwd.focus();
+		        return;
+			}
+			
+			if(employee_pwd != employee_pwd2) {
+				alert("올바른 관리자 비밀번호를 입력해주세요.");
+				employee_pwd2.select();
+				employee_pwd2.focus();
+		        return;
+			}
+			
+			if(employee_email.length < 0 || employee_email == '' || employee_email == null){
+				alert("올바른 관리자 이메일을 입력해주세요.");
+				employee_email.select();
+				employee_email.focus();
+				return;
+			}
+
+			if(company_name.length < 0 || company_name == '' || company_name == null){
+				alert("올바른 회사명을 입력해주세요.");
+				company_name.select();
+				company_name.focus();
+				return;
+			}
+			
+			if(company_business_num.length != 10){
+				alert("올바른 사업자 번호를 입력해주세요.");
+				company_business_num.select();
+				company_business_num.focus();
+				return;
+			}
+			
+			if(company_ceo_name.length < 0 || company_ceo_name == '' || company_ceo_name == null){
+				alert("올바른 대표자명을 입력해주세요.");
+				company_ceo_name.select();
+				company_ceo_name.focus();
+				return;
+			}
+			
+			if(company_postcode.length < 0 || company_postcode == '' || company_postcode == null){
+				alert("올바른 우편번호를 입력해주세요.");
+				return;
+			}
+			
+			if(company_address.length < 0 || company_address == '' || company_address == null){
+				alert("올바른 주소를 입력해주세요.");
+				return;
+			}
+			
+			if(company_detailaddress.length < 0 || company_detailaddress == '' || company_detailaddress == null){
+				alert("올바른 상세주소를 입력해주세요.");
+				company_detailaddress.select();
+				company_detailaddress.focus();
+				return;
+			}
+			
+			$('#joinMember').submit();
+			
+		}
+	</script>
+</head>
+
+<body>
+    <div class="container-xxl position-relative bg-white d-flex p-0">
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+
+        <!-- Sign Up Start -->
+        <div class="container-fluid">
+            <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
+                <div class="col-12 col-sm-8 col-md-6 col-lg-10 col-xl-10">
+                    <div class="bg-light rounded p-4 p-sm-5 my-4 mx-3">
+                    
+                    	<!-- kuroware 시작멘트-->
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <a th:href="@{/}" class="">
+                                <h3 class="text-primary"><i class="fa fa-hashtag me-2"></i>KUROWARE</h3>
+                            </a>
+                            <h3>Sign Up</h3>
+                        </div>
+                        
+                        <form th:action="@{/company/join}" method="post" id="joinMember">
+							<div class="row mb-3">
+								<div class="form-group col-lg-6">
+									<label for="company_name" class="form-label">회사명</label>
+				                	<input type="text" id="company_name" class="form-control" name="company_name" placeholder="회사명을 입력해주세요." required="required">
+								</div>
+								<div class="form-group col-lg-4">
+									<label for="company_business_num" class="form-label">사업자 번호</label>
+				                	<input type="text" id="company_business_num" class="form-control mb-1" name="company_business_num" placeholder="사업자번호를 입력해주세요." required="required">
+								</div>
+								<div class="d-flex align-items-end form-group col-lg-2">
+									<input class="btn btn-outline-primary" type="button" id="findcompany" value="계정 찾기">
+								</div>
+							</div>
+							<div class="row">
+								<div class="form-group col-lg-6">
+								</div>
+								<div class="form-group col-lg-6">
+									<div id="businessnummsg"></div>
+								</div>
+							</div>
+							<div class="row mb-3">
+								<div class="form-group col-lg-6 ">
+									<label for="company_ceo_name" class="form-label">대표자</label>
+				                	<input type="text" id="company_ceo_name" class="form-control" name="company_ceo_name" placeholder="대표자명을 입력해주세요." required="required">
+								</div>
+								<div class="form-group col-lg-6">
+									<label for="company_est_date" class="form-label">설립연도</label>
+				                	<input type="date" id="company_est_date" class="form-control" name="company_est_date" required="required">
+								</div>
+							</div>
+							
+							<!-- 다음 주소 api start -->
+							<div class="row mb-3">
+								<div class="form-group col-lg-3 mb-1">
+								    <label for="company_adress" class="form-label">사업장 소재지</label>
+					                <input type="text" id="company_postcode" class="form-control" name="company_postcode" placeholder="우편번호" required="required" readonly="readonly">
+								</div>
+								<div class="d-flex align-items-end form-group col-lg-3">
+									<button type="button" class="btn btn-outline-secondary" onclick="sample6_execDaumPostcode()">우편번호 찾기</button>
+								</div>
+							</div>
+							<div class="row mb-3">
+								<div class="form-group col-lg-5 form-floating mb-1">
+		                            <input type="text" class="form-control" id="company_address" name="company_address" placeholder="주소" readonly="readonly">
+		                            <label for="company_address">&nbsp;&nbsp;주소</label>
+	                       	 	</div>
+								<div class="form-group col-lg-5 form-floating mb-1">
+									<input type="text" class="form-control" id="company_detailaddress" name="company_detailaddress" placeholder="상세주소">
+		                            <label for="company_detailaddress">&nbsp;&nbsp;상세주소</label>
+								</div>
+								<div  class="form-group col-lg-2 form-floating mb-1">
+									<input type="text" class="form-control" id="company_extraaddress" name="company_extraaddress" placeholder="참고항목" readonly="readonly">
+		                            <label for="company_extraaddress">&nbsp;&nbsp;참고항목</label>
+								</div>
+							</div>
+							<!-- 다음 주소 api end -->
+							
+							<div class="row mb-3">
+								<hr>
+								<div class="form-group col-lg-6">
+									<label for="employee_id" class="form-label">관리자 ID</label>
+				                	<input type="text" id="employee_id" class="form-control" name="employee_id" placeholder="3~20자 이내로 입력" maxlength="20" required="required">
+									<div id="idmsg"></div>
+								</div>
+								<div class="form-group col-lg-6">
+									<label for="employee_email" class="form-label">관리자 이메일주소</label>
+				                	<input type="email" id="employee_email" class="form-control" name="employee_email" placeholder="***@**.***형식으로 입력" maxlength="50" required="required">
+								</div>
+							</div>
+							<div class="row mb-3">
+								<div class="form-group col-lg-6">
+									<label for="employee_pwd" class="form-label">관리자 비밀번호</label>
+				                	<input type="password" id="employee_pwd" class="form-control" name="employee_pwd" placeholder="3~20자 이내로 입력" maxlength="20" required="required">
+								</div>
+								<div class="form-group col-lg-6">
+									<label for="employee_pwd2" class="form-label">비밀번호 확인</label>
+				                	<input type="password" id="employee_pwd2" class="form-control" placeholder="다시 한 번 입력해주세요." maxlength="20" required="required">
+									<div id="passwordmsg"></div>
+								</div>
+							</div>		  	
+	                        <button type="button" id="submitButton" class="btn btn-primary py-3 w-100 mb-4" disabled="disabled">Sign Up</button>
+						</form>   
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Sign Up End -->
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/assets/lib/chart/chart.min.js}"></script>
+    <script th:src="@{/assets/lib/easing/easing.min.js}"></script>
+    <script th:src="@{/assets/lib/waypoints/waypoints.min.js}"></script>
+    <script th:src="@{/assets/lib/owlcarousel/owl.carousel.min.js}"></script>
+    <script th:src="@{/assets/lib/tempusdominus/js/moment.min.js}"></script>
+    <script th:src="@{/assets/lib/tempusdominus/js/moment-timezone.min.js}"></script>
+    <script th:src="@{/assets/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js}"></script>
+
+    <!-- Template Javascript -->
+    <script th:src="@{/assets/js/main2.js}"></script>
+    
+    <!-- 다음지도 api -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script>
+	function sample6_execDaumPostcode() {
+		new daum.Postcode({
+		oncomplete: function(data) {
+		// 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+									
+		// 각 주소의 노출 규칙에 따라 주소를 조합한다.
+		// 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+		var addr = ''; // 주소 변수
+		var extraAddr = ''; // 참고항목 변수
+									
+		//사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+		if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+		addr = data.roadAddress;
+		} else { // 사용자가 지번 주소를 선택했을 경우(J)
+		addr = data.jibunAddress;
+		}
+									
+		// 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+		if(data.userSelectedType === 'R'){
+		// 법정동명이 있을 경우 추가한다. (법정리는 제외)
+		// 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+		if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+		extraAddr += data.bname;
+		}
+		// 건물명이 있고, 공동주택일 경우 추가한다.
+		if(data.buildingName !== '' && data.apartment === 'Y'){
+		extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+		}
+		// 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+		if(extraAddr !== ''){
+		extraAddr = ' (' + extraAddr + ')';
+		}
+		// 조합된 참고항목을 해당 필드에 넣는다.
+		document.getElementById("company_extraaddress").value = extraAddr;
+									                
+		} else {
+		document.getElementById("company_extraaddress").value = '';
+		}
+									
+		// 우편번호와 주소 정보를 해당 필드에 넣는다.
+		document.getElementById('company_postcode').value = data.zonecode;
+		document.getElementById("company_address").value = addr;
+		// 커서를 상세주소 필드로 이동한다.
+		document.getElementById("company_extraaddress").focus();
+		}
+		}).open();
+		}
+	</script>
+</body>
+
+</html>

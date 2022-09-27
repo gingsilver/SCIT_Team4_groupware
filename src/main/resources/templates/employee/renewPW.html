@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>KUROWARE 비밀번호 재설정</title>
+<script>
+//비밀번호 갱신
+function validation() {
+	let employee_pwd = document.getElementById('employee_pwd');
+	let employee_pwd2 = document.getElementById('employee_pwd2');
+	
+	if (employee_pwd.value != '' && (employee_pwd.value.length < 3 || employee_pwd.value.length > 10)) {
+		alert("비밀번호는 3~10자로 입력하세요.");
+		return false;
+	}
+	if (employee_pwd.value != employee_pwd2.value) {
+		alert("비밀번호를 정확하게 입력하세요.");
+		return false;
+	}
+
+	return true;
+}
+
+</script>
+</head>
+<body>
+	<header>
+	<h1>[ 비밀번호 재설정 ]</h1>
+	</header>
+	<section>
+	<form id="mypageForm" th:action="@{/employee/renewpw}"  method="post" onsubmit="return validation();">
+	<table>
+		<tr>
+			<th>ID</th>
+			<td><input type="text" name="employee_id" id="employee_id"  th:value="${employee_id}" readonly="readonly"></td>
+		</tr>
+		<tr>
+			<th>비밀번호</th>
+			<td><input type="password" name="employee_pwd" id="employee_pwd" placeholder="비밀번호를 변경하려면 입력하세요."><br>
+			<input type="password" id="employee_pwd2" placeholder="비밀번호 다시 입력"></td>
+		</tr>
+
+	</table>
+	<br>
+	
+	<input type="submit" value="수정" />
+	<input type="reset" value="다시 쓰기" />
+	
+	</form>	
+	</section>
+	
+</body>
+</html>

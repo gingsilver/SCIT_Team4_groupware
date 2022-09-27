@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ko"  xmlns:th="http://thymeleaf.org"
+				 xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>KUROWARE - MAIN</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons  : 탭 창에서 보이는 이모티콘 -->
+  <link th:href="@{/assets/img/favicon.png}" rel="icon">
+  <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+  <link href="@{/assets/css/mailbox.css}" rel="stylesheet">
+<script>
+function validation(){
+	let receiver = document.getElementById('email_receiver');
+	let title = document.getElementById('email_title'); 
+	let content = document.getElementById('email_content'); 
+	
+	if(receiver.value.length==0 ){
+		alert("받는 사람은 필수 입력사항입니다.");
+		return false;		
+	}
+	
+	if(title.value.length==0 ){
+		alert("제목은 필수 입력사항입니다.");
+		return false;		
+	}
+	
+	if(content.value.length==0 ){
+		alert("내용을 입력해주세요.");
+		return false;		
+	}
+	
+	alert("메일발송이 완료되었습니다.");
+	
+	}
+	
+	
+	const add_textbox = (obj) => {
+	    const box = obj.parentElement.parentElement; 
+	    const newP = document.createElement("tr");
+	
+	    newP.innerHTML = "<tr class='form-group'><td><input type='text' class='form-control' name='email_receiver' placeholder=' To:'></td><td><input type='button' class='form-control' value='삭제' onclick='opt_remove(this)'></td></tr>";
+		box.parentNode.insertBefore(newP, box.nextSibling);
+	}
+	
+	const add_textbox2 = (obj) => {
+	    const box = obj.parentElement.parentElement; 
+	    const newP = document.createElement("tr");
+	
+	    newP.innerHTML = "<tr class='form-group'><td><input type='text' class='form-control' name='email_cc_receiver' placeholder='CC : '></td><td><input type='button' class='form-control' value='삭제' onclick='opt_remove2(this)'></td></tr>";
+		box.parentNode.insertBefore(newP, box.nextSibling);
+		}
+	
+	const opt_remove = (obj) => {
+		obj.parentElement.parentElement.parentElement.removeChild(obj.parentElement.parentElement);
+	}
+	const opt_remove2 = (obj) => {
+		obj.parentElement.parentElement.parentElement.removeChild(obj.parentElement.parentElement);
+	}	
+</script>
+  <!-- =======================================================
+  * Template Name: NiceAdmin - v2.3.1
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+<style>
+div.container{
+	padding-left : 50px;
+}
+input[type=text]{
+	width : 800px;
+}
+input[type=text]:hover{
+  border-color: #593bdb !important;
+}
+textarea:hover{
+  border-color: #593bdb !important;
+}
+input[type=button]{
+	width : 100px;
+	
+}
+.sendAndReset{
+	margin : 0 auto;
+	text-align: center;
+}
+div.container > h6{
+	margin : 20 20 20 20 auto;
+}
+#sendButton{
+	background-color: #f07167;
+	color: white;
+	padding: 0.40rem 2rem;
+	font-size: 0.85rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	border: none;
+	border-radius: 10rem;
+}
+#resetButton{
+	background-color: #f07167;
+	color: white;
+	padding: 0.40rem 2rem;
+	font-size: 0.85rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	border: none;
+	border-radius: 10rem;
+}
+div.attechedFile{
+	background: white;
+	border-color: #593bdb !important;
+	
+}
+</style>
+<body>
+
+  <!-- ======= Header ======= -->
+  <header th:replace="/indexcommon/header :: header"></header><!-- End Header -->
+  <!-- ======= Sidebar ======= -->
+  <aside th:replace="/indexcommon/aside :: aside"></aside><!-- End Sidebar-->
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Mail Box</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item active">Compose</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">      
+        <div class="container">
+
+     <form id="write" th:action="write" method="post" onsubmit="return validation();" enctype="multipart/form-data">
+        <table>
+            <tr id="box" class="form-group">
+                <td>
+                    <input type="text" class="form-control" id="email_receiver" name="email_receiver" placeholder=" To:">
+                </td>
+                <td>
+					<input type="button" class="form-control" value="추가" onclick="add_textbox(this)">
+				</td>
+            </tr>
+            <tr id="box2" class="form-group">        
+                <td>
+                    <input type="text" class="form-control" name="email_cc_receiver" placeholder=" CC :">
+                </td>
+                <td>
+					<input type="button" class="form-control" value="추가" onclick="add_textbox2(this)">
+				</td>
+            </tr>
+            <tr class="form-group">
+                <td>
+                    <input type="text" class="form-control" id="email_title" name="email_title" placeholder="Title : ">
+                </td>
+            </tr>
+            <tr class="form-group">
+                <td>
+                    <textarea class="form-control" id="email_content" name="email_content" placeholder="Enter text.." cols="60" rows="20"> </textarea>
+                </td>
+            </tr>
+            <div class="attechedFile">
+            <tr></tr>
+            <tr class="form-group" >
+            	<td><h6 class="mb-4"><i class="bi bi-paperclip"></i></i>첨부파일</h6></td>
+            </tr>            	
+            <tr>
+            	<td><input type="file" name="upload" class="file-input" id="file-input" multiple/></td>
+            </tr>
+            </div>
+			<tr>
+				<th colspan="2" class="sendAndReset">
+				<button type="submit" id="sendButton"><i class="bi bi-send" aria-hidden="true"> 발 송</i></button>&nbsp;
+				<button type="reset" id="resetButton"><i class="bi bi-x-lg" aria-hidden="true"> 리 셋</i></button>&nbsp;
+				</th>
+			</tr>
+        </table>                
+                
+    </form>
+     
+ </div>
+ </div>       
+    
+    
+    
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+      <!-- All the links in the footer should remain intact. -->
+      <!-- You can delete the links only if you purchased the pro version. -->
+      <!-- Licensing information: https://bootstrapmade.com/license/ -->
+      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+      Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>
+  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/vendor/chart.js/chart.min.js"></script>
+  <script src="../assets/vendor/echarts/echarts.min.js"></script>
+  <script src="../assets/vendor/quill/quill.min.js"></script>
+  <script src="../assets/vendor/simple-datatables/simple-datatables.js"></script>
+  <script src="../assets/vendor/tinymce/tinymce.min.js"></script>
+  <script src="../assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="../assets/js/main.js"></script>
+
+</body>
+
+</html>

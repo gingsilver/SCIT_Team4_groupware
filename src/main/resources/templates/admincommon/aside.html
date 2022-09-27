@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ko"  
+	  xmlns:th="http://thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>KUROWARE ADMIN PAGE</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons  : 탭 창에서 보이는 이모티콘 -->
+  <link th:href="@{/assets/img/favicon.png}" rel="icon">
+  <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: NiceAdmin - v2.3.1
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<!-- ======= Sidebar ======= -->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+      <li class="nav-item">
+        <a class="nav-link " th:href="@{/admin}">
+          <i class="bi bi-grid"></i>
+          <span>HOME</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+      
+     <li class="nav-heading">Pages</li>
+
+	 <!-- Start 회사 정보 Nav -->
+	 <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-building"></i><span>회사 관리</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="forms-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+          <li>
+            <a th:href="@{/admin/companyInfo}">
+              <i class="bi bi-pencil-square"></i><span>회사 정보 수정</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/admin/adminInfo}">
+              <i class="bi bi-exclamation-octagon"></i><span>관리자 정보 수정</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/admin/companyCalendar}">
+              <i class="bi bi-calendar-week"></i><span>회사 일정 관리</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End 회사 정보 Nav -->
+
+	  <!-- start 조직원 정보 Nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-person-rolodex"></i><span>조직 관리</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="components-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+          <li>
+            <a th:href="@{/admin/employeeList}">
+              <i class="bi bi-person-plus-fill"></i><span>조직원 관리</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/admin/updateEmployee}">
+              <i class="bi bi-arrow-repeat"></i><span>조직원 정보 수정</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/admin/settingOrg}">
+              <i class="bi bi-diagram-3"></i><span>조직도 관리</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End 조직원 정보 Nav -->
+
+	  <!-- Start 전자결재 Page Nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" th:href="@{/admin/adminDraft}">
+          <i class="bi bi-collection-fill"></i>
+          <span>전자결재</span>
+        </a>
+      </li><!-- End 전자결재 Page Nav -->
+      
+      <!-- Start 게시판 Page Nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" th:href="@{/admin/adminBoard}">
+          <i class="bi bi-chat-right-text"></i>
+          <span>게시판</span>
+        </a>
+      </li><!-- End 게시판 Page Nav -->
+
+	  <hr>
+	  
+      <!-- Start Logout Nav -->
+      <li class="nav-item" sec:authorize="isAuthenticated()">
+        <a class="nav-link collapsed" th:href="@{/logout}">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>Logout</span>
+        </a>
+      </li><!-- End Logout Page Nav -->
+    </ul>
+
+  </aside><!-- End Sidebar-->
+  
+    <!-- Vendor JS Files -->
+  <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+  <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+  <script th:src="@{/assets/vendor/chart.js/chart.min.js}"></script>
+  <script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+  <script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+  <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+  <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+  <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+
+  <!-- Template Main JS File -->
+  <script th:src="@{/assets/js/main.js}"></script>
+</body>
+</html>

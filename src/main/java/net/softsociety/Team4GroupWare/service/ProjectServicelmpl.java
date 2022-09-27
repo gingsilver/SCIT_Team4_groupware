@@ -1,0 +1,103 @@
+package net.softsociety.Team4GroupWare.service;
+
+import java.util.ArrayList;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import lombok.extern.slf4j.Slf4j;
+import net.softsociety.Team4GroupWare.dao.ProjectDAO;
+import net.softsociety.Team4GroupWare.domain.Company;
+import net.softsociety.Team4GroupWare.domain.Employee;
+import net.softsociety.Team4GroupWare.domain.Organization;
+import net.softsociety.Team4GroupWare.domain.Project;
+import net.softsociety.Team4GroupWare.domain.ProjectMember;
+import net.softsociety.Team4GroupWare.domain.ProjectPart;
+
+@Transactional
+@Service
+@Slf4j
+public class ProjectServicelmpl implements ProjectService {
+
+    @Autowired
+    private ProjectDAO projectDAO;
+
+    @Override
+    public int insertProject(Project pj, ProjectMember pj_member, ProjectPart pj_part) {
+        int result = projectDAO.insertPj(pj);
+        projectDAO.insertPj_member(pj_member);
+        projectDAO.insertPj_part(pj_part);
+        return result;
+    }
+
+    @Override
+    public ArrayList<Project> projectList(String employee_id) {
+        ArrayList<Project> projectList = projectDAO.selectProjectList(employee_id);
+
+        return projectList;
+    }
+
+    @Override
+    public Employee readEmployee(String username) {
+        System.out.println("서비스 테스트");
+        Employee employee = projectDAO.readEmployee(username);
+        return employee;
+    }
+
+    @Override
+    public Company readCompany(String company_code) {
+        Company company = projectDAO.readCompany(company_code);
+        return company;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public JSONArray readOrg(Company company) {
+        ArrayList<Organization> org = projectDAO.readOrg(company);
+
+        JSONArray jArray = new JSONArray();// 배열이 필요할때
+        for (int i = 0; i < org.size(); i++)// 배열
+        {
+            JSONObject sObject = new JSONObject();// 배열 내에 들어갈 json
+            sObject.put("id", org.get(i).getDepartment_id());
+            sObject.put("pId", org.get(i).getParent_id());
+            sObject.put("name", org.get(i).getDepartment_name());
+            sObject.put("open", org.get(i).getOpen());
+            sObject.put("path", org.get(i).getPATH());
+            sObject.put("level", org.get(i).getLEVEL());
+            jArray.add(sObject);
+        }
+
+        return jArray;
+    }
+
+    @Override
+    public ArrayList<Employee> findByOrganization(Employee employee) {
+        ArrayList<Employee> empList = projectDAO.findByOrganization(employee);
+        return empList;
+    }
+
+    @Override
+    public ArrayList<Employee> employeeList(Employee employee) {
+        ArrayList<Employee> empList = projectDAO.employeeList(employee);
+        return empList;
+    }
+
+    @Override
+    public ArrayList<Organization> findByParentId(String parent_id) {
+        ArrayList<Organization> orgList = projectDAO.findByParentId(parent_id);
+
+        return orgList;
+    }
+
+    @Override
+    public int addOrganization(Organization org) {
+        int result = projectDAO.addOrganization(org);
+
+        return result;
+    }
+
+}

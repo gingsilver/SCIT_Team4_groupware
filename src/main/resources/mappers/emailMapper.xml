@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.softsociety.Team4GroupWare.dao.EmailDAO">
+	<!-- 이메일 발송 -->
+	<insert id="sendToMailbox" parameterType="Email">
+		<selectKey resultType="String" keyProperty="email_code"
+			order="BEFORE">
+			SELECT 'M'||LPAD(team4_mailbox_total_seq.nextval, 4, 0) FROM DUAL
+		</selectKey>
+		INSERT INTO
+			team4_mailbox_total
+			(
+				email_code
+				, company_code
+				, email_title
+				, email_content
+				, email_sender
+			)
+			values
+			(
+				#{email_code}
+				, #{company_code}
+				, #{email_title}
+				, #{email_content}
+				, #{email_sender}
+			)
+	</insert>
+
+	<!-- 수신인 저장 -->
+	<insert id="insertReceiver" parameterType="map">
+		INSERT INTO
+			team4_mailbox_process
+			(
+				email_num
+				, email_code
+				, company_code
+				, email_receiver
+				)
+			values
+				(
+				team4_mailbox_process_seq.nextval
+				, #{email_code}
+				, #{company_code}
+				, #{email_receiver}
+				)
+	</insert>
+
+	<!-- 참조인 저장 -->
+	<insert id="insertCCreceiver" parameterType="map">
+		INSERT INTO
+		team4_mailbox_process
+		(
+		email_num
+		, email_code
+		, company_code
+		, email_cc_receiver
+		)
+		values
+		(
+		team4_mailbox_process_seq.nextval
+		, #{email_code}
+		, #{company_code}
+		, #{email_cc_receiver}
+		)
+	</insert>
+
+	<!-- 이메일 발송시 첨부파일 정보 인서트 -->
+	<insert id="insertMailAtteched" parameterType="AttachedFile">
+		insert into
+		team4_attached_file
+		(company_code
+		,attached_file_code
+		,document_code
+		,attached_file_origin_name
+		,attached_file_save_name
+		,attached_file_ext
+		)
+		values
+		(#{company_code}
+		,'File'||LPAD(team4_attached_file_seq.nextval,
+		4, 0)
+		,#{email_code}
+		,#{attached_file_origin_name}
+		,#{attached_file_save_name}
+		,#{attached_file_ext}
+		)
+	</insert>
+	
+	<!-- 보낸 메일함 -->
+	<select id="selectSentmail" parameterType="String"
+		resultType="Mailinfo">
+		SELECT DISTINCT
+			P.email_code
+			, P.company_code
+			, T.email_title
+			, TO_CHAR(T.email_date, 'YYYY-MM-DD') as "email_date"
+		FROM
+			team4_mailbox_total T, team4_mailbox_process P
+		WHERE 
+			T.email_code =	P.email_code 
+			and T.email_sender = #{email_sender}
+		ORDER BY
+			TO_CHAR(T.email_date, 'YYYY-MM-DD') DESC
+	</select>
+	
+	<!-- 페이지 나누기를 위한 글 개수 조회 -->
+	<select id="sentmailCount" parameterType="String" resultType="int">
+	SELECT 
+		count(*)
+	FROM
+		team4_mailbox_total T, team4_mailbox_process P
+	WHERE 
+		T.email_code =	P.email_code 
+		and T.email_sender = #{email_sender}	
+	</select>	
+	
+	<!-- 전체 메일함 -->
+		<select id="readAllmail" parameterType="map" resultType="Mailinfo">
+		SELECT DISTINCT
+			P.email_code
+			, P.company_code
+			, T.email_title
+			, T.email_sender
+			, TO_CHAR(T.email_date, 'YYYY-MM-DD') as "email_date"
+		FROM
+			team4_mailbox_total T, team4_mailbox_process P
+		WHERE 
+			T.email_code =	P.email_code 
+			and (P.email_receiver = #{email_receiver}
+			or P.email_cc_receiver = #{email_cc_receiver})
+		ORDER BY
+			TO_CHAR(T.email_date, 'YYYY-MM-DD') DESC
+	</select>
+	
+	<!-- 메일 1개 불러오기 -->
+		<select id="selectOne" parameterType="String" resultType="Mailinfo">
+		SELECT
+			P.email_code
+			, P.company_code
+			, T.email_title
+			, T.email_sender
+			, T.email_date
+			, T.email_content
+			, P.email_receiver
+			, P.email_cc_receiver
+		FROM
+			team4_mailbox_total T, team4_mailbox_process P
+		WHERE 
+			T.email_code =	P.email_code 
+			AND P.email_code = #{email_code}
+	</select>
+</mapper>

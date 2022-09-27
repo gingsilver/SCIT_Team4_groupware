@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<!-- net.softsociety.spring5.dao패키지의 BoardDAO인터페이스와 매핑됨 -->
+<mapper namespace="net.softsociety.Team4GroupWare.dao.AdminDAO">
+	<!-- ID 중복 체크 -->
+	<select id="checkID" parameterType="string" resultType="int">
+		select
+			count(*)
+		from
+			team4_employee
+		where
+			employee_id = #{employee_id}
+	</select>
+	
+	<!-- 이메일 중복 체크 -->
+	<select id="checkEmail" parameterType="string" resultType="int">
+		select
+			count(*)
+		from
+			team4_employee
+		where
+			employee_email = #{employee_email}
+	</select>
+	
+	<!-- 관리자 찾기 -->
+	<select id="readAdmin" parameterType="string" resultType="Employee">
+		select *
+		from team4_employee
+		where employee_id = #{employee_id}
+	</select>
+	
+	<!-- 사원 추가 -->
+	<insert id="addEmployee" parameterType="Employee">
+		insert into team4_employee
+		(EMPLOYEE_CODE
+		,COMPANY_CODE
+		,EMPLOYEE_ID
+		,EMPLOYEE_PWD
+		,EMPLOYEE_NAME
+		,EMPLOYEE_EMAIL
+		,position_type
+		,organization
+		)
+		values
+		('MEM'||LPAD(team4_employee_seq.nextval, 4, 0)
+		,#{company_code}
+		,#{employee_id}
+		,#{employee_pwd}
+		,#{employee_name}
+		,#{employee_email}
+		,'사원'
+		,' '
+		)
+	</insert>
+	
+	<!-- 전체 사원 리스트 출력 -->
+	<select id="employeeList" parameterType="Employee" resultType="Employee">
+		select *
+		from team4_employee
+		where company_code = #{company_code}
+		order by employee_code desc
+	</select>
+	
+	<!-- 로그인 한 관리자의 회사 내용을 불러옴 -->
+	<select id="readCompany" parameterType="string" resultType="Company">
+		select 
+			company_code
+			,company_name
+			,company_business_num
+			,to_char(company_est_date, 'yyyy/mm/dd') as company_est_date
+			,company_ceo_name
+			,company_postcode
+			,company_address
+			,company_detailaddress
+			,company_extraaddress
+			,company_logo
+		from team4_company
+		where company_code = #{company_code}
+	</select>
+	
+	<!-- 회사 정보 수정 -->
+	<update id="updateCompany" parameterType="Company">
+		update
+			team4_company
+		set 
+			company_name = #{company_name}
+			,company_ceo_name = #{company_ceo_name}
+			,company_postcode = #{company_postcode}
+			,company_address = #{company_address}
+			,company_detailaddress = #{company_detailaddress}
+			,company_extraaddress = #{company_extraaddress}
+		where
+			company_code = #{company_code}
+	</update>
+	
+	<!-- 회사 로고 첨부파일 테이블에 인서트 -->
+	<insert id="insertLogo" parameterType="AttachedFile">
+		insert into team4_attached_file
+		(company_code
+		,attached_file_code
+		,document_code
+		,attached_file_origin_name
+		,attached_file_save_name
+		,attached_file_ext
+		,employee_code
+		,employee_id
+		,employee_name
+		)
+		values
+		(#{company_code}
+		,'File'||LPAD(team4_attached_file_seq.nextval, 4, 0)
+		,'Logo'||LPAD(team4_logo_file_seq.nextval, 4, 0)
+		,#{attached_file_origin_name}
+		,#{attached_file_save_name}
+		,#{attached_file_ext}
+		,#{employee_code}
+		,#{employee_id}
+		,#{employee_name}
+		)
+	</insert>
+	
+	<!-- 회사 테이블 내 로고 데이터 업데이트 -->
+	<update id="updateLogo" parameterType="Company">
+		update
+			team4_company
+		set 
+			company_logo = #{company_logo}
+		where
+			company_code = #{company_code}
+	</update>
+	
+	<!-- 관리자 내용 업데이트 -->
+	<update id="updateAdmin" parameterType="Employee">
+		update
+			team4_employee
+		set 
+			EMPLOYEE_ID = #{employee_id}
+			<if test="employee_pwd != null and employee_pwd != ''">
+			,EMPLOYEE_PWD = #{employee_pwd}
+			</if>
+			,EMPLOYEE_EMAIL = #{employee_email}
+		where
+			employee_code = #{employee_code}
+	</update>
+	
+	<!-- 조직도 내용 불러오기 -->
+	<select id="readOrg" parameterType="Company" resultType="Organization">
+		SELECT 
+			department_id
+     		, parent_id
+     		, department_name
+     		, LEVEL
+     		, REGEXP_REPLACE(SYS_CONNECT_BY_PATH(department_name, ' '), '^\s+\-\>\s+', '') as "PATH"
+     		, open
+  		FROM
+  			team4_organization
+        WHERE company_code = #{company_code}
+  		START WITH
+  			parent_id = #{company_name}
+		CONNECT BY 
+			PRIOR department_id = parent_id
+ 		ORDER SIBLINGS BY 
+ 			department_id ASC
+	</select>
+	
+	<!-- 조직도 사원 리스트 출력 -->
+	<select id="findByOrganization" parameterType="Employee" resultType="Employee">
+		select *
+		from team4_employee
+		where company_code = #{company_code} and  organization = #{organization}
+		order by employee_code desc
+	</select>
+	
+	<!-- 조직도 부서 리스트 출력 -->
+	<select id="findByParentId" parameterType="string" resultType="Organization">
+		select *
+		from team4_organization
+		where parent_id = #{parent_id}
+	</select>
+	
+	<!-- 새로운 조직 생성 -->
+	<insert id="addOrganization" parameterType="Organization">
+		insert into team4_organization
+			(company_code
+			,department_id
+			,parent_id
+			,department_name)
+			values
+			(#{company_code}
+			,#{department_id}+1
+			,#{parent_id}
+			,#{department_name})
+	</insert>
+	
+	<!-- 멤버에 조직 추가 -->
+	<update id="addEmpForOrg" parameterType="Employee">
+		update team4_employee
+		set organization = #{organization}
+		where employee_code =#{employee_code}
+	</update>
+</mapper>

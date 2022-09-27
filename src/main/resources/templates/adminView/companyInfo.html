@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ko"  
+	  xmlns:th="http://thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>KUROWARE Company Info</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons  : 탭 창에서 보이는 이모티콘 -->
+  <link th:href="@{/assets/img/favicon.png}" rel="icon">
+  <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: NiceAdmin - v2.3.1
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+  <!-- ======= Header ======= -->
+  <header th:replace="/admincommon/header :: header"></header><!-- End Header -->
+  <!-- ======= Sidebar ======= -->
+  <aside th:replace="/admincommon/aside :: aside"></aside><!-- End Sidebar-->
+
+  <main id="main" class="main">
+    <div class="pagetitle">
+      <h1>회사 정보 수정</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a th:href="@{/admin}">Home</a></li>
+          <li class="breadcrumb-item active">Admin page</li>
+          <li class="breadcrumb-item active">Company Info</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard py-2">
+		<div class="container">
+			<div class="bg-white shadow rounded-lg d-block d-sm-flex">
+				<div class="profile-tab-nav border-right">
+					<div class="p-4">
+						<div class="img-circle text-center mb-3">
+							<span th:if="${company.company_logo} == null"><img th:src="@{/image/catIcon.png}" alt="기본 로고" class="shadow"></span>
+							<span th:if="${company.company_logo} != null"><img th:src="@{/assets/upload/admin/} + ${company.company_logo}" alt="companyLogo" class="shadow"></span>
+						</div>
+						<h4 class="text-center" th:text="${company.company_name}"></h4>
+					</div>
+					<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+						<a class="nav-link active" id="account-tab" data-toggle="pill" href="#account" role="tab" aria-controls="account" aria-selected="true">
+							<i class="fa fa-home text-center mr-1"></i> 
+							기본 정보
+						</a>
+						<a class="nav-link" id="logo-tab" data-toggle="pill" href="#companylogo" role="tab" aria-controls="logo" aria-selected="false">
+							<i class="fa fa-key text-center mr-1"></i> 
+							회사 로고 변경
+						</a>
+					</div>
+				</div>
+				<div class="tab-content p-4 p-md-5" id="v-pills-tabContent">
+					<div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
+					
+						<!-- 회사 기본 정보 박스 start -->
+						<h3 class="mb-4">회사 기본 정보</h3>
+						
+						<!-- 회사 정보 수정 폼 start -->
+						<form th:action="@{/admin/updateCompany}" method="post" id="updateCompanyForm">
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="form-group">
+									  	<label>회사명</label>
+									  	<input type="text" class="form-control" id="company_name" name="company_name"
+									  	       th:value="${company.company_name}" >
+									  	<div id="nameMsg"></div>
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="form-group">
+									  	<label>사업자 번호</label>
+									  	<input type="text" class="form-control" id="company_business_num"  name="company_business_num"
+									  	       th:value="${company.company_business_num}" readonly="readonly">
+									  	<div id="numMsg"></div>
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="form-group">
+									  	<label>대표자명</label>
+									  	<input type="text" class="form-control" id="company_ceo_name" name="company_ceo_name"
+									  	       th:value="${company.company_ceo_name}">
+									  	<div id="ceoMsg"></div>
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="form-group">
+									  	<label>설립일</label>
+									  	<input type="text" class="form-control" id="company_est_date" name="company_est_date"
+									  	 	   th:value="${company.company_est_date}" readonly="readonly">
+									  	<div id="estMsg"></div>
+									</div>
+								</div>
+								<div class="row">
+									<label>사업장 소재지</label>
+									<div class="form-group col-lg-3">
+						                <input type="text" class="form-control" id="company_postcode" name="company_postcode"
+						                	   placeholder="우편번호" readonly="readonly" th:value="${company.company_postcode}">
+									</div>
+									<div class="form-group col-lg-2">
+										<button type="button" class="btn btn-outline-secondary"
+												onclick="sample6_execDaumPostcode()">우편번호 찾기</button>
+									</div>
+								</div>
+								<div class="row">
+									<div class="form-group col-lg-5">
+			                            <label>주소</label>
+			                            <input type="text" class="form-control" id="company_address" name="company_address"
+			                            	   placeholder="주소" readonly="readonly" th:value="${company.company_address}">
+		                       	 	</div>
+									<div class="form-group col-lg-5">
+			                            <label>상세주소</label>
+										<input type="text" class="form-control" id="company_detailaddress" name="company_detailaddress"
+											   placeholder="상세주소" th:value="${company.company_detailaddress}">
+									</div>
+									<div  class="form-group col-lg-2">
+			                            <label>참고항목</label>
+										<input type="text" class="form-control" id="company_extraaddress" name="company_extraaddress"
+											   placeholder="참고항목" readonly="readonly" th:value="${company.company_extraaddress}">
+									</div>
+								</div>
+							</div>
+							<div class="text-center">
+								<button class="btn btn-primary" id="updateCompany">수정</button>&nbsp;
+								<button class="btn btn-dark" type="reset">취소</button>
+							</div>
+						</form>
+					</div>
+					<!-- 회사 로고 변경 page start -->
+					<div class="tab-pane fade" id="companylogo" role="tabpanel" aria-labelledby="logo-tab">
+					
+						<h3 class="mb-4">회사 로고 변경</h3>
+						
+						<form th:action="@{/admin/updateLogo}" method="post" id="updateLogoForm" enctype="multipart/form-data">
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="form-group">
+										<input class="form-control form-control-user" type="file" size="30"
+											   name="upload" id="product_image" onchange="setThumbnail(event);">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-6 text-center">
+									<div class="form-group">
+									  	<label class="mb-3">기존 회사 로고</label>
+									  	<div class="img-circle2 text-center mb-3">
+										  	<span th:if="${company.company_logo} == null"><img th:src="@{/image/catIcon.png}" alt="기본 로고"></span>
+										  	<span th:if="${company.company_logo} != null"><img th:src="@{/assets/upload/admin/} + ${company.company_logo}" alt="companyLogo"></span>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-6 text-center">
+									<div class="form-group">
+									  	<label id="label-bold" class="mb-3">변경 회사 로고</label>
+									  	<div class="img-circle2 text-center mb-3">
+											<div id="image_container"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="text-center">
+								<button class="btn btn-primary" id="updateLogo">Update</button>&nbsp;
+								<button class="btn btn-dark">Cancel</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+      <!-- All the links in the footer should remain intact. -->
+      <!-- You can delete the links only if you purchased the pro version. -->
+      <!-- Licensing information: https://bootstrapmade.com/license/ -->
+      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+      Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+  <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+  <script th:src="@{/assets/vendor/chart.js/chart.min.js}"></script>
+  <script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+  <script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+  <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+  <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+  <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+
+  <!-- Template Main JS File -->
+  <script th:src="@{/assets/js/main.js}"></script>
+  
+	<!-- 제이쿼리, 에이젝스 -->
+  	<script th:src="@{/assets/js/jquery-3.6.0.js}"></script>
+  	
+  	<!-- 다음지도 api -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script>
+	function sample6_execDaumPostcode() {
+		new daum.Postcode({
+		oncomplete: function(data) {
+		// 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+									
+		// 각 주소의 노출 규칙에 따라 주소를 조합한다.
+		// 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+		var addr = ''; // 주소 변수
+		var extraAddr = ''; // 참고항목 변수
+									
+		//사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+		if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+		addr = data.roadAddress;
+		} else { // 사용자가 지번 주소를 선택했을 경우(J)
+		addr = data.jibunAddress;
+		}
+									
+		// 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+		if(data.userSelectedType === 'R'){
+		// 법정동명이 있을 경우 추가한다. (법정리는 제외)
+		// 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+		if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+		extraAddr += data.bname;
+		}
+		// 건물명이 있고, 공동주택일 경우 추가한다.
+		if(data.buildingName !== '' && data.apartment === 'Y'){
+		extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+		}
+		// 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+		if(extraAddr !== ''){
+		extraAddr = ' (' + extraAddr + ')';
+		}
+		// 조합된 참고항목을 해당 필드에 넣는다.
+		document.getElementById("company_extraaddress").value = extraAddr;
+									                
+		} else {
+		document.getElementById("company_extraaddress").value = '';
+		}
+									
+		// 우편번호와 주소 정보를 해당 필드에 넣는다.
+		document.getElementById('company_postcode').value = data.zonecode;
+		document.getElementById("company_address").value = addr;
+		// 커서를 상세주소 필드로 이동한다.
+		document.getElementById("company_extraaddress").focus();
+		}
+		}).open();
+		}
+	</script>
+	
+  	<script>
+  	$(document).ready(function(){
+  		/* 사업자번호 마우스 이벤트 */
+  		$('#company_business_num').on('mouseenter', function() {
+  			$('#numMsg').html('<p>수정할 수 없는 항목입니다.</p>').css('color', 'red');
+  		});
+  		$('#company_business_num').on('mouseleave', function() {
+  			$('#numMsg').html('');
+  		});
+  		
+  		/* 설립연도 마우스 이벤트 */
+  		$('#company_est_date').on('mouseenter', function() {
+  			$('#estMsg').html('<p>수정할 수 없는 항목입니다.</p>').css('color', 'red');
+  		});
+  		$('#company_est_date').on('mouseleave', function() {
+  			$('#estMsg').html('');
+  		});
+  		
+  		/* 수정 버튼 클릭 이벤트 */
+  		$('#updateCompany').on('click', validation);
+  		
+  	});
+
+  	/* 수정 버튼 클릭 이벤트 */
+  	function validation() {
+  		let company_name = $('#company_name').val();
+  		let company_business_num = $('#company_business_num').val();
+  		let company_ceo_name = $('#company_ceo_name').val();
+  		let company_est_date = $('#company_est_date').val();
+  		let company_postcode = $('#company_postcode').val();
+  		let company_address = $('#company_address').val();
+  		let company_detailaddress = $('#company_detailaddress').val();
+  		let company_extraaddress = $('#company_extraaddress').val();
+  		
+  		if(company_name.length < 0 || company_name == '' || company_name == null){
+			alert("올바른 회사명을 입력해주세요.");
+			company_name.select();
+			company_name.focus();
+			return;
+		}
+		
+		if(company_business_num.length < 0 || company_business_num == '' || company_business_num == null){
+			alert("잘못된 접근입니다.");
+			company_business_num.select();
+			company_business_num.focus();
+			return;
+		}
+		
+		if(company_ceo_name.length < 0 || company_ceo_name == '' || company_ceo_name == null){
+			alert("올바른 대표자명을 입력해주세요.");
+			company_ceo_name.select();
+			company_ceo_name.focus();
+			return;
+		}
+		
+		if(company_est_date.length < 0 || company_est_date == '' || company_est_date == null){
+			alert("잘못된 접근입니다.");
+			company_business_num.select();
+			company_business_num.focus();
+			return;
+		}
+		
+		if(company_postcode.length < 0 || company_postcode == '' || company_postcode == null){
+			alert("올바른 우편번호를 입력해주세요.");
+			return;
+		}
+		
+		if(company_address.length < 0 || company_address == '' || company_address == null){
+			alert("올바른 주소를 입력해주세요.");
+			return;
+		}
+		
+		if(company_detailaddress.length < 0 || company_detailaddress == '' || company_detailaddress == null){
+			alert("올바른 상세주소를 입력해주세요.");
+			company_detailaddress.select();
+			company_detailaddress.focus();
+			return;
+		}
+		
+		$('#updateCompanyForm').submit();
+  		
+  	}
+  	
+  	/* 회사 로고 수정 페이지 이미지 미리보기 */
+  	function setThumbnail(event){
+		let reader = new FileReader();
+		
+		reader.onload = function(event){
+			let img = document.createElement("img");
+			img.setAttribute("src", event.target.result);
+			img.setAttribute("class", "col-lg-6");
+			document.querySelector("div#image_container").appendChild(img);
+		};
+		
+		reader.readAsDataURL(event.target.files[0]);
+	}
+  	</script>
+
+</body>
+
+</html>

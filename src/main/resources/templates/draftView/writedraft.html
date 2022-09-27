@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ko"  xmlns:th="http://thymeleaf.org"
+				 xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>KUROWARE 전자결재</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons  : 탭 창에서 보이는 이모티콘 -->
+  <link th:href="@{/assets/img/favicon.png}" rel="icon">
+  <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+  
+  <!-- zTree -->
+  <link rel="stylesheet" th:href="@{/zTree/zTreeStyle.css}" />
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header th:replace="/indexcommon/header :: header"></header><!-- End Header -->
+  <!-- ======= Sidebar ======= -->
+  <aside th:replace="/indexcommon/aside :: aside"></aside><!-- End Sidebar-->
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>전자결재</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a th:href="@{/index}">Home</a></li>
+          <li class="breadcrumb-item active"><a th:href="@{/draft/main}">전자결재</a></li>
+          <li class="breadcrumb-item active">기안작성</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+			<div class="card">
+				<div class="card-body" style="height : 1550px;">
+					<!-- start 버튼 행 -->
+                	<div class="row">
+                    	<div class="col-lg-12">
+							<input type="button" value="상신" class="btn btn-primary">&nbsp;
+							<button type="button" class="btn btn-primary"
+								    data-bs-toggle="modal" data-bs-target="#approvalModal">결재선 선택</button>&nbsp;
+							<input type="button" value="의견 추가" class="btn btn-primary">&nbsp;
+							<input type="button" value="임시 저장" class="btn btn-primary">&nbsp;
+							<input type="button" value="작성 취소" class="btn btn-danger">
+						</div>
+                    </div><!-- end 버튼 행 -->
+                    
+                    <!-- start 기안자 정보, 결재선, 기안종류  -->
+					<div class="row  my-3">
+                    	<div class="col-lg-4">
+                    		<h5>● 기안자 정보</h5>
+                    		<table class="table">
+                    			<tr>
+                    				<th>이름</th>
+                    				<td th:text="${employee.employee_name}"></td>
+                    			</tr>
+                    			<tr>
+                    				<th>부서</th>
+                    				<td th:text="${employee.organization}"></td>
+                    			</tr>
+                    		</table>
+						</div>
+						<div class="col-lg-8">
+							<h5>● 결재선</h5>
+							<table class="table">
+                    			<tr>
+                    				<th>이름</th>
+                    				<th>이름</th>
+                    				<th>이름</th>
+                    				<th>이름</th>
+                    				<th>이름</th>
+                    			</tr>
+                    			<tr style="height : 100px;">
+                    				<td>뭐야</td>
+                    				<td>뭐야</td>
+                    				<td>뭐야</td>
+                    				<td>뭐야</td>
+                    				<td>뭐야</td>
+                    			</tr>
+                    		</table>
+						</div>
+                    </div><!-- end 기안자 정보, 결재선, 기안 선택 -->
+                    
+                    <!-- start 양식함 -->
+                	<div class="row">
+                		<hr>
+                		<div class="col-lg-4">
+                    		<h5>● 기안 선택</h5>
+                    		<div class="input-group mb-3">
+                    			<span class="input-group-text">기안 종류</span>
+                    			<select class="form-select">
+                    				<option selected>----------------------기안 종류 선택----------------------</option>
+				                    <option value="1">One</option>
+				                    <option value="2">Two</option>
+				                    <option value="3">Three</option>
+                    				<option>나오낭</option>
+                    			</select>
+                    		</div>
+                		</div>
+                    	<div class="col-lg-8" >
+							<h5>● 양식함</h5>
+							<div style="background-color : lightgrey;">
+								<ul>
+									<li>테스트~</li>
+									<li>테스트~</li>
+									<li>테스트~</li>
+									<li>테스트~</li>
+								</ul>
+							</div>
+							
+						</div>
+                    </div><!-- end 양식함 -->
+                    
+                    <!-- start 기안내용 -->
+                	<div class="row">
+                    	<div class="col-lg-12">
+                    		<hr>
+                    		<!-- 기안 시작 -->
+                    		<h5>● 기안내용</h5>
+							<table class="table">
+								<colgroup>
+									<col width="10%">
+									<col width="40%">
+									<col width="10%">
+									<col width="40%">
+								</colgroup>
+                    			<tr>
+                    				<th>문서 번호</th>
+                    				<td></td>
+                    				<th>기안일</th>
+                    				<td><input type="date" class="form-control"></td>
+                    			</tr>
+                    			<tr>
+                    				<th>문서 제목</th>
+                    				<td><input type="text" class="form-control"></td>
+                    				<th>마감일</th>
+                    				<td><input type="date" class="form-control"></td>
+                    			</tr>
+                    		</table>
+                    		<!-- 웹 에디터 시작 -->
+                    		<div class="quill-editor-full">
+                    			<textarea rows="10" cols="50"></textarea>
+							</div> 
+							<hr>
+							<!-- 파일 첨부 시작 -->
+							<h5>● 파일 첨부</h5>
+					        <div class="card">
+					            <div class="card-body">
+					            	<input class="form-control form-control-user" type="file" size="30"
+											   name="upload" id="product_image" onchange="setThumbnail(event);">
+								    <ul>
+								    	<li>테스트~</li>
+								      	<li>테스트~</li>
+								      	<li>테스트~</li>
+								   </ul>
+					            </div>
+					        </div>
+						</div>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <!-- 결재선 선택 modal start -->
+			<div class="modal fade" id="approvalModal" tabindex="-1">
+				<div class="modal-dialog modal-xl">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title"><b>결재선 선택</b></h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						
+						<!-- 조직도 -->
+						<div class="modal-body">
+							<div class="row">
+							<!-- 첫 번째 단 -->
+								<div class="col-4">
+									<!-- 조직도 카드 start -->
+									<div class="card border-dark mb-3">
+										<div class="card-header text-center">
+											<b id="test" style="color : black" th:text="|${company.company_name} 조직도|"></b>
+										</div>
+										<div class="card-body text-dark" style="overflow-x:hidden; width:auto; height:400px;">
+										<div class="card-text">
+											<ul id="treeDemo" class="ztree"></ul>
+										</div>
+										</div>
+									</div><!-- 조직도 카드 end -->
+										
+									<!-- 조직도 사원 목록 start -->
+									<div class="card border-dark mb-3">
+										<div class="card-header text-center">
+											<b id="clickOrg" style="color : black" th:text="|${company.company_name} 사원 목록|"></b>
+										</div>
+										<div class="card-body text-dark" style="overflow-x:hidden; width:auto; height:200px;">
+											<div class="card-text">
+												<div id="employeeList">
+													<ul class="employeeInfo">
+													</ul>
+												</div>
+											</div>
+										</div>
+									</div><!-- 조직도 사원 목록 end -->
+								</div>
+								<div class="col-8">
+									<h5><b>● 결재선</b></h5>
+									<table class="table">
+										<tr>
+											<th>#</th>
+											<th>결재권한</th>
+											<th>결재자</th>
+											<th>결재타입</th>
+										</tr>
+										<tr>
+											<th>1</th>
+											<th>기안</th>
+											<th th:text="${employee.employee_name}"></th>
+											<th>
+												<select>
+													<option>--결재 타입 선택--</option>
+													<option>기안</option>
+													<option>결재</option>
+													<option>참조</option>
+													<option>전결</option>
+												</select>
+											</th>
+										</tr>
+									</table>
+								</div>
+		                    </div>
+		                    <div class="modal-footer">
+		                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+		                      <button type="button" class="btn btn-primary">Save changes</button>
+		                    </div>
+		                  </div>
+		                </div>
+		              </div><!-- End Extra Large Modal-->
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer" class="footer">
+    <div class="copyright">
+      &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+    </div>
+    <div class="credits">
+      <!-- All the links in the footer should remain intact. -->
+      <!-- You can delete the links only if you purchased the pro version. -->
+      <!-- Licensing information: https://bootstrapmade.com/license/ -->
+      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+      Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+  <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+  <script th:src="@{/assets/vendor/chart.js/chart.min.js}"></script>
+  <script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+  <script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+  <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+  <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+  <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+
+  <!-- Template Main JS File -->
+  <script th:src="@{/assets/js/main.js}"></script>
+  
+  <!-- 제이쿼리, 에이젝스 -->
+  <script th:src="@{/assets/js/jquery-3.6.0.js}"></script>
+
+  <!-- zTree js : 조직도 라이브러리 입니다. -->
+  <script type="text/javascript" th:src="@{/zTree/jquery.ztree.core.min.js}"></script>
+
+  <SCRIPT LANGUAGE="JavaScript">
+  $(document).ready(function(){
+	  /* 페이지가 시작되자마자 조직도 출력 */
+	  readOrg();
+	  
+	  $('.employeeInfo').on('click', addEmpl);
+  });  
+  
+  /* 사원 목록 클릭 이벤트*/
+  function addEmpl() {
+	  let count = $(this).attr('count');
+	  let employee_name = $(this).attr('empname');
+	  let employee_code = $(this).attr('empcode');
+	  let organization_name = $('#organization_name').val();
+	  
+	  console.log(employee_name);
+	  
+	  if(count == 0) {
+		  $('.selectedEmp').append('<li id=' + employee_name + ' name='+ employee_name +'>'+ employee_name + '</li>');
+		  $(this).mouseleave().css('background-color', '#EEF1FA');
+		  $(this).attr('count', '1');
+	  } else {
+		  document.getElementById(employee_name).remove();
+	      $(this).mouseenter().css('background-color', 'white');
+		  $(this).attr('count', '0');
+	  }
+  }
+  
+  /* 조직도를 읽어오는 함수 | zTree data attributes, refer to the API documentation (treeNode data details) */
+  function readOrg() {
+	  var zNodes;
+	   
+	   $.ajax({
+		   url : 'readOrg',
+		   type : 'post',
+		   async:false,
+		   success:function(data){
+			   zNodes = data;
+		   },
+		   error:function(e){
+			   console.log(e.responseText);
+		   }});
+	   
+	   var zTreeObj;
+	   /* zTree configuration information, refer to API documentation (setting details)*/
+	   /* setting 내용을 어떻게 수정하냐에 따라 보이는게 다릅니다. api 문서 참고해주세요.(주소 : https://treejs.cn/v3/api.php) */
+	   var setting = {
+			   data: {
+			        simpleData: {
+			            enable: true
+			        }     
+			    },
+				   view: {
+					   dblClickExpand: false,
+					   showIcon: true
+				       },
+				   callback: {
+					   onClick: myOnClick
+						}   
+	   };
+	   
+	   zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+	   
+  }
+   /* 클릭한 조직도의 부모아이디를 받기 위해 선언 : 다른 함수에서도 쓰기 위해 전역으로 선언함 */
+   let parent_id;
+   let organization;
+   
+   /* 조직도 내 부서명 클릭시 시 부서명이 서버단으로 넘어가서 db에서 부서명에 속한 사원이 출력됩니다. */
+   function myOnClick(event, treeId, treeNode) {
+	   parent_id = treeNode.id;
+	   organization = treeNode.path;
+	   
+	   $('#clickOrg').html(treeNode.name + ' 사원목록');
+
+	   /* 선택한거에 따라 신규 부서 생성에 표시되는 내용 */
+	   /* path받은 내용을 띄어쓰기로 스플릿 후 변수에 저장 */
+	   let str = treeNode.path;
+	   let [a, b, c, d, e] = str.split(' ');
+	   
+	   if(treeNode.level == 1){
+		   $('#business_unit').val(treeNode.name);
+		   $('#team').val("");
+		   $('#department').val("");
+		   $('#organization_name').val(c);
+	   } else if(treeNode.level == 2){
+		   $('#business_unit').val(c);
+		   $('#team').val(d);
+		   $('#department').val("");
+		   $('#organization_name').val(c + ' ' + d);
+	   } else if(treeNode.level == 3){
+		   $('#business_unit').val(c);
+		   $('#team').val(d);
+		   $('#department').val(e);
+		   $('#organization_name').val(c + ' ' + d + ' ' + e);
+	   } else {
+		   $('#business_unit').val("");
+		   $('#team').val("");
+		   $('#department').val("");
+		   $('#organization_name').val("");
+	   }
+	   
+	   /* 선택된 조직도와 path가 동일한 사원의 정보 출력 */
+	   if(treeNode.id != '0000'){
+		   $.ajax({
+			   url : 'searchEmployee',
+			   type : 'post',
+			   data : {organization : organization},
+			   dataType : 'json',
+			   success:function(data){
+				   let emp;
+				   
+				   emp = '<ul>'
+				   $.each(data, function(idx, ob){
+					   emp += '<li empname="' + ob.employee_name + '" empcode="'+ ob.employee_code + '" count="0">' + ob.employee_name + '</li>';
+					});
+				   emp += '</ul>'
+				   
+				   //목록 출력 영역에 내용 삽입
+				   $('#employeeList').html(emp);
+					
+			   },
+			   error:function(e){
+				   console.log(e.responseText);
+			   }
+			});
+	   }
+	};
+  </SCRIPT>
+</body>
+
+</html>

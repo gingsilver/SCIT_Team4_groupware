@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<!-- net.softsociety.Team4GroupWare.dao패키지의 DraftDAO인터페이스와 매핑됨 -->
+<mapper namespace="net.softsociety.Team4GroupWare.dao.DraftDAO">
+	<!-- ID 중복 체크 -->
+	<select id="readEmployee" parameterType="String" resultType="Employee">
+		select *
+		from team4_employee
+		where employee_id = #{employee_id}
+	</select>
+</mapper>

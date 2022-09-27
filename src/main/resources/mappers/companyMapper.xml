@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<!-- net.softsociety.spring5.dao패키지의 BoardDAO인터페이스와 매핑됨 -->
+<mapper namespace="net.softsociety.Team4GroupWare.dao.CompanyDAO">
+	<!-- 새로운 회사 생성 -->
+		<insert id="insertCompany" parameterType="Company">
+			insert into team4_company
+			(company_code
+			,company_name
+			,company_business_num
+			,company_postcode
+			,company_est_date
+			,company_ceo_name
+			,company_address
+			,company_detailaddress
+			,company_extraaddress
+			)
+			values
+			(
+			'COM'||LPAD(team4_company_seq.nextval, 4, 0)
+			,#{company_name}
+			,#{company_business_num}
+			,#{company_postcode}
+			,#{company_est_date}
+			,#{company_ceo_name}
+			,#{company_address}
+			,#{company_detailaddress}
+			,#{company_extraaddress}
+			)
+		</insert>
+
+	<!-- 회사 조회 -->
+	<select id="readCompany" parameterType="String" resultType="Company">
+		select
+			*
+		from
+			team4_company
+		where
+			company_business_num = #{company_business_num}
+	</select>
+	
+	<!-- admin 생성 -->
+	<insert id="insertAdmin" parameterType="Employee">
+		insert into
+			team4_employee
+		(employee_code
+		,company_code
+		,employee_id
+		,employee_pwd
+		,employee_name
+		,employee_email
+		,role_name
+		)
+		values
+		('ADMIN'||LPAD(team4_employee_seq.nextval, 4, 0)
+		,#{company_code}
+		,#{employee_id}
+		,#{employee_pwd}
+		,'관리자'
+		,#{employee_email}
+		,'ROLE_ADMIN'
+		)
+	</insert>
+	
+	<!-- ID 중복 체크 -->
+	<select id="checkID" parameterType="string" resultType="int">
+		select
+			count(*)
+		from
+			team4_employee
+		where
+			employee_id = #{employee_id}
+	</select>
+	
+	<!-- 사업자 번호 중복 체크 -->
+	<select id="checkBusinessNum" parameterType="string" resultType="int">
+		select
+			count(*)
+		from
+			team4_company
+		where
+			company_business_num = #{company_business_num}
+	</select>
+	
+	<!-- 관리자 찾기 -->
+	<select id="readAdmin" parameterType="string" resultType="Employee">
+		select *
+		from team4_employee
+		where COMPANY_CODE = #{COMPANY_CODE} and ROLE_NAME = 'ROLE_ADMIN'
+	</select>
+</mapper>

@@ -1,0 +1,139 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.softsociety.Team4GroupWare.dao.EmployeeDAO">
+
+<!-- 회원정보 저장 -->
+<insert id="insertEmployee" parameterType="Employee">
+    insert into team4_employee (
+		employee_code
+		, company_code
+		, employee_id
+		, employee_pwd
+		, employee_name
+		, employee_gender
+		, employee_email
+		, employee_birthdate
+		, employee_phone
+		, employee_address
+		, employee_address2
+		, hiredate
+		, position_type
+		, business_unit
+		, team
+		, department
+		, enabled
+		
+	) 
+    values (
+		#{employee_code}
+		, #{company_code}
+		, #{employee_id}
+		, #{employee_pwd}
+		, #{employee_name}
+		, #{employee_gender}
+		, #{employee_email}
+		, #{employee_birthdate}
+		, #{employee_phone}
+		, #{employee_address}
+		, #{employee_address2}
+		, #{hiredate}
+		, #{position_type}
+		, #{business_unit}
+		, #{team}
+		, #{department}
+		, #{enabled}
+	)
+</insert>
+
+<!-- 회원 Id 찾기  -->
+<select id="findId" parameterType="Employee" resultType="String">
+	select employee_id
+	from	team4_employee
+	where 
+	employee_name = #{employee_name}
+	and
+	employee_email = #{employee_email}
+	and
+	employee_phone = #{employee_phone} 
+
+</select>
+
+<!-- 회원 비밀번호 재설정  -->
+<update id="renewPw" parameterType="Employee">
+update team4_employee
+set employee_pwd = #{employee_pwd}
+where employee_id = #{employee_id}
+
+</update>
+
+	<!-- 사원 권한 체크 -->
+	<select id="checkRole" parameterType="Employee" resultType="int">
+		select count(*)
+		from team4_employee
+		where employee_id = #{employee_id} and role_name = #{role_name}
+	</select>
+
+<!-- 사원 정보읽어오기  -->
+<select id="getEmployeeById" parameterType="String" resultType="Employee">
+	select * 
+	from team4_employee	
+	where employee_id = #{employee_id} 
+		
+</select>
+
+	<!-- 프로필사진 첨부파일 테이블에 인서트 -->
+	<insert id="insertPhoto" parameterType="AttachedFile">
+		insert into team4_attached_file
+		(company_code
+		,attached_file_code
+		,document_code
+		,attached_file_origin_name
+		,attached_file_save_name
+		,attached_file_ext
+		,employee_code
+		,employee_id
+		,employee_name
+		)
+		values
+		(#{company_code}
+		,'File'||LPAD(team4_attached_file_seq.nextval, 4, 0)
+		,'Photo'||LPAD(team4_photo_file_seq.nextval, 4, 0)
+		,#{attached_file_origin_name}
+		,#{attached_file_save_name}
+		,#{attached_file_ext}
+		,#{employee_code}
+		,#{employee_id}
+		,#{employee_name}
+		)
+	</insert>
+	
+	<!-- 사원 테이블 내 프로필 사진 업데이트 -->
+	<update id="updatePhoto" parameterType="Employee">
+		update
+			team4_employee
+		set 
+			employee_photo = #{employee_photo}
+		where
+			employee_id = #{employee_id}
+	</update>
+	
+		<!-- 사원 테이블 내 프로필 데이터 업데이트 -->
+	<update id="updateinfo" parameterType="Employee">
+		update
+			team4_employee
+		set
+			employee_phone = #{employee_phone}
+		,
+			employee_email = #{employee_email}
+		,
+			employee_address = #{employee_address}
+		,
+			employee_pwd = #{employee_pwd}
+		
+		where
+			employee_id = #{employee_id}
+	</update>
+
+</mapper>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>KUROWARE 캘린더</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <!-- jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+	<!-- bootstrap 4 -->
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	
+	<!-- fullcalendar CDN -->
+	<link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.css' rel='stylesheet'/>
+	<script th:src='@{/js/calendar/fullcalendar.js}'></script>
+	
+	
+  <!-- Favicons -->
+  <link th:href="@{/assets/img/favicon.png}" rel="icon">
+  <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link th:href="@{https://fonts.gstatic.com}" rel="preconnect">
+  <link th:href="@{https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i}" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+
+	
+	
+
+
+    <script type="text/javascript" th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+        	selectScheduleList();
+            
+        });
+        
+        function createCalendar(scheduleList) {
+        	var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                timeZone: 'Asia/Seoul',
+                initialView: 'dayGridMonth', // 홈페이지에서 다른 형태의 view를 확인할  수 있다.
+                events: createEvent(scheduleList)
+            , headerToolbar: {
+                    center: 'addEventButton' // headerToolbar에 버튼을 추가
+                }, customButtons: {
+                    addEventButton: { // 추가한 버튼 설정
+                        text : "일정 추가",  // 버튼 내용
+                        click : function(){ // 버튼 클릭 시 이벤트 추가
+                            $("#calendarModal").modal("show"); // modal 나타내기
+
+                            $("#addCalendar").on("click",function(){  // modal의 추가 버튼 클릭 시
+                            	var schedule_title = $("#schedule_title").val();
+                                var schedule_contents = $("#schedule_contents").val();
+                                var schedule_startDate = $("#schedule_startDate").val();
+                                var schedule_endDate = $("#schedule_endDate").val();
+                                
+                                //내용 입력 여부 확인
+                                if(schedule_title == null || schedule_title == ""){
+                                    alert("제목을 입력하세요.");
+                                }else if(schedule_contents == null || schedule_contents == ""){
+                                    alert("내용을 입력하세요.");
+                                }else if(schedule_startDate == "" || schedule_endDate ==""){
+                                    alert("날짜를 입력하세요.");
+                                }else if(new Date(schedule_endDate)- new Date(schedule_startDate) < 0){ // date 타입으로 변경 후 확인
+                                    alert("종료일이 시작일보다 먼저입니다.");
+                                }else{ // 정상적인 입력 시
+                                    var obj = {
+                                        "schedule_title" : schedule_title,
+                                        "schedule_contents" : schedule_contents,
+                                        "schedule_startDate" : schedule_startDate,
+                                        "schedule_endDate" : schedule_endDate
+                                    }//전송할 객체 생성
+
+                                    console.log(obj); //서버로 해당 객체를 전달해서 DB 연동 가능
+                                }
+                            });
+                        }
+                    }
+                },
+                displayEventTime: false // 시간 표시 x
+            });
+            
+            calendar.render();
+        }
+        
+        function selectScheduleList(){
+        	$.ajax({
+        		url: 'selectScheduleList',
+        		type: 'post',
+        		data: {
+        			company_code : [[${company_code}]]
+        		},
+        		dataType: 'json',
+        		success: function (scheduleList) {
+        			createCalendar(scheduleList);
+        		},
+        		error: function () {
+        			alert('저장 실패');
+        		}
+        	});
+        }
+        
+        function createEvent(objList){
+        	let arrEvent = new Array();
+        	for(let obj of objList){
+
+    			console.log(obj);
+        		let event = new Object();
+        		event.id = obj.schedule_num;
+        		event.title = obj.schedule_title;
+        		if(obj.schedule_allDay === '1')
+					event.allDay = true;
+        		event.start = obj.schedule_startDate.replace(' ', 'T');
+        		event.end = obj.schedule_endDate.replace(' ', 'T');
+        		event.textColor = obj.schedule_textColor;
+        		event.borderColor = obj.schedule_borderColor;
+        		event.backgroundColor = obj.schedule_backgroundColor;
+        		event.contents = obj.schedule_contents;
+        		event.company_code = obj.company_code;
+        		event.schedule_writer_id = obj.schedule_writer_id;
+        		event.schedule_type = obj.schedule_type;
+
+    			console.log(event);
+				arrEvent.push(event);
+				
+        	}
+        	return arrEvent;
+        }
+    </script>
+    <style>
+        #calendarBox{
+            width: 70%;
+            padding-left: 15%;
+        }
+
+    </style>
+    
+</head>
+
+<body>
+    <div class="d-flex align-items-center justify-content-between">
+      <a th:href="@{/index}" class="logo d-flex align-items-center">
+        <img th:src="@{/assets/img/logo.png}" alt="">
+        <span class="d-none d-lg-block">KUROWARE</span>
+      </a>
+    </div><!-- End Logo -->
+
+
+    <div id="calendarBox">
+        <div id="calendar"></div>
+    </div>
+
+    <!-- 일정추가 때의 modal -->
+    <div class="modal fade" id="calendarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">일정을 입력하세요.</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form class="form-group" method="post" th:action="@{/schedule/save}">
+                <div class="modal-body">
+                        <label for="taskId" class="col-form-label">일정 제목</label>
+                        <input type="text" class="form-control" id="schedule_title" name="schedule_title">                    
+                        <label for="taskId" class="col-form-label">일정 내용</label>
+                        <input type="text" class="form-control" id="schedule_contents" name="schedule_contents">
+                        <label for="taskId" class="col-form-label">시작 날짜</label>
+                        <input type="datetime-local" class="form-control" id="schedule_startDate" name="schedule_startDate">
+                        <label for="taskId" class="col-form-label">종료 날짜</label>
+                        <input type="datetime-local" class="form-control" id="schedule_endDate" name="schedule_endDate">
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-warning" id="addCalendar">추가</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                        id="sprintSettingModalClose">취소</button>
+                </div>
+                </form>
+    
+            </div>
+        </div>
+    </div>
+    
+    <!-- 일정클릭 때의 modal -->
+    
+    <!--  
+    
+        
+    <div class="modal fade" id="calendarModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">일정을 확인하세요.</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                        <label for="taskId" class="col-form-label">일정 제목</label>
+                        <input type="text" class="form-control" id="schedule_title" th:value="${scheduleList.schedule_title}">                    
+                        <label for="taskId" class="col-form-label">일정 내용</label>
+                        <input type="text" class="form-control" id="schedule_contents" th:value="${scheduleList.schedule_contents}">
+                        <label for="taskId" class="col-form-label">시작 날짜</label>
+                        <input type="datetime-local" class="form-control" id="schedule_startDate" th:value="${scheduleList.schedule_startDate}">
+                        <label for="taskId" class="col-form-label">종료 날짜</label>
+                        <input type="datetime-local" class="form-control" id="schedule_endDate" th:value="${scheduleList.schedule_endDate}">
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                        id="sprintSettingModalClose">취소</button>
+                </div>
+              
+    
+            </div>
+        </div>
+    </div>
+    
+    -->
+    
+     <!-- 일정클릭 때의 modal 끝 -->
+     
+     
+
+  
+</body>
+
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.softsociety.Team4GroupWare.dao.ScheduleDAO">
+
+<!-- 회사일정 저장 -->
+<insert id="saveCompanySchedule" parameterType="Schedule">
+    insert into team4_schedule (
+		schedule_num
+		, schedule_type
+		, company_code
+		, schedule_writer_id
+		, schedule_title
+		, schedule_contents
+		, schedule_startDate
+		, schedule_endDate		
+		, schedule_allDay
+	) 
+    values (
+		team4_schedule_seq.nextval
+		, 0
+		, #{company_code}
+		, #{schedule_writer_id}
+		, #{schedule_title}
+		, #{schedule_contents}
+		, TO_DATE(#{schedule_startDate},'YYYY-MM-DD HH24:MI')
+		, TO_DATE(#{schedule_endDate},'YYYY-MM-DD HH24:MI')
+		, #{schedule_allDay}
+	)
+</insert>
+
+<!-- 개인일정 저장 -->
+<insert id="saveEmployeeSchedule" parameterType="Schedule">
+    insert into team4_schedule (
+		schedule_num
+		, schedule_type
+		, company_code
+		, schedule_writer_id
+		, schedule_title
+		, schedule_contents
+		, schedule_startDate
+		, schedule_endDate
+		, schedule_allDay		
+	) 
+    values (
+		team4_schedule_seq.nextval
+		, 1
+		, #{company_code}
+		, #{schedule_writer_id}
+		, #{schedule_title}
+		, #{schedule_contents}
+		, TO_DATE(#{schedule_startDate},'YYYY-MM-DD HH24:MI')
+		, TO_DATE(#{schedule_endDate},'YYYY-MM-DD HH24:MI')
+		, #{schedule_allDay}
+	)
+</insert>
+
+<!-- 회사일정 불러오기  -->
+<select id="selectCompanySchedule" parameterType="map" resultType="Schedule">
+	select *
+	from	team4_schedule
+	where	company_code = #{company_code}
+		and	schedule_type = 0
+			
+
+</select>
+
+
+<!-- 개인일정 불러오기  -->
+<select id="selectEmployeeSchedule" parameterType="map" resultType="Schedule">
+	select *
+	from	team4_schedule
+	where	schedule_writer_id = #{schedule_writer_id}
+		and	schedule_type = 1
+
+</select>
+
+
+
+</mapper>
