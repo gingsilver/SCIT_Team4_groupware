@@ -62,7 +62,7 @@
                 	<div class="row">
                     	<div class="col-lg-12">
 							<input type="button" value="상신" class="btn btn-primary">&nbsp;
-							<button type="button" class="btn btn-primary"
+							<button type="button" class="btn btn-primary" id="selectApproval"
 								    data-bs-toggle="modal" data-bs-target="#approvalModal">결재선 선택</button>&nbsp;
 							<input type="button" value="의견 추가" class="btn btn-primary">&nbsp;
 							<input type="button" value="임시 저장" class="btn btn-primary">&nbsp;
@@ -229,33 +229,31 @@
 								</div>
 								<div class="col-8">
 									<h5><b>● 결재선</b></h5>
-									<table class="table">
-										<tr>
-											<th>#</th>
-											<th>결재권한</th>
-											<th>결재자</th>
-											<th>결재타입</th>
-										</tr>
-										<tr>
-											<th>1</th>
-											<th>기안</th>
-											<th th:text="${employee.employee_name}"></th>
-											<th>
-												<select>
-													<option>--결재 타입 선택--</option>
-													<option>기안</option>
-													<option>결재</option>
-													<option>참조</option>
-													<option>전결</option>
-												</select>
-											</th>
-										</tr>
-									</table>
+									<form id="addApprovalForm">
+										<table class="table" id="memDiv">
+											<thead class="py-8">
+											<tr>
+												<th>#</th>
+												<th>결재권한</th>
+												<th>결재자</th>
+												<th>결재타입</th>
+											</tr>
+											</thead>
+											<tbody>
+											<tr>
+												<td>1</td>
+												<td><span>기안자</span></td>
+												<td th:text="${employee.employee_name}"></td>
+												<td>기안</td>
+											</tr>
+											</tbody>
+										</table>
+									</form>
 								</div>
 		                    </div>
 		                    <div class="modal-footer">
-		                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-		                      <button type="button" class="btn btn-primary">Save changes</button>
+		                      <button type="button" class="btn btn-primary" id="addApprovalButton">결재선 추가</button>
+		                      <button type="button" class="btn btn-danger" data-bs-dismiss="modal">닫기</button>
 		                    </div>
 		                  </div>
 		                </div>
@@ -304,28 +302,97 @@
 	  /* 페이지가 시작되자마자 조직도 출력 */
 	  readOrg();
 	  
+	  /* 조직원 사원 목록 클릭시 이벤트 */
 	  $('.employeeInfo').on('click', addEmpl);
+	  
+	  /* 결재선 선택 버튼 : 시퀀스 추가 */
+	  $('#selectApproval').on('click', addDraftSeq);
+	  
+	  /* 결재선 추가 버튼 : 결재자 정보 결재 페이지에 넘기기 */
+	  $('#addApprovalButton').on('click', addApproval);
   });  
   
+  /* 결재선 추가 버튼 : 결재자 정보 결재 페이지에 넘기기 */
+  function addApproval()  {
+	  $.ajax({
+			url : 'addApproval',
+			type : 'post',
+			data : $('#addApprovalForm').serialize(), //serialize : name이 붙어있는 form의 객체들을 한번에 불러서 가져감
+			success : function () {
+				alert('저장되었습니다.');
+			},
+			error : function () {
+				alert('저장 실패');
+			}
+		});
+  }
+  
+  /* 결재선 선택 버튼 : 시퀀스 추가 */
+  function addDraftSeq() {
+	  $.ajax({
+		   url : 'addDraftSeq',
+		   type : 'get',
+		   success:function(data){
+			   if(data == 0){
+				   console.log('실패');
+			   }else{
+				   console.log('성공');
+			   }
+		   },
+		   error:function(e){
+			   console.log(e.responseText);
+		   }
+	  });
+  }
+  
+  /* 결재선 테이블 번호 추가를 위한 전역 num 변수 */
+  let num = 1;
   /* 사원 목록 클릭 이벤트*/
   function addEmpl() {
 	  let count = $(this).attr('count');
 	  let employee_name = $(this).attr('empname');
 	  let employee_code = $(this).attr('empcode');
 	  let organization_name = $('#organization_name').val();
-	  
-	  console.log(employee_name);
+	  var insertTr = "";
 	  
 	  if(count == 0) {
+		  num += 1;
+		  let type = 'type' + num;
+		  let selectedType = 'selectedType' + num;
 		  $('.selectedEmp').append('<li id=' + employee_name + ' name='+ employee_name +'>'+ employee_name + '</li>');
 		  $(this).mouseleave().css('background-color', '#EEF1FA');
 		  $(this).attr('count', '1');
+		  
+		  insertTr += "<tr>";
+		  insertTr += "<td>"+ num +"</td>";
+		  insertTr += "<td><span id="+ type +"></span></td>";
+		  insertTr += "<td employee_name="+ employee_name +" employee_code=" + employee_code + ">" + employee_name + "</td>";
+		  insertTr += "<td><select id=" + selectedType + ">";
+		  insertTr += "<option>--결재 타입 선택--</option>";
+		  insertTr += "<option value='결재'>결재</option>";
+		  insertTr += "<option value='참조'>참조</option>";
+		  insertTr += "<option value='전결'>전결</option>";
+		  insertTr += "</select></td>"
+		  insertTr += "</tr>";
+		  
+		  $('#memDiv > tbody:last').append(insertTr);
+		  
+		  $('#selectedType'+num).on('change', addApr);
+		  
 	  } else {
-		  document.getElementById(employee_name).remove();
 	      $(this).mouseenter().css('background-color', 'white');
 		  $(this).attr('count', '0');
+		  num -= 1;
+		  
+		  $('#memDiv > tbody > tr:last').remove();
+	  }
+	  
+	  function addApr(){
+		  let selType = $(this).val();
+		  $('#type'+num).html(selType + '자');
 	  }
   }
+  
   
   /* 조직도를 읽어오는 함수 | zTree data attributes, refer to the API documentation (treeNode data details) */
   function readOrg() {
@@ -413,13 +480,14 @@
 				   
 				   emp = '<ul>'
 				   $.each(data, function(idx, ob){
-					   emp += '<li empname="' + ob.employee_name + '" empcode="'+ ob.employee_code + '" count="0">' + ob.employee_name + '</li>';
+					   emp += '<li class="employeeInfo" empname="' + ob.employee_name + '" empcode="'+ ob.employee_code + '" count="0">' + ob.employee_name + '</li>';
 					});
 				   emp += '</ul>'
 				   
 				   //목록 출력 영역에 내용 삽입
 				   $('#employeeList').html(emp);
-					
+				
+				   $('.employeeInfo').on('click', addEmpl);
 			   },
 			   error:function(e){
 				   console.log(e.responseText);

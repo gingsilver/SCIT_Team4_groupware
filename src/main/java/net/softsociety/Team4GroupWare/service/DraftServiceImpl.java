@@ -23,4 +23,11 @@ public class DraftServiceImpl implements DraftService {
 		return employee;
 	}
 
+	@Override
+	public int addDraftSeq() {
+		int result = dao.addDraftSeq();
+		
+		return result;
+	}
+
 }
