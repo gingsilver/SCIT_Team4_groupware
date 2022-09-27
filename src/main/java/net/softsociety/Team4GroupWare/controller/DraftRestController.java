@@ -7,12 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.Team4GroupWare.domain.Company;
+import net.softsociety.Team4GroupWare.domain.DraftApproval;
 import net.softsociety.Team4GroupWare.domain.Employee;
 import net.softsociety.Team4GroupWare.domain.Organization;
 import net.softsociety.Team4GroupWare.service.AdminService;
@@ -61,32 +63,21 @@ public class DraftRestController {
 			return empList;
 		}
 		
-		@PostMapping("addOrganization")
-		public int addOrganization(Organization org, @AuthenticationPrincipal UserDetails user) {
-			log.debug("가져온 조직 : {}", org);
-			//1. 컴퍼니 아이디 가져와서 저장
-			Employee employee = adminservice.readAdmin(user.getUsername());
-			org.setCompany_code(employee.getCompany_code());
-			
-			//2. 부모 아이디에 가지고 있는 부서 아이디의 끝번호를 가져와서.. 저장? 그리고 그 번호 +1해서 org에 부서 아이디로 저장
-			ArrayList<Organization> orgList = adminservice.findByParentId(org.getParent_id());
-			
-			String department_node = null;
-			for(int i = 0; i < orgList.size(); i++) {
-				department_node = orgList.get(i).getDepartment_id();
-			}
-			org.setDepartment_id(department_node);
-			
-			int result = adminservice.addOrganization(org);
+		//결재선 추가 클릭시 예비 기안 코드 시퀀스 추가
+		@GetMapping("addDraftSeq")
+		public int addDraftSeq() {
+			int result = 0;
+			result = draftservice.addDraftSeq();
 			
 			return result;
 		}
 		
-		@PostMapping("addEmpForOrg")
-		public int addEmpForOrg(Employee employee) {
-			log.debug("가져온 멤버 : {}", employee);
+		//결재선 추가
+		@PostMapping("addApproval")
+		public int addApproval(DraftApproval approval) {
+			int result = 0;
 			
-			int result = adminservice.addEmpForOrg(employee);
+			log.debug("가져온 결재선 : {}", approval);
 			
 			return result;
 		}

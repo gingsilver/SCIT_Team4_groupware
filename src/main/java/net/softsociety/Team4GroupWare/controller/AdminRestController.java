@@ -104,6 +104,15 @@ public class AdminRestController {
 	public int addEmpForOrg(Employee employee) {
 		log.debug("가져온 멤버 : {}", employee);
 		
+		ArrayList<Employee> empList = new ArrayList<>();
+		empList.add(employee);
+		
+		log.debug("가져온 배열 : {}", empList);
+		
+		
+		ArrayList<String> email = new ArrayList<>();
+		
+		
 		int result = service.addEmpForOrg(employee);
 		
 		return result;

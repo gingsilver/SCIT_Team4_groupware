@@ -1,0 +1,19 @@
+package net.softsociety.Team4GroupWare.domain;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class DraftApproval {
+	String draft_code;
+	String approver_code;
+	String employee_code;
+	String approver_name;
+	String process_type;
+	String process_turn_code;
+	String process_enabled;
+
+}
