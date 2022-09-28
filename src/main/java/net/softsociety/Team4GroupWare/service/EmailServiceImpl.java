@@ -33,42 +33,15 @@ public class EmailServiceImpl implements EmailService {
 	@Autowired
 	EmailDAO emailDAO;
 
-	private JavaMailSender mailSender;
+
 
 	@Override
 	public int sendMailWithFiles(Email email, MultipartFile upload, MailProcess mail_process) throws Exception {
 
-		/* --------------------------- 외부 서버로 메일 발송하기 ---------------------------*/
-
-
-		  MimeMessage message = mailSender.createMimeMessage(); MimeMessageHelper
-		  helper = new MimeMessageHelper(message, true);
-
-		  //보내는 이
-		  helper.setFrom(email.getEmail_sender());
-
-		  //참조자 설정
-		  helper.setCc(mail_process.getEmail_cc_receiver());
-
-		  //제목
-		  helper.setSubject(email.getEmail_title());
-
-		  //내용
-		  helper.setText(email.getEmail_content());
-
-		  //첨부파일
-		  String fileName = StringUtils.cleanPath(upload.getOriginalFilename());
-		  helper.addAttachment(MimeUtility.encodeText(fileName, "UTF-8", "B")
-				  			   , new ByteArrayResource(IOUtils.toByteArray(upload.getInputStream())));
-
-		  //수신자 한번에 전송
-		  helper.setTo(mail_process.getEmail_receiver());
-		  mailSender.send(message); log.info("mail multiple send completed");
 
 
         /* -------------------------------- 내부 DB에 메일 저장하기 --------------------------------*/
 
-		//String return_email_code = emailDAO.sendToMailbox(email);
         int mail_return = emailDAO.sendToMailbox(email);
 
         return mail_return;

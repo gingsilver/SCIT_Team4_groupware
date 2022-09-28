@@ -83,14 +83,12 @@ a:visited{
 							<colgroup>
 								<col width="50px" />
 								<col width="50px" />
-								<col width="150px" />
 								<col width="800px" />
 								<col width="150px" />
 							</colgroup>
 							<tr>
 								<th></th>
 								<th></th>
-								<th>From</th>
 								<th>Title</th>
 								<th>Date</th>
 							</tr>
@@ -99,7 +97,6 @@ a:visited{
 									<td><div class="custom-control custom-checkbox pl-4"><input type="checkbox"></td>
 									<td><div class="ml-2"><button class="border-0 bg-transparent align-middle p-0">
 										<i class="bi bi-star" aria-hidden="true"></i></button></td>
-									<td><div th:text="${mail.email_sender}"></div></td>
 									<td><a class="subject mail" th:text="${mail.email_title}" th:href="@{/mailbox/readOne(email_code=${mail.email_code})}"></a></td>
 									<td><div class="date mail" th:text="${mail.email_date}"></div></td>
 								</tr>
