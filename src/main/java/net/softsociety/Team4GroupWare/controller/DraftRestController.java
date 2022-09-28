@@ -1,6 +1,7 @@
 package net.softsociety.Team4GroupWare.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,22 +64,26 @@ public class DraftRestController {
 			return empList;
 		}
 		
-		//결재선 추가 클릭시 예비 기안 코드 시퀀스 추가
-		@GetMapping("addDraftSeq")
-		public int addDraftSeq() {
-			int result = 0;
-			result = draftservice.addDraftSeq();
-			
-			return result;
-		}
-		
 		//결재선 추가
 		@PostMapping("addApproval")
 		public int addApproval(DraftApproval approval) {
-			int result = 0;
+			String draft_code = draftservice.createCode();
+			approval.setDraft_code(draft_code);
 			
+			String process_turn_code = draftservice.countDraftCode(draft_code);
+			if(process_turn_code == null) {
+				process_turn_code = "0";
+			}
+			approval.setProcess_turn_code(process_turn_code);
+			
+			if(approval.getProcess_type().equals("참조")) {
+				approval.setProcess_enabled(4);
+			} else if(approval.getProcess_type().equals("결재") ||approval.getProcess_type().equals("전결")) { 
+				 approval.setProcess_enabled(3); 
+			}
 			log.debug("가져온 결재선 : {}", approval);
-			
+			int result = draftservice.addApproval(approval);
+			 
 			return result;
 		}
 

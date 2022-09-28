@@ -1,5 +1,6 @@
 package net.softsociety.Team4GroupWare.service;
 
+import net.softsociety.Team4GroupWare.domain.DraftApproval;
 import net.softsociety.Team4GroupWare.domain.Employee;
 
 public interface DraftService {
@@ -12,9 +13,23 @@ public interface DraftService {
 	public Employee readEmployee(String username);
 
 	/**
-	 * insert : 예비 기안 코드 번호 생성 메소드
+	 * insert : 결재선 추가
+	 * @param approval
 	 * @return
 	 */
-	public int addDraftSeq();
+	public int addApproval(DraftApproval approval);
+
+	/**
+	 * create : 예비 기안 시퀀스 
+	 * @return
+	 */
+	public String createCode();
+
+	/**
+	 * selecct : 기안 코드에 맞는 결재선 턴 코드 총합 리턴
+	 * @param draft_code
+	 * @return
+	 */
+	public String countDraftCode(String draft_code);
 
 }

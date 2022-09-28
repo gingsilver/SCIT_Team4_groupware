@@ -80,7 +80,6 @@ where employee_id = #{employee_id}
 	select * 
 	from team4_employee	
 	where employee_id = #{employee_id} 
-		
 </select>
 
 	<!-- 프로필사진 첨부파일 테이블에 인서트 -->
