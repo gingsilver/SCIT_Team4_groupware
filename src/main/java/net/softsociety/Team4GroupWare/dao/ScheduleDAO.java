@@ -22,6 +22,9 @@ public interface ScheduleDAO {
 	//개인일정 불러오기
 	public List<Schedule> selectEmployeeSchedule(Map<String, String> map);
 	
+	//일정 삭제
+	public int deleteSchedule(int schedule_num);
+	
 
 
 }

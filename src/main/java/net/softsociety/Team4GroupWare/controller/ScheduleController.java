@@ -103,13 +103,12 @@ public class ScheduleController {
 	}
 	
 	//스케줄 삭제
-	@GetMapping("deleteSchedule")
-	public String deleteSchedule(Schedule schedule, @AuthenticationPrincipal UserDetails user) {
+	@PostMapping("deleteSchedule")
+	public String deleteSchedule(int schedule_num, @AuthenticationPrincipal UserDetails user) {
 		
-		schedule.setSchedule_writer_id(user.getUsername());
-		int result = scheduleService.deleteSchedule(schedule);
+		int result = scheduleService.deleteSchedule(schedule_num);
 		
-		return "redirect:/schedule/selectScheduleList?schedule_num=" + schedule.getSchedule_num();
+		return "redirect:/schedule/list";
 		
 	}
 	
