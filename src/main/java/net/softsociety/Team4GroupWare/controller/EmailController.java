@@ -2,21 +2,30 @@ package net.softsociety.Team4GroupWare.controller;
 
 import java.util.ArrayList;
 
+import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.Team4GroupWare.domain.AttachedFile;
+import net.softsociety.Team4GroupWare.domain.Company;
+import net.softsociety.Team4GroupWare.domain.DraftApproval;
 import net.softsociety.Team4GroupWare.domain.Email;
+import net.softsociety.Team4GroupWare.domain.Employee;
 import net.softsociety.Team4GroupWare.domain.MailProcess;
 import net.softsociety.Team4GroupWare.domain.Mailinfo;
+import net.softsociety.Team4GroupWare.service.AdminService;
+import net.softsociety.Team4GroupWare.service.DraftService;
 import net.softsociety.Team4GroupWare.service.EmailService;
 import net.softsociety.Team4GroupWare.util.FileService;
 
@@ -26,8 +35,20 @@ import net.softsociety.Team4GroupWare.util.FileService;
 @RequestMapping("mailbox")
 public class EmailController {
 
+	// 메일 서비스 선언
 	@Autowired
 	EmailService service;
+	
+	// 기안 서비스 선언
+	@Autowired
+	DraftService draftservice;
+		
+	// 관리자 서비스 선언
+	@Autowired
+	AdminService adminservice;
+	
+	
+	
 
 	//첨부파일 저장할 경로
 	@Value("${spring.servlet.multipart.location}")
@@ -44,15 +65,92 @@ public class EmailController {
 	//게시판 목록의 페이지 이동 링크 수 
 	@Value("${user.board.group}")
 	int pagePerGroup;	
+	
+	/*------------------------------ 조직도 관련 ------------------------------*/
+
+	//조직도 불러오는 ajax 컨트롤러
+	@ResponseBody
+	@PostMapping("readOrg")
+	public JSONArray readOrg(@AuthenticationPrincipal UserDetails user) {
+		//회사코드, 관리자 내용 가져오기
+		Employee admin = adminservice.readAdmin(user.getUsername());
+		Company company = adminservice.readCompany(admin.getCompany_code());
+		
+		JSONArray json = adminservice.readOrg(company);
+		
+		return json;
+	}
+	
+	//조직도 내 사원 목록 불러오는 ajax 컨트롤러
+	@ResponseBody
+	@PostMapping("searchEmployee")
+	public ArrayList<Employee> searchEmployee(@AuthenticationPrincipal UserDetails user, String organization){
+		Employee employee = adminservice.readAdmin(user.getUsername());
+		Company company = adminservice.readCompany(employee.getCompany_code());
+		
+		String realOrg = organization.substring(company.getCompany_name().length()+2);
+		
+		log.debug("가져온 팀명 : {}", realOrg);
+
+		employee.setOrganization(realOrg);
+		
+		ArrayList<Employee> empList = adminservice.findByOrganization(employee);
+		
+		return empList;
+	}
+	
+	//결재선 추가 클릭시 예비 기안 코드 시퀀스 추가
+	@ResponseBody
+	@GetMapping("addDraftSeq")
+	public int addDraftSeq() {
+		int result = 0;
+		result = draftservice.addDraftSeq();
+		
+		return result;
+	}
+	
+	//결재선 추가
+	@ResponseBody
+	@PostMapping("addApproval")
+	public int addApproval(DraftApproval approval) {
+		int result = 0;
+		
+		log.debug("가져온 결재선 : {}", approval);
+		
+		return result;
+	}
+	
+	
+	
+	//메일 쓰기 페이지로 이동
+	@GetMapping("/write")
+	public String writeDdraft(@AuthenticationPrincipal UserDetails user, Model model) {
+		// 회사코드, 관리자 내용 가져오기
+		Employee employee = draftservice.readEmployee(user.getUsername());
+		Company company = adminservice.readCompany(employee.getCompany_code());
+		JSONArray json = adminservice.readOrg(company);
+				
+		ArrayList<Employee> empList = adminservice.employeeList(employee);
+				
+		for(int i = 0; i < empList.size(); i++) {
+			if(empList.get(i).getRole_name().equals("ROLE_ADMIN")) {
+				empList.remove(i);
+			}
+		}
+				
+		model.addAttribute("employee", employee);
+		model.addAttribute("company", company);
+		model.addAttribute("json", json);
+		model.addAttribute("empList",empList);
+		
+		return "mailbox/write";
+	}
 
 	
 	/*------------------------------ 메일 쓰기 ------------------------------*/
 	
-	//메일 쓰기 페이지로 이동
-	@GetMapping("write")
-	public String write() {
-		return "mailbox/write";
-	}
+
+
 	
 	
 	//작성된 메일 내용 받아오기
@@ -213,11 +311,12 @@ public class EmailController {
 		//Company_code("COM0007"); 로그인 정보 받아와서 넣기 현재는 임시 정보
 		//email_sender는 로그인 정보에서 가져와야함, 여기서는 모르니까 임의로 넣고 진행(pp2000pooh@naver.com)
 		//DB에서 글을 읽어서
-		String email_receiver = "hongvely0829@gmail.com"; 
-		String email_cc_receiver = "hongvely0829@gmail.com";
+		String email_receiver = "pp2000pooh@naver.com"; 
+		String email_cc_receiver = "yunhye.kay.hong@gmail.com";
+		String email_sender = "hongvely0829@gmail.com";
 		
 		
-		ArrayList<Mailinfo> mailinfo = service.readAllmail(email_receiver, email_cc_receiver); 
+		ArrayList<Mailinfo> mailinfo = service.readAllmail(email_receiver, email_cc_receiver, email_sender); 
 
 		System.out.println(mailinfo);
 		//모델에 담아서 html로 보내주기

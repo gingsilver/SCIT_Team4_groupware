@@ -128,8 +128,10 @@
 			team4_mailbox_total T, team4_mailbox_process P
 		WHERE 
 			T.email_code =	P.email_code 
-			and (P.email_receiver = #{email_receiver}
-			or P.email_cc_receiver = #{email_cc_receiver})
+			and (P.email_receiver like '%' || #{email_sender} || '%'
+			or P.email_cc_receiver like '%' || #{email_sender} || '%')
+			
+			
 		ORDER BY
 			TO_CHAR(T.email_date, 'YYYY-MM-DD') DESC
 	</select>

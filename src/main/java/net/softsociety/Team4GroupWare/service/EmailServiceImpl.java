@@ -34,19 +34,13 @@ public class EmailServiceImpl implements EmailService {
 	EmailDAO emailDAO;
 
 
+	//메일 쓰기
 
 	@Override
 	public int sendMailWithFiles(Email email, MultipartFile upload, MailProcess mail_process) throws Exception {
 
-
-
-        /* -------------------------------- 내부 DB에 메일 저장하기 --------------------------------*/
-
         int mail_return = emailDAO.sendToMailbox(email);
-
         return mail_return;
-
-
 	}
 	
 	//첨부파일 저장
@@ -109,11 +103,12 @@ public class EmailServiceImpl implements EmailService {
 	
 	//전체 메일함
 	@Override
-	public ArrayList<Mailinfo> readAllmail(String email_receiver, String email_cc_receiver) {
+	public ArrayList<Mailinfo> readAllmail(String email_receiver, String email_cc_receiver, String email_sender) {
 		HashMap<String, String> map = new HashMap<>();
 		
 		map.put("email_receiver", email_receiver);
 		map.put("email_cc_receiver", email_cc_receiver);
+		map.put("email_sender", email_sender);
 		
 		ArrayList<Mailinfo> mailinfo = emailDAO.readAllmail(map);
 		

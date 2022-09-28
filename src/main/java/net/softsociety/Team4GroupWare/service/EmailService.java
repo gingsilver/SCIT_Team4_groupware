@@ -74,7 +74,7 @@ public interface EmailService {
 	 * @param email_cc_receiver 참조인
 	 * @return '수신인', '참조인'으로서 받은 메일 
 	 */
-	public ArrayList<Mailinfo> readAllmail(String email_receiver, String email_cc_receiver);
+	public ArrayList<Mailinfo> readAllmail(String email_receiver, String email_cc_receiver, String email_sender);
 
 	/**
 	 * 메일 1개 읽어오기

@@ -28,6 +28,7 @@ public class WebSecurityConfig implements WebMvcConfigurer { // 클래스 이름
                 http.csrf().disable()
                                 .authorizeRequests()
                                 .antMatchers("/index").hasRole("USER")
+                                .antMatchers("/mailbox/**").hasRole("USER")
                                 .antMatchers("/admin/**").hasRole("ADMIN")
                                 .antMatchers("/", "/employee/signup" // 경섭 : 사원 생성 => 곧 지울 예정
                                                 , "/employee/checkRole" // 지은 : 로그인 시 권한 확인 ajax 페이지
