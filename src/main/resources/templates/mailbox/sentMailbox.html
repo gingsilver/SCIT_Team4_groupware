@@ -30,6 +30,8 @@
   <!-- Template Main CSS File -->
   <link rel="icon" type="image/png" sizes="16x16" href="./image/favicon.png">
   <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+  
+  
 
   <!-- =======================================================
   * Template Name: NiceAdmin - v2.3.1
@@ -37,7 +39,16 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
-
+<style>
+a:link{
+    /* unvisited link*/
+    text-decoration: none;
+    color: black;
+}
+a:visited{
+    color: #6b705c;
+}
+</style>
 
 
 </head>
@@ -62,20 +73,20 @@
     </div><!-- End Page Title -->
 
     <section class="section dashboard">
+            			<div class="card">
+				<div class="card-body" style="height : 1550px;">
    		<div class="email-list">
 			<div class="message">
 				<table class="table table-hover">
 					<colgroup>
 						<col width="50px" />
 						<col width="50px" />
-						<col width="150px" />
 						<col width="800px" />
 						<col width="150px" />
 					</colgroup>
 					<tr>
 						<th></th>
 						<th></th>
-						<th>To</th>
 						<th>title</th>
 						<th>date</th>
 					</tr>
@@ -84,14 +95,14 @@
 							<td><div class="custom-control custom-checkbox pl-4"><input type="checkbox"></td>
 							<td><div class="ml-2"><button class="border-0 bg-transparent align-middle p-0">
 								<i class="bi bi-star" aria-hidden="true"></i></button></td>
-							<td><div th:text="${mail.email_receiver}"></div></td>
 							<td><a class="subject mail"	th:text="${mail.email_title}" th:href="@{/mailbox/sentMailboxOne(email_code=${mail.email_code})}"></a></td>
 							<td><div class="date mail" th:text="${mail.email_date}"></div></td>
 						</tr>
 					</div>
 				</table>
 					
-
+</div>
+</div>
 					</div>
 				</div>
     

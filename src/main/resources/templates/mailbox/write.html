@@ -30,6 +30,12 @@
   <!-- Template Main CSS File -->
   <link th:href="@{/assets/css/style.css}" rel="stylesheet">
   <link href="@{/assets/css/mailbox.css}" rel="stylesheet">
+  
+    <!-- zTree -->
+  <link rel="stylesheet" th:href="@{/zTree/zTreeStyle.css}" />
+  
+  
+  
 <script>
 function validation(){
 	let receiver = document.getElementById('email_receiver');
@@ -56,28 +62,6 @@ function validation(){
 	}
 	
 	
-	const add_textbox = (obj) => {
-	    const box = obj.parentElement.parentElement; 
-	    const newP = document.createElement("tr");
-	
-	    newP.innerHTML = "<tr class='form-group'><td><input type='text' class='form-control' name='email_receiver' placeholder=' To:'></td><td><input type='button' class='form-control' value='삭제' onclick='opt_remove(this)'></td></tr>";
-		box.parentNode.insertBefore(newP, box.nextSibling);
-	}
-	
-	const add_textbox2 = (obj) => {
-	    const box = obj.parentElement.parentElement; 
-	    const newP = document.createElement("tr");
-	
-	    newP.innerHTML = "<tr class='form-group'><td><input type='text' class='form-control' name='email_cc_receiver' placeholder='CC : '></td><td><input type='button' class='form-control' value='삭제' onclick='opt_remove2(this)'></td></tr>";
-		box.parentNode.insertBefore(newP, box.nextSibling);
-		}
-	
-	const opt_remove = (obj) => {
-		obj.parentElement.parentElement.parentElement.removeChild(obj.parentElement.parentElement);
-	}
-	const opt_remove2 = (obj) => {
-		obj.parentElement.parentElement.parentElement.removeChild(obj.parentElement.parentElement);
-	}	
 </script>
   <!-- =======================================================
   * Template Name: NiceAdmin - v2.3.1
@@ -103,6 +87,11 @@ input[type=button]{
 	width : 100px;
 	
 }
+
+#email_title, #email_receiver, #email_cc_receiver{
+	width : 900px;
+}
+
 .sendAndReset{
 	margin : 0 auto;
 	text-align: center;
@@ -157,6 +146,8 @@ div.attechedFile{
 
     <section class="section dashboard">      
         <div class="container">
+        			<div class="card">
+				<div class="card-body" style="height : 850px; ">
 
      <form id="write" th:action="write" method="post" onsubmit="return validation();" enctype="multipart/form-data">
         <table>
@@ -164,16 +155,18 @@ div.attechedFile{
                 <td>
                     <input type="text" class="form-control" id="email_receiver" name="email_receiver" placeholder=" To:">
                 </td>
-                <td>
-					<input type="button" class="form-control" value="추가" onclick="add_textbox(this)">
+				<td>
+					<button type="button" class="btn btn-primary" id="selectApproval"
+							data-bs-toggle="modal" data-bs-target="#approvalModal"><i class="bi bi-person-plus-fill">&nbsp;주소록</i></button>&nbsp;
 				</td>
             </tr>
             <tr id="box2" class="form-group">        
                 <td>
-                    <input type="text" class="form-control" name="email_cc_receiver" placeholder=" CC :">
+                    <input type="text" class="form-control" id="email_cc_receiver" name="email_cc_receiver" placeholder=" CC :">
                 </td>
-                <td>
-					<input type="button" class="form-control" value="추가" onclick="add_textbox2(this)">
+					<td>
+					<button type="button" class="btn btn-primary" id="selectApproval"
+							data-bs-toggle="modal" data-bs-target="#approvalModal"><i class="bi bi-person-plus-fill">&nbsp;주소록</i></button>&nbsp;
 				</td>
             </tr>
             <tr class="form-group">
@@ -183,13 +176,16 @@ div.attechedFile{
             </tr>
             <tr class="form-group">
                 <td>
-                    <textarea class="form-control" id="email_content" name="email_content" placeholder="Enter text.." cols="60" rows="20"> </textarea>
+             <!-- 웹 에디터 시작 -->
+             	<div class="quill-editor-full">
+                    <textarea class="form-control" id="email_content" name="email_content" placeholder="Enter text.." rows="10" cols="50"> </textarea>
+				</div> 
                 </td>
             </tr>
             <div class="attechedFile">
             <tr></tr>
             <tr class="form-group" >
-            	<td><h5 class="mb-4"><i class="bi bi-paperclip"></i></i>첨부파일</h5></td>
+            	<td><h5 class="mb-4"><i class="bi bi-paperclip"></i>첨부파일</h5></td>
             </tr>            	
             <tr>
             	<td><input type="file" name="upload" class="btn btn-light" id="file-input" multiple/></td>
@@ -204,9 +200,10 @@ div.attechedFile{
         </table>                
                 
     </form>
-     
+      </div>
  </div>
- </div>       
+    </div> 
+    
     
     
     
