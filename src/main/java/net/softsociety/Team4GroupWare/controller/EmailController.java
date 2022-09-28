@@ -84,7 +84,7 @@ public class EmailController {
 		System.out.println("컨트롤러에서 값이 잘 넘어오나 확인"+ email.getEmail_code());
 
 		
-		/*---------------------청부파일 정보 입력--------------------------*/
+		/*---------------------첨부파일 정보 입력--------------------------*/
 		
 		if (upload != null && !upload.isEmpty() && upload.getSize()!=0) {
 			

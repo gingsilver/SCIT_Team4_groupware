@@ -6,8 +6,7 @@
 <mapper namespace="net.softsociety.Team4GroupWare.dao.EmailDAO">
 	<!-- 이메일 발송 -->
 	<insert id="sendToMailbox" parameterType="Email">
-		<selectKey resultType="String" keyProperty="email_code"
-			order="BEFORE">
+		<selectKey  resultType="String" keyProperty="email_code" order="BEFORE">
 			SELECT 'M'||LPAD(team4_mailbox_total_seq.nextval, 4, 0) FROM DUAL
 		</selectKey>
 		INSERT INTO
