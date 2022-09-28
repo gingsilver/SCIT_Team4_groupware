@@ -281,7 +281,9 @@
                         <input type="datetime-local" class="form-control" id="schedule_endDate2">
                 </div>
                 <div class="modal-footer">
-                <button type="submit" class="btn btn-warning" id="deleteCalendar">삭제</button>
+                <a th:href="|javascript:deleteSchedule(${scheduleList.schedule_num})|">
+                <button type="button" class="btn btn-warning" id="deleteSchedule">삭제</button>
+                </a>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"
                         id="sprintSettingModalClose2">취소</button>
                 </div>

@@ -102,5 +102,19 @@ public class ScheduleController {
 		
 	}
 	
+	//스케줄 삭제
+	@GetMapping("deleteSchedule")
+	public String deleteSchedule(Schedule schedule, @AuthenticationPrincipal UserDetails user) {
+		
+		schedule.setSchedule_writer_id(user.getUsername());
+		int result = scheduleService.deleteSchedule(schedule);
+		
+		return "redirect:/schedule/selectScheduleList?schedule_num=" + schedule.getSchedule_num();
+		
+	}
+	
+	
+	
+	
 	
 }
