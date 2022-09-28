@@ -15,4 +15,6 @@ public interface ScheduleService {
 	// 회사일정 + 개인일정 불러오기
 	public List<Schedule> readEmployeeSchedule(String company_code, String schedule_writer_id);
 
+	public int deleteSchedule(Schedule schedule);
+
 }
