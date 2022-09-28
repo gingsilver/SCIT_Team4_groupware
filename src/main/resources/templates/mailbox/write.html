@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>KUROWARE - MAIN</title>
+  <title>KUROWARE - 메일기능</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -29,12 +29,10 @@
 
   <!-- Template Main CSS File -->
   <link th:href="@{/assets/css/style.css}" rel="stylesheet">
-  <link href="@{/assets/css/mailbox.css}" rel="stylesheet">
+<!--   <link th:href="@{/assets/css/mailbox.css}" rel="stylesheet"> -->
   
     <!-- zTree -->
   <link rel="stylesheet" th:href="@{/zTree/zTreeStyle.css}" />
-  
-  
   
 <script>
 function validation(){
@@ -110,7 +108,7 @@ div.container > h6{
 	border-radius: 10rem;
 }
 #resetButton{
-	background-color: rgb(255, 0, 0);
+	background-color: gray;
 	color: white;
 	padding: 0.40rem 2rem;
 	font-size: 0.85rem;
@@ -124,7 +122,7 @@ div.attechedFile{
 	border-color: #593bdb !important;
 	
 }
-</style>
+</style> 
 <body>
 
   <!-- ======= Header ======= -->
@@ -153,7 +151,7 @@ div.attechedFile{
         <table>
             <tr id="box" class="form-group">
                 <td>
-                    <input type="text" class="form-control" id="email_receiver" name="email_receiver" placeholder=" To:">
+                    <span type="text" class="form-control" id="email_receiver" name="email_receiver" >To:</span>
                 </td>
 				<td>
 					<button type="button" class="btn btn-primary" id="selectApproval"
@@ -162,7 +160,7 @@ div.attechedFile{
             </tr>
             <tr id="box2" class="form-group">        
                 <td>
-                    <input type="text" class="form-control" name="email_cc_receiver" id="email_cc_receiver" placeholder=" CC :">
+                    <span type="text" class="form-control" name="email_cc_receiver" id="email_cc_receiver" >CC :</span>
                 </td>
 					<td>
 					<button type="button" class="btn btn-primary" id="selectApproval"
@@ -182,12 +180,16 @@ div.attechedFile{
                 </td>
             </tr>
             <div class="attechedFile">
-            <tr></tr>
+            
             <tr class="form-group" >
             	<td><h5 class="mb-4"><i class="bi bi-paperclip"></i>첨부파일</h5></td>
             </tr>            	
             <tr>
-            	<td><input type="file" name="upload" class="btn btn-light" id="file-input" multiple/></td>
+            <td>
+                <form action="#" class="d-flex flex-column align-items-center justify-content-center">
+               <div class="fallback w-100">
+               <input type="file"  name="upload" class="file-input" data-default-file="" multiple/>
+            </td>
             </tr>
             </div>
 			<tr>
@@ -197,12 +199,76 @@ div.attechedFile{
 				</th>
 			</tr>
         </table>                
-                
     </form>
       </div>
  </div>
     </div> 
-    
+        <!-- 주소록 선택 modal start -->
+			<div class="modal fade" id="approvalModal" tabindex="-1" >
+				<div class="modal-dialog modal-xl">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title"><b>주소록</b></h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						
+					<!-- 조직도 -->
+						<div class="modal-body">
+							<div class="row">
+							<!-- 첫 번째 단 -->
+								<div class="col-4">
+									<!-- 조직도 카드 start -->
+									<div class="card border-dark mb-3">
+										<div class="card-header text-center">
+											<b id="test" style="color : black" th:text="|${company.company_name} 조직도|"></b>
+										</div>
+										<div class="card-body text-dark" style="overflow-x:hidden; width:auto; height:400px;">
+										<div class="card-text">
+											<ul id="treeDemo" class="ztree"></ul>
+										</div>
+										</div>
+									</div><!-- 조직도 카드 end -->
+										
+									<!-- 조직도 사원 목록 start -->
+									<div class="card border-dark mb-3">
+										<div class="card-header text-center">
+											<b id="clickOrg" style="color : black" th:text="|${company.company_name} 사원 목록|"></b>
+										</div>
+										<div class="card-body text-dark" style="overflow-x:hidden; width:auto; height:200px;">
+											<div class="card-text">
+												<div id="employeeList">
+													<ul class="employeeInfo">
+													</ul>
+												</div>
+											</div>
+										</div>
+									</div><!-- 조직도 사원 목록 end -->
+								</div>
+								<div class="col-8">
+									<h5><b>● 추가한 목록</b></h5>
+									<form id="addApprovalForm">
+										<table class="table" id="memDiv">
+											<thead class="py-8">
+											<tr>
+												<th>#</th>
+												<th>이름</th>
+												<th>이메일</th>
+											</tr>
+											</thead>
+											<tbody>
+											
+											</tbody>
+										</table>
+									</form>
+								</div>
+		                    </div>
+		                    <div class="modal-footer">
+		                      <button type="button" class="btn btn-primary" id="addApprovalButton">추가</button>
+		                      <button type="button" class="btn btn-danger" data-bs-dismiss="modal">닫기</button>
+		                    </div>
+		                  </div>
+		                </div>
+		              </div><!-- End Extra Large Modal-->
     
     
     
@@ -227,17 +293,227 @@ div.attechedFile{
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
-  <script src="../assets/vendor/apexcharts/apexcharts.min.js"></script>
-  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../assets/vendor/chart.js/chart.min.js"></script>
-  <script src="../assets/vendor/echarts/echarts.min.js"></script>
-  <script src="../assets/vendor/quill/quill.min.js"></script>
-  <script src="../assets/vendor/simple-datatables/simple-datatables.js"></script>
-  <script src="../assets/vendor/tinymce/tinymce.min.js"></script>
-  <script src="../assets/vendor/php-email-form/validate.js"></script>
+  <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+  <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+  <script th:src="@{/assets/vendor/chart.js/chart.min.js}"></script>
+  <script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+  <script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+  <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+  <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+  <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
 
   <!-- Template Main JS File -->
-  <script src="../assets/js/main.js"></script>
+  <script th:src="@{/assets/js/main.js}"></script>
+
+  
+  <!-- 제이쿼리, 에이젝스 -->
+  <script th:src="@{/assets/js/jquery-3.6.0.js}"></script>
+
+  <!-- zTree js : 조직도 라이브러리 입니다. -->
+  <script type="text/javascript" th:src="@{/zTree/jquery.ztree.core.min.js}"></script>
+
+  <SCRIPT LANGUAGE="JavaScript">
+  $(document).ready(function(){
+	  /* 페이지가 시작되자마자 조직도 출력 */
+	  readOrg();
+	  
+	  /* 조직원 사원 목록 클릭시 이벤트 */
+	  $('.employeeInfo').on('click', addEmpl);
+	  
+	  /* 결재선 추가 버튼 : 결재자 정보 결재 페이지에 넘기기 */
+	  $('#addApprovalButton').on('click', addApproval);
+	  
+
+
+	  
+	  
+	  
+  });  
+  
+  
+  /* To부분에 자동으로 이메일 입력 */
+  function addReceiver()  {
+		alert("받는 이가 추가되었습니다.");
+
+	  
+	  let email_receiver = document.getElementById('email_receiver');
+	  
+	  email_receiver.innerHTML="hongvely0829@gmail.com";
+	  
+	  
+	  
+	 
+  }  
+  
+  
+  /* CC부분에 자동으로 이메일 입력 */
+  function addCCReceiver()  {
+	  
+	  
+	  
+	  
+
+  }  
+  
+  
+  /* 결재선 테이블 번호 추가를 위한 전역 num 변수 */
+  let num = 0;
+  /* 사원 목록 클릭 이벤트*/
+  function addEmpl() {
+	  let count = $(this).attr('count');
+	  let employee_name = $(this).attr('empname');
+	  let employee_code = $(this).attr('empcode');
+	  let employee_email = $(this).attr('empemail');
+	  let organization_name = $('#organization_name').val();
+	  var insertTr = "";
+	  
+	  if(count == 0) {
+		  num += 1;
+		  let type = 'type' + num;
+		  let selectedType = 'selectedType' + num;
+		  $('.selectedEmp').append('<li id=' + employee_name + ' name='+ employee_name +'>'+ employee_name + '</li>');
+		  $(this).mouseleave().css('background-color', '#EEF1FA');
+		  $(this).attr('count', '1');
+		  
+		  insertTr += "<tr>";
+		  insertTr += "<td>"+ num +"</td>";
+		  insertTr += "<td employee_name="+ employee_name +" employee_code=" + employee_code + ">" + employee_name + "</td>";
+		  insertTr += "<td employee_email="+ employee_email +" employee_code=" + employee_code + ">" + employee_email + "</td>";
+
+		  insertTr += "<td><span id="+ type +"></span></td>";
+		  insertTr += "</tr>";
+		  
+		  $('#memDiv > tbody:last').append(insertTr);
+		  
+		  $('#selectedType'+num).on('change', addApr);
+		  
+		  
+		  /* To부분에 자동으로 이메일 입력 */
+		  $('#addApprovalButton').on('click', addReceiver);
+		  
+		  
+		  /* CC부분에 자동으로 이메일 입력 */
+		  $('#addApprovalButton').on('click', addCCReceiver);
+		  
+		  
+	  } else {
+	      $(this).mouseenter().css('background-color', 'white');
+		  $(this).attr('count', '0');
+		  num -= 1;
+		  
+		  $('#memDiv > tbody > tr:last').remove();
+	  }
+	  
+	  function addApr(){
+		  let selType = $(this).val();
+		  $('#type'+num).html(selType + '자');
+	  }
+  }
+  
+  
+  /* 조직도를 읽어오는 함수 | zTree data attributes, refer to the API documentation (treeNode data details) */
+  function readOrg() {
+	  var zNodes;
+	   
+	   $.ajax({
+		   url : 'readOrg',
+		   type : 'post',
+		   async:false,
+		   success:function(data){
+			   zNodes = data;
+		   },
+		   error:function(e){
+			   console.log(e.responseText);
+		   }});
+	   
+	   var zTreeObj;
+	   /* zTree configuration information, refer to API documentation (setting details)*/
+	   /* setting 내용을 어떻게 수정하냐에 따라 보이는게 다릅니다. api 문서 참고해주세요.(주소 : https://treejs.cn/v3/api.php) */
+	   var setting = {
+			   data: {
+			        simpleData: {
+			            enable: true
+			        }     
+			    },
+				   view: {
+					   dblClickExpand: false,
+					   showIcon: true
+				       },
+				   callback: {
+					   onClick: myOnClick
+						}   
+	   };
+	   
+	   zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+	   
+  }
+   /* 클릭한 조직도의 부모아이디를 받기 위해 선언 : 다른 함수에서도 쓰기 위해 전역으로 선언함 */
+   let parent_id;
+   let organization;
+   
+   /* 조직도 내 부서명 클릭시 시 부서명이 서버단으로 넘어가서 db에서 부서명에 속한 사원이 출력됩니다. */
+   function myOnClick(event, treeId, treeNode) {
+	   parent_id = treeNode.id;
+	   organization = treeNode.path;
+	   
+	   $('#clickOrg').html(treeNode.name + ' 사원목록');
+
+	   /* 선택한거에 따라 신규 부서 생성에 표시되는 내용 */
+	   /* path받은 내용을 띄어쓰기로 스플릿 후 변수에 저장 */
+	   let str = treeNode.path;
+	   let [a, b, c, d, e] = str.split(' ');
+	   
+	   if(treeNode.level == 1){
+		   $('#business_unit').val(treeNode.name);
+		   $('#team').val("");
+		   $('#department').val("");
+		   $('#organization_name').val(c);
+	   } else if(treeNode.level == 2){
+		   $('#business_unit').val(c);
+		   $('#team').val(d);
+		   $('#department').val("");
+		   $('#organization_name').val(c + ' ' + d);
+	   } else if(treeNode.level == 3){
+		   $('#business_unit').val(c);
+		   $('#team').val(d);
+		   $('#department').val(e);
+		   $('#organization_name').val(c + ' ' + d + ' ' + e);
+	   } else {
+		   $('#business_unit').val("");
+		   $('#team').val("");
+		   $('#department').val("");
+		   $('#organization_name').val("");
+	   }
+	   
+	   /* 선택된 조직도와 path가 동일한 사원의 정보 출력 */
+	   if(treeNode.id != '0000'){
+		   $.ajax({
+			   url : 'searchEmployee',
+			   type : 'post',
+			   data : {organization : organization},
+			   dataType : 'json',
+			   success:function(data){
+				   let emp;
+				   
+				   emp = '<ul>'
+				   $.each(data, function(idx, ob){
+					   emp += '<li class="employeeInfo" empname="' + ob.employee_name + '" empcode="'+ ob.employee_code +  '"empemail="' + ob.employee_email + '" count="0">' + ob.employee_name + '</li>';
+					});
+				   emp += '</ul>'
+				   
+				   //목록 출력 영역에 내용 삽입
+				   $('#employeeList').html(emp);
+				
+				   $('.employeeInfo').on('click', addEmpl);
+			   },
+			   error:function(e){
+				   console.log(e.responseText);
+			   }
+			});
+	   }
+	};
+  </SCRIPT>
+
 
 </body>
 
