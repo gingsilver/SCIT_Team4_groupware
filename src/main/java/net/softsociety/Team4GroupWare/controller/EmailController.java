@@ -99,16 +99,6 @@ public class EmailController {
 		return empList;
 	}
 	
-	//결재선 추가 클릭시 예비 기안 코드 시퀀스 추가
-	@ResponseBody
-	@GetMapping("addDraftSeq")
-	public int addDraftSeq() {
-		int result = 0;
-		result = draftservice.addDraftSeq();
-		
-		return result;
-	}
-	
 	//결재선 추가
 	@ResponseBody
 	@PostMapping("addApproval")

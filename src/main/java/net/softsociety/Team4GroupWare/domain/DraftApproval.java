@@ -14,6 +14,7 @@ public class DraftApproval {
 	String approver_name;
 	String process_type;
 	String process_turn_code;
-	String process_enabled;
+	int process_enabled;
+	String approver_date;
 
 }

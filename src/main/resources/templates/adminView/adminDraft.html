@@ -30,6 +30,17 @@
 
   <!-- Template Main CSS File -->
   <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+  
+   <!-- data table -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+  
+  <style>
+  	hr#hr1 {
+  		margin : 0;
+  		padding : 0;
+  	}
+  	
+  </style>
 
   <!-- =======================================================
   * Template Name: NiceAdmin - v2.3.1
@@ -47,10 +58,208 @@
   <!-- ======= Sidebar ======= -->
   <aside th:replace="/admincommon/aside :: aside"></aside><!-- End Sidebar-->
 	
-	<main>
-		<section>
-			<h2>전자결재</h2>
+	<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>관리자 전자결재</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a th:href="@{/admin}">Home</a></li>
+          <li class="breadcrumb-item active">Admin page</li>
+          <li class="breadcrumb-item active">관리자 전자결재</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+		<section class="section dashboard">
+			 <div class="container-fluid">
+			<div class="bg-white shadow rounded-lg d-block d-sm-flex">
+				<div class="profile-tab-nav border-right">
+					<div class="p-4">
+					</div>
+					<div class="nav flex-column nav-pills text-center" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+						<a class="nav-link active" id="account-tab" data-toggle="pill" href="#home" role="tab" aria-controls="account" aria-selected="false">
+							<i class="fa fa-home text-center mr-1"></i> 
+							<h5><b>HOME</b></h5>
+						</a>
+						<div class="text-center"><h5 class="mt-3 m-b-6"><b>결재함</b></h5></div><hr id="hr1">
+						<a class="nav-link" id="logo-tab" data-toggle="pill" href="#companylogo" role="tab" aria-controls="logo" aria-selected="false">
+							<i class="fa fa-key text-center mr-1"></i> 
+							결재 대기함
+						</a>
+						<a class="nav-link" id="logo-tab" data-toggle="pill" href="#companylogo" role="tab" aria-controls="logo" aria-selected="false">
+							<i class="fa fa-key text-center mr-1"></i> 
+							결재 완료함
+						</a>
+						<a class="nav-link" id="logo-tab" data-toggle="pill" href="#companylogo" role="tab" aria-controls="logo" aria-selected="false">
+							<i class="fa fa-key text-center mr-1"></i> 
+							결재 반려함
+						</a>
+						<a class="nav-link" id="logo-tab" data-toggle="pill" href="#companylogo" role="tab" aria-controls="logo" aria-selected="false">
+							<i class="fa fa-key text-center mr-1"></i> 
+							결재 참조함
+						</a>
+						<div class="text-center"><h5 class="mt-3 m-b-6"><b>양식함</b></h5></div><hr id="hr1">
+						<a class="nav-link" id="account-tab" data-toggle="pill" href="#account" role="tab" aria-controls="account" aria-selected="false">
+							<i class="fa fa-home text-center mr-1"></i> 
+							양식 작성
+						</a>
+						<a class="nav-link" id="logo-tab" data-toggle="pill" href="#companylogo" role="tab" aria-controls="logo" aria-selected="false">
+							<i class="fa fa-key text-center mr-1"></i> 
+							양식 목록
+						</a>
+						<div class="py-5"></div>
+					</div>
+				</div>
+				<div class="tab-content p-4 p-md-5" id="v-pills-tabContent">
+					<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="account-tab">
+						<h5>● 결재함</h5>
+						<table id="datatable" class="table datatable">
+							<thead>
+								<tr>
+									<th>결재 번호</th>
+									<th>제목</th>
+									<th>결재자</th>
+									<th>작성일</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>135421</td>
+									<td>테스트</td>
+									<td>김지은</td>
+									<td>2022.09.25</td>
+								</tr>
+								<tr>
+									<td>135421</td>
+									<td>테스트</td>
+									<td>김지은</td>
+									<td>2022.09.25</td>
+								</tr>
+								<tr>
+									<td>135421</td>
+									<td>테스트</td>
+									<td>김지은</td>
+									<td>2022.09.25</td>
+								</tr>
+								<tr>
+									<td>135421</td>
+									<td>테스트</td>
+									<td>김지은</td>
+									<td>2022.09.25</td>
+								</tr>
+								<tr>
+									<td>135421</td>
+									<td>테스트</td>
+									<td>김지은</td>
+									<td>2022.09.25</td>
+								</tr>
+								<tr>
+									<td>135421</td>
+									<td>테스트</td>
+									<td>김지은</td>
+									<td>2022.09.25</td>
+								</tr>
+								<tr>
+									<td>135421</td>
+									<td>테스트</td>
+									<td>김지은</td>
+									<td>2022.09.25</td>
+								</tr>
+								<tr>
+									<td>135421</td>
+									<td>테스트</td>
+									<td>김지은</td>
+									<td>2022.09.25</td>
+								</tr>
+								<tr>
+									<td>135421</td>
+									<td>테스트</td>
+									<td>김지은</td>
+									<td>2022.09.25</td>
+								</tr>
+								<tr>
+									<td>135421</td>
+									<td>테스트</td>
+									<td>김지은</td>
+									<td>2022.09.25</td>
+								</tr>
+							</tbody>
+						</table>
+						
+						<hr>
+							      	
+						<h5>● 진행 상황</h5>
+							<table class="table">
+								<thead>
+									<tr>
+										<th>결재 순서</th>
+										<th>결재자</th>
+										<th>결재 상태</th>
+										<th>결재 시간</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>2</td>
+										<td>김지은</td>
+										<td>결재중</td>
+										<td>2022.09.25 20:51:43</td>
+									</tr>
+									<tr>
+										<td>1</td>
+										<td>고경섭</td>
+										<td>기안</td>
+										<td>2022.09.25 11:25:39</td>
+									</tr>
+								</tbody>
+							</table>
+					</div>
+					
+					<!-- 회사 로고 변경 page start -->
+					<div class="tab-pane fade" id="companylogo" role="tabpanel" aria-labelledby="logo-tab">
+					
+						<h3 class="mb-4">회사 로고 변경</h3>
+						
+						<form method="post" id="updateLogoForm" enctype="multipart/form-data">
+							<div class="row">
+								<div class="col-lg-12">
+									<div class="form-group">
+										<input class="form-control form-control-user" type="file" size="30"
+											   name="upload" id="product_image" onchange="setThumbnail(event);">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-6 text-center">
+									<div class="form-group">
+									  	<label class="mb-3">기존 회사 로고</label>
+									  	<div class="img-circle2 text-center mb-3">
+										  	<img th:src="@{/image/catIcon.png}" alt="기본 로고">
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-6 text-center">
+									<div class="form-group">
+									  	<label id="label-bold" class="mb-3">변경 회사 로고</label>
+									  	<div class="img-circle2 text-center mb-3">
+											<div id="image_container"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="text-center">
+								<button class="btn btn-primary" id="updateLogo">Update</button>&nbsp;
+								<button class="btn btn-dark">Cancel</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
 		</section>
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 	</main> 	
 	
 	<!-- Vendor JS Files -->
@@ -65,5 +274,15 @@
 
   <!-- Template Main JS File -->
   <script th:src="@{/assets/js/main.js}"></script>
+  
+  <!-- 제이쿼리, 에이젝스 -->
+  <script th:src="@{/assets/js/jquery-3.6.0.js}"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+
+  <script>
+	$(document).ready(function() {
+		$('#dataTable').DataTable();
+	});
+  </script>
 </body>
 </html>

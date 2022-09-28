@@ -32,6 +32,12 @@
   
   <!-- zTree -->
   <link rel="stylesheet" th:href="@{/zTree/zTreeStyle.css}" />
+  
+  <style>
+  	th, td {
+		vertical-align : middle;
+	}
+  </style>
 
 </head>
 
@@ -62,18 +68,25 @@
                 	<div class="row">
                     	<div class="col-lg-12">
 							<input type="button" value="상신" class="btn btn-primary">&nbsp;
-							<button type="button" class="btn btn-primary" id="selectApproval"
-								    data-bs-toggle="modal" data-bs-target="#approvalModal">결재선 선택</button>&nbsp;
 							<input type="button" value="의견 추가" class="btn btn-primary">&nbsp;
 							<input type="button" value="임시 저장" class="btn btn-primary">&nbsp;
 							<input type="button" value="작성 취소" class="btn btn-danger">
 						</div>
                     </div><!-- end 버튼 행 -->
                     
+                    <div class="row">
+                    	<div class="col-lg-4 my-2"><h5>● 기안자 정보</h5></div>
+                    	<div class="col-lg-8">
+                    		<h5>● 결재선&nbsp;
+                    			<input type="button" value="결재선 추가" class="btn btn-primary" id="addApprover"> 
+                    			<input type="button" value="결재선 삭제" class="btn btn-primary" id="deleteApprover">
+                    		</h5>
+                    	</div>
+                    </div>
+                    
                     <!-- start 기안자 정보, 결재선, 기안종류  -->
 					<div class="row  my-3">
                     	<div class="col-lg-4">
-                    		<h5>● 기안자 정보</h5>
                     		<table class="table">
                     			<tr>
                     				<th>이름</th>
@@ -85,22 +98,31 @@
                     			</tr>
                     		</table>
 						</div>
-						<div class="col-lg-8">
-							<h5>● 결재선</h5>
-							<table class="table">
+						<div class="col-lg-1">
+							<table class="table text-center" style="width : 120px;">
                     			<tr>
-                    				<th>이름</th>
-                    				<th>이름</th>
-                    				<th>이름</th>
-                    				<th>이름</th>
-                    				<th>이름</th>
+                    				<th>기안자</th>
                     			</tr>
-                    			<tr style="height : 100px;">
-                    				<td>뭐야</td>
-                    				<td>뭐야</td>
-                    				<td>뭐야</td>
-                    				<td>뭐야</td>
-                    				<td>뭐야</td>
+                    			<tr style="height : 60px;">
+                    				<td th:text="${employee.employee_name}"></td>
+                    			</tr>
+                    			<tr>
+                    				<td style="height : 55px;"></td>
+                    			</tr>
+                    		</table>
+						</div>
+						<div class="col-lg-1 lastDiv">
+							<table class="table">
+                    			<tr style="height : 40.5px;">
+                    				<th></th>
+                    			</tr>
+                    			<tr style="height : 60px;">
+                    				<td></td>
+                    			</tr>
+                    			<tr>
+                    				<td>
+                    					<input type="button" value="조직원검색" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#approvalModal">
+                    				</td>
                     			</tr>
                     		</table>
 						</div>
@@ -211,13 +233,14 @@
 										</div>
 										</div>
 									</div><!-- 조직도 카드 end -->
-										
+								</div>
+								<div class="col-4">
 									<!-- 조직도 사원 목록 start -->
 									<div class="card border-dark mb-3">
 										<div class="card-header text-center">
 											<b id="clickOrg" style="color : black" th:text="|${company.company_name} 사원 목록|"></b>
 										</div>
-										<div class="card-body text-dark" style="overflow-x:hidden; width:auto; height:200px;">
+										<div class="card-body text-dark" style="overflow-x:hidden; width:auto; height:400px;">
 											<div class="card-text">
 												<div id="employeeList">
 													<ul class="employeeInfo">
@@ -227,25 +250,32 @@
 										</div>
 									</div><!-- 조직도 사원 목록 end -->
 								</div>
-								<div class="col-8">
-									<h5><b>● 결재선</b></h5>
+								<div class="col-4">
+									<h5><b>● 결재타입 선택</b></h5>
 									<form id="addApprovalForm">
-										<table class="table" id="memDiv">
+										<table class="table text-center">
 											<thead class="py-8">
 											<tr>
-												<th>#</th>
 												<th>결재권한</th>
+												<td><span id="selectedMSG"></span></td>
+											</tr>
+											<tr>
 												<th>결재자</th>
+												<td><span id="selectedName"></span></td>
+											</tr>
+											<tr>
 												<th>결재타입</th>
+												<td>
+													<select class="form-select" id="selectedType">
+														<option>--결재 타입 선택--</option>
+														<option value="결재">결재</option>
+		  												<option value="참조">참조</option>
+		  												<option value="전결">전결</option>
+													</select>
+		  										</td>
 											</tr>
 											</thead>
 											<tbody>
-											<tr>
-												<td>1</td>
-												<td><span>기안자</span></td>
-												<td th:text="${employee.employee_name}"></td>
-												<td>기안</td>
-											</tr>
 											</tbody>
 										</table>
 									</form>
@@ -258,6 +288,7 @@
 		                  </div>
 		                </div>
 		              </div><!-- End Extra Large Modal-->
+		            </div>
     </section>
 
   </main><!-- End #main -->
@@ -305,94 +336,77 @@
 	  /* 조직원 사원 목록 클릭시 이벤트 */
 	  $('.employeeInfo').on('click', addEmpl);
 	  
-	  /* 결재선 선택 버튼 : 시퀀스 추가 */
-	  $('#selectApproval').on('click', addDraftSeq);
+	  $('#addApprover').on('click', function(){
+		  let myClass = "col-lg-1 new";
+		  let insertTr = "<table class='table'>";
+		  
+		  insertTr += "<tr style='height : 40.5px;'>";
+		  insertTr += "<th></th>";
+		  insertTr += "</tr>";
+		  insertTr += "<tr style='height : 60px;'>";
+		  insertTr += "<td></td>";
+		  insertTr += "</tr>";
+	  	  insertTr += "<tr>";
+		  insertTr += "<td>";
+	      insertTr += "<input type='button' value='조직원검색' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#approvalModal'>";
+	      insertTr += "</td>";
+          insertTr += "</tr></table><p></p>";
+          
+          let div = $("<div>" + insertTr + "</div>").addClass(myClass);
+		  $(".lastDiv").after(div);
+	  });
 	  
-	  /* 결재선 추가 버튼 : 결재자 정보 결재 페이지에 넘기기 */
-	  $('#addApprovalButton').on('click', addApproval);
+	  $('#deleteApprover').on('click', function(){
+		  $('.new:last').remove();
+	  });
+	  
   });  
   
-  /* 결재선 추가 버튼 : 결재자 정보 결재 페이지에 넘기기 */
-  function addApproval()  {
-	  $.ajax({
-			url : 'addApproval',
-			type : 'post',
-			data : $('#addApprovalForm').serialize(), //serialize : name이 붙어있는 form의 객체들을 한번에 불러서 가져감
-			success : function () {
-				alert('저장되었습니다.');
-			},
-			error : function () {
-				alert('저장 실패');
-			}
-		});
-  }
-  
-  /* 결재선 선택 버튼 : 시퀀스 추가 */
-  function addDraftSeq() {
-	  $.ajax({
-		   url : 'addDraftSeq',
-		   type : 'get',
-		   success:function(data){
-			   if(data == 0){
-				   console.log('실패');
-			   }else{
-				   console.log('성공');
-			   }
-		   },
-		   error:function(e){
-			   console.log(e.responseText);
-		   }
-	  });
-  }
-  
-  /* 결재선 테이블 번호 추가를 위한 전역 num 변수 */
-  let num = 1;
   /* 사원 목록 클릭 이벤트*/
   function addEmpl() {
 	  let count = $(this).attr('count');
 	  let employee_name = $(this).attr('empname');
 	  let employee_code = $(this).attr('empcode');
 	  let organization_name = $('#organization_name').val();
-	  var insertTr = "";
 	  
 	  if(count == 0) {
-		  num += 1;
-		  let type = 'type' + num;
-		  let selectedType = 'selectedType' + num;
-		  $('.selectedEmp').append('<li id=' + employee_name + ' name='+ employee_name +'>'+ employee_name + '</li>');
+		  $('.selectedEmp').append('<li>'+ employee_name + '</li>');
 		  $(this).mouseleave().css('background-color', '#EEF1FA');
 		  $(this).attr('count', '1');
-		  
-		  insertTr += "<tr>";
-		  insertTr += "<td>"+ num +"</td>";
-		  insertTr += "<td><span id="+ type +"></span></td>";
-		  insertTr += "<td employee_name="+ employee_name +" employee_code=" + employee_code + ">" + employee_name + "</td>";
-		  insertTr += "<td><select id=" + selectedType + ">";
-		  insertTr += "<option>--결재 타입 선택--</option>";
-		  insertTr += "<option value='결재'>결재</option>";
-		  insertTr += "<option value='참조'>참조</option>";
-		  insertTr += "<option value='전결'>전결</option>";
-		  insertTr += "</select></td>"
-		  insertTr += "</tr>";
-		  
-		  $('#memDiv > tbody:last').append(insertTr);
-		  
-		  $('#selectedType'+num).on('change', addApr);
-		  
+		  $('#selectedName').html(employee_name);
 	  } else {
 	      $(this).mouseenter().css('background-color', 'white');
 		  $(this).attr('count', '0');
-		  num -= 1;
-		  
-		  $('#memDiv > tbody > tr:last').remove();
+		  $('#selectedName').html("");
 	  }
 	  
-	  function addApr(){
-		  let selType = $(this).val();
-		  $('#type'+num).html(selType + '자');
+	  let select;
+	  
+	  /* 결재선 추가 모달창에서 결재타입 선택시 결재권한에 데이터 추가하는 이벤트 */
+	  $('#selectedType').on('change', function(){
+		  select = $("#selectedType option:selected").val();
+		  $('#selectedMSG').html(select + '자');
+	  });
+	  
+	  /* 결재선 추가 버튼 : 결재자 정보 결재 페이지에 넘기기 */
+	  $('#addApprovalButton').on('click', addApproval);
+	  
+	  /* 결재선 추가 버튼 : 결재자 정보 결재 페이지에 넘기기 */
+	  function addApproval()  {
+		  $.ajax({
+				url : 'addApproval',
+				type : 'post',
+				data : {approver_name : employee_name, employee_code : employee_code, process_type : select},
+				success : function () {
+					alert('저장되었습니다.');
+				},
+				error : function () {
+					alert('저장 실패');
+				}
+			});
 	  }
-  }
   
+  }
   
   /* 조직도를 읽어오는 함수 | zTree data attributes, refer to the API documentation (treeNode data details) */
   function readOrg() {

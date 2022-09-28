@@ -12,9 +12,37 @@
 		where employee_id = #{employee_id}
 	</select>
 	
-	<!-- 기안 시퀸스 추가 -->
-	<insert id="addDraftSeq">
-		insert into team4_draftcode
-		values (LPAD(team4_draftcode_seq.nextval, 4, 0))
+	<!-- 예비 기안 시퀀스 추가 -->
+	<select id="createCode" resultType="String">
+		select (LPAD(team4_draft_seq.nextval, 4, 0))
+		from dual
+	</select>
+	
+	<!-- 결재선 추가 -->
+	<insert id="addApproval" parameterType="DraftApproval">
+		insert into team4_draft_approver
+		(approver_code
+		,draft_code
+		,employee_code
+		,approver_name
+		,process_type
+		,process_turn_code
+		,process_enabled)
+		values
+		(LPAD(team4_approver_seq.nextval, 4, 0)
+		,#{draft_code}
+		,#{employee_code}
+		,#{approver_name}
+		,#{process_type}
+		,#{process_turn_code} + 1 
+		,#{process_enabled}
+		)
 	</insert>
+	
+	<!-- 기안에 있는 결재선 카운팅 -->
+	<select id="countDraftCode" parameterType="String" resultType="String">
+		select *
+		from team4_draft_approver
+		where draft_code = #{draft_code}
+	</select>
 </mapper>
