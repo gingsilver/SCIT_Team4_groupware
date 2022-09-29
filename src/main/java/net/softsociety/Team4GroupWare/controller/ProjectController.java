@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.Team4GroupWare.domain.Company;
 import net.softsociety.Team4GroupWare.domain.Employee;
-import net.softsociety.Team4GroupWare.domain.Organization;
 import net.softsociety.Team4GroupWare.domain.Project;
 import net.softsociety.Team4GroupWare.domain.ProjectMember;
 import net.softsociety.Team4GroupWare.domain.ProjectPart;
+import net.softsociety.Team4GroupWare.service.AdminService;
 import net.softsociety.Team4GroupWare.service.ProjectService;
 
 @Slf4j
@@ -28,6 +28,8 @@ public class ProjectController {
 
     @Autowired
     ProjectService pj_service;
+    @Autowired
+    AdminService service;
 
     // 프로젝트 메인 페이지 출력
     @GetMapping("main")
@@ -44,11 +46,11 @@ public class ProjectController {
     }
 
     // 프로젝트 작성 페이지 출력
-    @GetMapping("create")
-    public String create() {
+    // @GetMapping("create")
+    // public String create() {
 
-        return "projectView/create";
-    }
+    // return "projectView/create";
+    // }
 
     // 작성된 프로젝트 등록
     @PostMapping("create")
@@ -59,76 +61,26 @@ public class ProjectController {
     }
 
     // 프로젝트 팝업페이지 출력
-    @GetMapping("popup")
-    public String popup(@AuthenticationPrincipal UserDetails user, Model model) {
+    @GetMapping("create")
+    public String create(@AuthenticationPrincipal UserDetails user, Model model) {
         // 회사코드, 관리자 내용 가져오기
-        Employee employee = pj_service.readEmployee(user.getUsername());
-        Company company = pj_service.readCompany(employee.getCompany_code());
-        JSONArray json = pj_service.readOrg(company);
+        Employee admin = service.readAdmin(user.getUsername());
+        Company company = service.readCompany(admin.getCompany_code());
+        JSONArray json = service.readOrg(company);
 
-        ArrayList<Employee> empList = pj_service.employeeList(employee);
+        ArrayList<Employee> empList = service.employeeList(admin);
 
         for (int i = 0; i < empList.size(); i++) {
             if (empList.get(i).getRole_name().equals("ROLE_ADMIN")) {
                 empList.remove(i);
             }
         }
-        model.addAttribute("employee", employee);
-        model.addAttribute("company ", company);
+
+        model.addAttribute("admin", admin);
+        model.addAttribute("company", company);
         model.addAttribute("json", json);
-        return "projectView/popup";
-    }
-
-    // 조직도 불러오는 ajax 컨트롤러
-    @PostMapping("readOrg")
-    public JSONArray readOrg(@AuthenticationPrincipal UserDetails user) {
-
-        // 회사코드, 관리자 내용 가져오기
-        Employee employee = pj_service.readEmployee(user.getUsername());
-        Company company = pj_service.readCompany(employee.getCompany_code());
-
-        JSONArray json = pj_service.readOrg(company);
-
-        return json;
-    }
-
-    // 조직도 내 사원 목록 불러오는 ajax 컨트롤러
-    @PostMapping("searchEmployee")
-    public ArrayList<Employee> searchEmployee(@AuthenticationPrincipal UserDetails user, String organization) {
-
-        Employee employee = pj_service.readEmployee(user.getUsername());
-        Company company = pj_service.readCompany(employee.getCompany_code());
-
-        String realOrg = organization.substring(company.getCompany_name().length() + 2);
-
-        log.debug("가져온 팀명 : {}", realOrg);
-
-        employee.setOrganization(realOrg);
-
-        ArrayList<Employee> empList = pj_service.findByOrganization(employee);
-
-        return empList;
-    }
-
-    @PostMapping("addOrganization")
-    public int addOrganization(Organization org, @AuthenticationPrincipal UserDetails user) {
-        log.debug("가져온 조직 : {}", org);
-        // 1. 컴퍼니 아이디 가져와서 저장
-        Employee employee = pj_service.readEmployee(user.getUsername());
-        org.setCompany_code(employee.getCompany_code());
-
-        // 2. 부모 아이디에 가지고 있는 부서 아이디의 끝번호를 가져와서.. 저장? 그리고 그 번호 +1해서 org에 부서 아이디로 저장
-        ArrayList<Organization> orgList = pj_service.findByParentId(org.getParent_id());
-
-        String department_node = null;
-        for (int i = 0; i < orgList.size(); i++) {
-            department_node = orgList.get(i).getDepartment_id();
-        }
-        org.setDepartment_id(department_node);
-
-        int result = pj_service.addOrganization(org);
-
-        return result;
+        model.addAttribute("empList", empList);
+        return "projectView/create";
     }
 
     // 작성된 프로젝트 수정 (리더만 수정가능)

@@ -8,6 +8,14 @@
     <!-- Favicons  : 탭 창에서 보이는 이모티콘 -->
     <link th:href="@{/assets/img/favicon.png}" rel="icon">
     <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+    <!-- jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- bootstrap 4 -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
 
 
     <!-- Google Fonts -->
@@ -30,28 +38,15 @@
     <!-- Template Main JS File -->
     <script th:src="@{/assets/js/main.js}"></script>
 
-    <!-- Vendor JS Files -->
-    <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
-    <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
-    <script th:src="@{/assets/vendor/chart.js/chart.min.js}"></script>
-    <script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
-    <script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
-    <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
-    <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
-    <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
 
-    <!-- Template Main JS File -->
-    <script th:src="@{/assets/js/main.js}"></script>
-    <script language="javascript">
-        function showPopup() { window.open("/team4/project/popup", "pop", "width=400, height=300, left=100, top=50 scrollbars=yes"); }
-    </script>
+    <!-- zTree -->
+    <link rel="stylesheet" th:href="@{/zTree/zTreeStyle.css}" />
 
 
-    <!-- <script>
-        function goPopup() {
-            pop = window.open("/jusoPopup", "pop", "width=570, height=420, scrollbars=yes");
-        }
-    </script> -->
+
+
+
+
 
 </head>
 
@@ -64,7 +59,7 @@
 
     <main id="main" class="main">
         <div class="pagetitle">
-            <h1>Dashboard</h1>
+            <h1>프로젝트 생성</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a th:href="@{/project/main}">프로젝트 메인</a></li>
@@ -116,58 +111,55 @@
                                     </div>
                                 </div>
 
-                                <div class="row mb-3">
-                                    <label for="inputText" class="col-sm-2 col-form-label">팀원</label>
 
-                                </div>
                                 <div class="col-sm-10">
+                                    <table class="table table-hover text-center">
+                                        <tr id="memberList">
+                                            <th scope="col">이름</th>
+                                            <th scope="col">부서</th>
+                                            <th scope="col">직급</th>
+                                            <th scope="col">일반/리더</th>
+                                            <th><button type="button" id="btnModal">팀원추가</button></th>
+                                        </tr>
 
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">번호</th>
-                                                <th scope="col">이름</th>
-                                                <th scope="col">부서</th>
-                                                <th scope="col">직급</th>
-                                                <th scope="col">일반/리더</th>
-                                                <th><input type="button" value="추가" onclick="showPopup()"></th>
-
-                                            </tr>
-                                        </thead>
 
                                         <!-- 팀원 추가 -->
                                         <tbody>
+
                                             <tr>
 
+                                                <td> </td>
+                                                <td> </td>
+                                                <td></td>
+                                                <td></td>
                                             </tr>
 
                                             <!-- 파트추가 제거-->
 
-                                            <form class="part" name="part">
-                                                <tr>
-                                                    <td>파트이름</td>
-                                                    <td><input type="text" name="pj_part_name" id="pj_part_name"> </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>파트내용</td>
-                                                    <td><input type="text" name="pj_part_content" id="pj_part_content">
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td><input type="submit" value="등록"></td>
-                                                    <td><input type="button" value="취소"></td>
-                                                </tr>
-                                            </form>
-
-                                            <tr>
-                                                <td><input type="submit" value="프로젝트 생성"></td>
-                                                <td><input type="submit" value="초기화"></td>
-                                            </tr>
-
+                                            <!-- <form class="part" id="part" name="part">
+                                                    <tr>
+                                                        <td>파트이름</td>
+                                                        <td><input type="text" name="pj_part_name" id="pj_part_name"> </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>파트내용</td>
+                                                        <td><input type="text" name="pj_part_content" id="pj_part_content">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><input type="submit" value="등록"></td>
+                                                        <td><input type="button" value="취소"></td>
+                                                    </tr>
+                                                </form> -->
                                         </tbody>
-                                        <tbody>
 
-                                        </tbody>
+                                        <tr>
+                                            <td><input type="button" id="btn" name="btn" value="프로젝트 생성"></td>
+                                            <td><input type="button" value="초기화"></td>
+                                        </tr>
+
+
+
                                     </table>
                                     <!-- End Default Table Example -->
                                 </div>
@@ -181,7 +173,47 @@
                 </div>
             </div>
         </section>
+
+
+
     </main><!-- End #main -->
+
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer" class="footer">
+        <div class="copyright">
+            &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+        </div>
+        <div class="credits">
+            <!-- All the links in the footer should remain intact. -->
+            <!-- You can delete the links only if you purchased the pro version. -->
+            <!-- Licensing information: https://bootstrapmade.com/license/ -->
+            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        </div>
+    </footer><!-- End Footer -->
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+            class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Vendor JS Files -->
+    <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+    <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/assets/vendor/chart.js/chart.min.js}"></script>
+    <script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+    <script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+    <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+    <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+    <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+
+
+
+    <!-- 제이쿼리, 에이젝스 -->
+    <script th:src="@{/assets/js/jquery-3.6.0.js}"></script>
+
+    <!-- zTree js : 조직도 라이브러리 입니다. -->
+    <script type="text/javascript" th:src="@{/zTree/jquery.ztree.core.min.js}"></script>
+
 
     <script>
         let pj_startdate = document.getElementById("pj_startdate");
@@ -196,11 +228,316 @@
                 pj_startdate.max = pj_enddate.value;
         }, false);
     </script>
+
+
+    <script language="javascript">
+        $(document).ready(function () {
+            $('#btnModal').click(function () {
+                $('#myModal').modal('show');
+            });
+
+            $('.modalCloseBtn').click(function () {
+                $('#myModal').modal('hide');
+            });
+            $('#btn').click(function () {
+                alert('프로젝트가 저장되었습니다')
+            });
+        });
+    </script>
+
+
+    <SCRIPT LANGUAGE="JavaScript">
+        var zNodes;
+
+        $.ajax({
+            url: 'readOrg',
+            type: 'post',
+            async: false,
+            success: function (data) {
+                zNodes = data;
+            },
+            error: function (e) {
+                console.log(e.responseText);
+            }
+        });
+
+        var zTreeObj;
+        // zTree configuration information, refer to API documentation (setting details)
+        /** setting 내용을 어떻게 수정하냐에 따라 보이는게 다릅니다. api 문서 참고해주세요.(주소 : https://treejs.cn/v3/api.php) **/
+        var setting = {
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            view: {
+                dblClickExpand: false,
+                showIcon: true
+            },
+            callback: {
+                onClick: myOnClick
+            }
+        };
+
+        // zTree data attributes, refer to the API documentation (treeNode data details)
+        $(document).ready(function () {
+            zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+        });
+
+        $(document).ready(function () {
+            /* 페이지가 시작되자마자 조직도 출력 */
+            readOrg();
+            /* 조직원 사원 목록 클릭시 이벤트 */
+            $('.employeeInfo').on('click', addEmpl);
+        });
+        /* 사원 목록 클릭 이벤트*/
+        function addEmpl() {
+            let count = $(this).attr('count');
+            let employee_name = $(this).attr('empname');
+            let employee_code = $(this).attr('empcode');
+            let organization_name = $('#organization_name').val();
+
+            if (count == 0) {
+                $('.selectedEmp').append('<li>' + employee_name + '</li>');
+                $(this).mouseleave().css('background-color', '#EEF1FA');
+                $(this).attr('count', '1');
+                $('#selectedName').html(employee_name);
+            } else {
+                $(this).mouseenter().css('background-color', 'white');
+                $(this).attr('count', '0');
+                $('#selectedName').html("");
+            }
+            let select;
+
+            /* 프로젝트 리더, 일반 지정 */
+            $('#selectedType').on('change', function () {
+                select = $("#selectedType option:selected").val();
+
+            });
+
+            /* 결재선 추가 버튼 : 결재자 정보 결재 페이지에 넘기기 */
+            $('#addMember').on('click', addMember);
+
+            /* 결재선 추가 버튼 : 결재자 정보 결재 페이지에 넘기기 */
+            function addMember() {
+                // $.ajax({
+                //     url: 'addMember',
+                //     type: 'post',
+                //     data: { employee_id: employee_id, pj_state: select },
+                //     success: function () {
+                //         alert('저장되었습니다.');
+                //     },
+                //     error: function () {
+                //         alert('저장 실패');
+                //     }
+                // });
+                $('#memberList').after(`<tr>
+                        <td>김지은</td>
+                        <td>일반영업</td>
+                        <td>과장</td>
+                        <td>리더</td>
+                    </tr>`)
+
+            }
+        }
+
+        /* 조직도를 읽어오는 함수 | zTree data attributes, refer to the API documentation (treeNode data details) */
+        function readOrg() {
+            var zNodes;
+
+            $.ajax({
+                url: 'readOrg',
+                type: 'post',
+                async: false,
+                success: function (data) {
+                    zNodes = data;
+                },
+                error: function (e) {
+                    console.log(e.responseText);
+                }
+            });
+
+            var zTreeObj;
+            /* zTree configuration information, refer to API documentation (setting details)*/
+            /* setting 내용을 어떻게 수정하냐에 따라 보이는게 다릅니다. api 문서 참고해주세요.(주소 : https://treejs.cn/v3/api.php) */
+            var setting = {
+                data: {
+                    simpleData: {
+                        enable: true
+                    }
+                },
+                view: {
+                    dblClickExpand: false,
+                    showIcon: true
+                },
+                callback: {
+                    onClick: myOnClick
+                }
+            };
+
+            zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+
+        }
+        /* 클릭한 조직도의 부모아이디를 받기 위해 선언 : 다른 함수에서도 쓰기 위해 전역으로 선언함 */
+        let parent_id;
+        let organization;
+
+        /* 조직도 내 부서명 클릭시 시 부서명이 서버단으로 넘어가서 db에서 부서명에 속한 사원이 출력됩니다. */
+        function myOnClick(event, treeId, treeNode) {
+            parent_id = treeNode.id;
+            organization = treeNode.path;
+
+            $('#clickOrg').html(treeNode.name + ' 사원목록');
+
+            /* 선택한거에 따라 신규 부서 생성에 표시되는 내용 */
+            /* path받은 내용을 띄어쓰기로 스플릿 후 변수에 저장 */
+            let str = treeNode.path;
+            let [a, b, c, d, e] = str.split(' ');
+
+            if (treeNode.level == 1) {
+                $('#business_unit').val(treeNode.name);
+                $('#team').val("");
+                $('#department').val("");
+                $('#organization_name').val(c);
+            } else if (treeNode.level == 2) {
+                $('#business_unit').val(c);
+                $('#team').val(d);
+                $('#department').val("");
+                $('#organization_name').val(c + ' ' + d);
+            } else if (treeNode.level == 3) {
+                $('#business_unit').val(c);
+                $('#team').val(d);
+                $('#department').val(e);
+                $('#organization_name').val(c + ' ' + d + ' ' + e);
+            } else {
+                $('#business_unit').val("");
+                $('#team').val("");
+                $('#department').val("");
+                $('#organization_name').val("");
+            }
+
+            /* 선택된 조직도와 path가 동일한 사원의 정보 출력 */
+            if (treeNode.id != '0000') {
+                $.ajax({
+                    url: 'searchEmployee',
+                    type: 'post',
+                    data: { organization: organization },
+                    dataType: 'json',
+                    success: function (data) {
+                        let emp;
+                        emp = '<ul>'
+
+                        $.each(data, function (idx, ob) {
+                            emp += '<li class="employeeInfo" empname="' + ob.employee_name + '" empcode="' + ob.employee_code + '" count="0">' + ob.employee_name + '</li>';
+                        });
+                        emp += '</ul>'
+
+                        //목록 출력 영역에 내용 삽입
+                        $('#employeeList').html(emp);
+                        $('.employeeInfo').on('click', addEmpl);
+
+
+                    },
+                    error: function (e) {
+                        console.log(e.responseText);
+                    }
+                });
+            }
+        };
+
+    </SCRIPT>
+
+
     <style>
         label {
             display: block;
         }
     </style>
+
+    <!-- The Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">조직도</h4>
+                    <button type="button" class="close modalCloseBtn" data-dismiss="myModal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <!-- 조직도 카드 start -->
+                <div class="modal-body">
+                    <div class="row">
+                        <!-- 첫 번째 단 -->
+                        <div class="col-4">
+                            <div class="card border-dark mb-3">
+                                <div class="card-header text-center">
+                                    <b id="test" style="color : black" th:text="|${company.company_name} 조직도|"></b>
+                                </div>
+                                <div class="card-body text-dark" style="overflow-x:hidden; width:auto; height:400px;">
+                                    <div class="card-text">
+                                        <ul id="treeDemo" class="ztree"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <!-- 조직도 사원 목록 start -->
+                            <div class="card border-dark mb-3">
+                                <div class="card-header text-center">
+                                    <b id="clickOrg" style="color : black"
+                                        th:text="|${company.company_name} 사원 목록|"></b>
+                                </div>
+                                <div class="card-body text-dark" style="overflow-x:hidden; width:auto; height:200px;">
+                                    <div class="card-text">
+                                        <div id="employeeList"></div>
+                                        <ul class="employeeInfo"></ul>
+                                    </div>
+                                </div>
+                            </div><!-- 조직도 사원 목록 end -->
+                        </div>
+                        <div class="col-4">
+                            <h5><b>● 프로젝트 멤버 선택</b></h5>
+                            <form id="addMemberForm">
+                                <table class="table text-center">
+                                    <thead class="py-8">
+
+                                        <tr>
+                                            <th>프로젝트 멤버</th>
+                                            <td><span id="selectedName"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <th>프로젝트 타입</th>
+                                            <td>
+                                                <select class="form-select" id="selectedType">
+                                                    <option>--프로젝트 포지션--</option>
+                                                    <option value="리더">리더</option>
+                                                    <option value="일반">일반</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="addMember">추가</button>
+                    <button type="button" class="btn btn-danger modalCloseBtn" data-dismiss="myModal">닫기</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>
