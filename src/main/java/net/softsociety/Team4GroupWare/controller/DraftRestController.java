@@ -61,7 +61,7 @@ public class DraftRestController {
 		}
 		
 		//결재선 추가
-		@PostMapping("addapprover")
+		@PostMapping("addApprover")
 		public int addapprover(DraftApprover approver) {
 			log.debug("가져온 결재선 : {}", approver);
 			
@@ -97,6 +97,10 @@ public class DraftRestController {
 		public DraftApprover readApprover(DraftApprover approver) {
 			log.debug("가져온 결재선 : {}", approver);
 			
-			return approver;
+			DraftApprover approver2 = draftservice.readApprover(approver);
+			
+			log.debug("가져온 결재선 : {}", approver2);
+			
+			return approver2;
 		}
 }

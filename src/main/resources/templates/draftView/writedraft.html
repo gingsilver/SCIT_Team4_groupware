@@ -353,7 +353,8 @@
 				let insertTr = "<table class='table'>";
 
 				insertTr += "<tr style='height : 40.5px;'>";
-				insertTr += "<th></th>";
+				insertTr += "<div id='dkanrjssk'>";
+				insertTr += "<th id='addtype'></th>";
 				insertTr += "</tr>";
 				insertTr += "<tr style='height : 60px;'>";
 				insertTr += "<td></td>";
@@ -378,7 +379,7 @@
 
 		/* 다른곳에서 사용하기 위해 선언하는 기안 예비 번호 */
 		let draft_code;
-		let employee_code
+		let employee_code;
 
 		function readApprover() {
 			$.ajax({
@@ -387,7 +388,7 @@
 				data: { draft_code: draft_code, employee_code: employee_code },
 				dataType: 'json',
 				success: function (data) {
-					console.log('성공');
+					console.log(data);
 				},
 				error: function () {
 					console.log('저장 실패');
@@ -438,16 +439,20 @@
 			});
 
 			/* 결재선 추가 버튼 : 결재자 정보 결재 페이지에 넘기기 */
-			$('#addApprovalButton').on('click', addApproval);
+			$('#addApprovalButton').on('click', addApprover);
 
 			/* 결재선 추가 버튼 : 결재자 정보 결재 페이지에 넘기기 */
-			function addApproval() {
+			function addApprover() {
 				$.ajax({
-					url: 'addApproval',
+					url: 'addApprover',
 					type: 'post',
 					data: { draft_code: draft_code, approver_name: employee_name, employee_code: employee_code, process_type: select },
 					success: function () {
-						alter('저장되었습니다.');
+						alert('저장되었습니다.');
+						$('#approvalModal').on('hidden.bs.modal', function () {
+							readApprover();
+						});
+						$('#approvalModal').modal('hide');
 					},
 					error: function () {
 						console.log('저장 실패');

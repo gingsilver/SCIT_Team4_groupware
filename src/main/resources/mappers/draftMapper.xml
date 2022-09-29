@@ -19,7 +19,7 @@
 	</select>
 	
 	<!-- 결재선 추가 -->
-	<insert id="addApproval" parameterType="DraftApprover">
+	<insert id="addApprover" parameterType="DraftApprover">
 		insert into team4_draft_approver
 		(approver_code
 		,draft_code
@@ -44,5 +44,12 @@
 		select *
 		from team4_draft_approver
 		where draft_code = #{draft_code}
+	</select>
+	
+	<!-- 결재자 찾기 -->
+	<select id="readApprover" parameterType="DraftApprover" resultType="DraftApprover">
+		select *
+		from team4_draft_approver
+		where draft_code = #{draft_code} and employee_code = #{employee_code}
 	</select>
 </mapper>

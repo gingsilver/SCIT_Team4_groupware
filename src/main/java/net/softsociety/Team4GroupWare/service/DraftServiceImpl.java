@@ -44,4 +44,11 @@ public class DraftServiceImpl implements DraftService {
 		return process_turn_code;
 	}
 
+	@Override
+	public DraftApprover readApprover(DraftApprover approver) {
+		DraftApprover approver2 = dao.readApprover(approver);
+		
+		return approver2;
+	}
+
 }
