@@ -19,7 +19,7 @@
 	</select>
 	
 	<!-- 결재선 추가 -->
-	<insert id="addApproval" parameterType="DraftApproval">
+	<insert id="addApproval" parameterType="DraftApprover">
 		insert into team4_draft_approver
 		(approver_code
 		,draft_code

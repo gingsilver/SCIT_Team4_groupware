@@ -2,6 +2,7 @@ package net.softsociety.Team4GroupWare.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -26,7 +28,10 @@ import net.softsociety.Team4GroupWare.domain.AttachedFile;
 import net.softsociety.Team4GroupWare.domain.Company;
 import net.softsociety.Team4GroupWare.domain.Employee;
 import net.softsociety.Team4GroupWare.domain.Organization;
+import net.softsociety.Team4GroupWare.domain.Schedule;
 import net.softsociety.Team4GroupWare.service.AdminService;
+import net.softsociety.Team4GroupWare.service.EmployeeService;
+import net.softsociety.Team4GroupWare.service.ScheduleService;
 import net.softsociety.Team4GroupWare.util.FileService;
 
 @Slf4j
@@ -216,5 +221,4 @@ public class AdminController {
 	public String companyCalendar() {
 		return "adminView/companyCalendar";
 	}
-
 }

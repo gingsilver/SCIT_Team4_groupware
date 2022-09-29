@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.Team4GroupWare.domain.AttachedFile;
 import net.softsociety.Team4GroupWare.domain.Company;
-import net.softsociety.Team4GroupWare.domain.DraftApproval;
+import net.softsociety.Team4GroupWare.domain.DraftApprover;
 import net.softsociety.Team4GroupWare.domain.Email;
 import net.softsociety.Team4GroupWare.domain.Employee;
 import net.softsociety.Team4GroupWare.domain.MailProcess;
@@ -102,7 +102,7 @@ public class EmailController {
 	//결재선 추가
 	@ResponseBody
 	@PostMapping("addApproval")
-	public int addApproval(DraftApproval approval) {
+	public int addApproval(DraftApprover approval) {
 		int result = 0;
 		
 		log.debug("가져온 결재선 : {}", approval);
