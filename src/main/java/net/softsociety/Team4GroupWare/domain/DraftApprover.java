@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DraftApproval {
+public class DraftApprover {
 	String draft_code;
 	String approver_code;
 	String employee_code;

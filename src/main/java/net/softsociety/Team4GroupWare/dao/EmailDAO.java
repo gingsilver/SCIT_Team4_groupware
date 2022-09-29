@@ -36,7 +36,7 @@ public interface EmailDAO {
 	public int sentmailCount(String email_sender);
 
 	//전체 메일함
-	public ArrayList<Mailinfo> readAllmail(HashMap<String, String> map);
+	public ArrayList<Mailinfo> readAllmail(String email_receiver);
 
 	//메일 1개 불러오기
 	public Mailinfo selectOne(String email_code);

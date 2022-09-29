@@ -1,23 +1,19 @@
 package net.softsociety.Team4GroupWare.controller;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.Team4GroupWare.domain.Company;
-import net.softsociety.Team4GroupWare.domain.DraftApproval;
+import net.softsociety.Team4GroupWare.domain.DraftApprover;
 import net.softsociety.Team4GroupWare.domain.Employee;
-import net.softsociety.Team4GroupWare.domain.Organization;
 import net.softsociety.Team4GroupWare.service.AdminService;
 import net.softsociety.Team4GroupWare.service.DraftService;
 
@@ -27,15 +23,15 @@ import net.softsociety.Team4GroupWare.service.DraftService;
 @ResponseBody
 public class DraftRestController {
 	
-	// 기안 서비스 선언
-	@Autowired
-	DraftService draftservice;
+		// 기안 서비스 선언
+		@Autowired
+		DraftService draftservice;
 		
-	// 관리자 서비스 선언
-	@Autowired
-	AdminService adminservice;
+		// 관리자 서비스 선언
+		@Autowired
+		AdminService adminservice;
 	
-	//조직도 불러오는 ajax 컨트롤러
+		//조직도 불러오는 ajax 컨트롤러
 		@PostMapping("readOrg")
 		public JSONArray readOrg(@AuthenticationPrincipal UserDetails user) {
 			//회사코드, 관리자 내용 가져오기
@@ -65,26 +61,42 @@ public class DraftRestController {
 		}
 		
 		//결재선 추가
-		@PostMapping("addApproval")
-		public int addApproval(DraftApproval approval) {
-			String draft_code = draftservice.createCode();
-			approval.setDraft_code(draft_code);
+		@PostMapping("addapprover")
+		public int addapprover(DraftApprover approver) {
+			log.debug("가져온 결재선 : {}", approver);
 			
-			String process_turn_code = draftservice.countDraftCode(draft_code);
+			String process_turn_code = draftservice.countDraftCode(approver.getDraft_code());
 			if(process_turn_code == null) {
 				process_turn_code = "0";
+				approver.setProcess_turn_code(process_turn_code);
+			} else {
+				approver.setProcess_turn_code(process_turn_code);
 			}
-			approval.setProcess_turn_code(process_turn_code);
 			
-			if(approval.getProcess_type().equals("참조")) {
-				approval.setProcess_enabled(4);
-			} else if(approval.getProcess_type().equals("결재") ||approval.getProcess_type().equals("전결")) { 
-				 approval.setProcess_enabled(3); 
+			if(approver.getProcess_type().equals("참조")) {
+				approver.setProcess_enabled(4);
+			} else if(approver.getProcess_type().equals("결재") ||approver.getProcess_type().equals("전결")) { 
+				 approver.setProcess_enabled(3); 
 			}
-			log.debug("가져온 결재선 : {}", approval);
-			int result = draftservice.addApproval(approval);
+			log.debug("가져온 결재선 : {}", approver);
+			int result = draftservice.addApprover(approver);
 			 
 			return result;
 		}
-
+		
+		//기안 예비 코드 생성
+		@PostMapping("addDraftCode")
+		public String addDraftCode() {
+			String draft_code = draftservice.createCode();
+			
+			return draft_code;
+		}
+		
+		//기안자 추가
+		@PostMapping("readApprover")
+		public DraftApprover readApprover(DraftApprover approver) {
+			log.debug("가져온 결재선 : {}", approver);
+			
+			return approver;
+		}
 }
