@@ -160,9 +160,9 @@ public class EmailController {
 		file.setEmployee_id(admin.getEmployee_id());
 		file.setEmployee_name(admin.getEmployee_name());
 		*/
-		String email_sender = "pp2000pooh@naver.com"; 
+		String email_sender = "example3@gmail.com"; 
 		email.setEmail_sender(email_sender);
-		email.setCompany_code("COM0007"); //로그인 정보 받아와서 넣기 현재는 임시 정보
+		email.setCompany_code("COM0006"); //로그인 정보 받아와서 넣기 현재는 임시 정보
 
 		/*---------------------이메일 정보를 메일함에 보내기----------------------------*/
 		
@@ -197,7 +197,7 @@ public class EmailController {
 		if(return_email_code == 1) {
 
 			mail_process.setEmail_code(new_email_code);
-			mail_process.setCompany_code("COM0007");
+			mail_process.setCompany_code("COM0006");
 
 			//맵으로 메일 번호랑 수신인 배열 바라바라 하기
 			String[] ReceiverArr = mail_process.getEmail_receiver();
@@ -247,7 +247,7 @@ public class EmailController {
 		//Company_code("COM0007"); 로그인 정보 받아와서 넣기 현재는 임시 정보
 		//email_sender는 로그인 정보에서 가져와야함, 여기서는 모르니까 임의로 넣고 진행(pp2000pooh@naver.com)
 		//DB에서 글을 읽어서
-		String email_sender = "pp2000pooh@naver.com"; 
+		String email_sender = "example3@gmail.com"; 
 		
 		
 		log.debug("페이지당 글 수 : {}, 페이지 이동 링크 수 : {}, 현재 페이지 : {}, 로그인 한 회원 아이디 : {}"
@@ -301,9 +301,9 @@ public class EmailController {
 		//Company_code("COM0007"); 로그인 정보 받아와서 넣기 현재는 임시 정보
 		//email_sender는 로그인 정보에서 가져와야함, 여기서는 모르니까 임의로 넣고 진행(pp2000pooh@naver.com)
 		//DB에서 글을 읽어서
-		String email_receiver = "pp2000pooh@naver.com"; 
+		String email_receiver = "popo@naver.com"; 
 		String email_cc_receiver = "yunhye.kay.hong@gmail.com";
-		String email_sender = "hongvely0829@gmail.com";
+		String email_sender = "example3@gmail.com";
 		
 		
 		ArrayList<Mailinfo> mailinfo = service.readAllmail(email_receiver, email_cc_receiver, email_sender); 

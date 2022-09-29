@@ -128,8 +128,7 @@
 			team4_mailbox_total T, team4_mailbox_process P
 		WHERE 
 			T.email_code =	P.email_code 
-			and (P.email_receiver like '%' || #{email_sender} || '%'
-			or P.email_cc_receiver like '%' || #{email_sender} || '%')
+			and (P.email_receiver like '%' || #{email_sender} || '%')
 			
 			
 		ORDER BY
@@ -146,7 +145,7 @@
 			, T.email_date
 			, T.email_content
 			, P.email_receiver
-			, P.email_cc_receiver
+			
 		FROM
 			team4_mailbox_total T, team4_mailbox_process P
 		WHERE 
