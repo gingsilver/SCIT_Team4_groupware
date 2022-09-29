@@ -42,7 +42,6 @@ public class ProjectServicelmpl implements ProjectService {
 
     @Override
     public Employee readEmployee(String username) {
-        System.out.println("서비스 테스트");
         Employee employee = projectDAO.readEmployee(username);
         return employee;
     }

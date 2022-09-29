@@ -28,6 +28,8 @@ public class WebSecurityConfig implements WebMvcConfigurer { // 클래스 이름
                 http.csrf().disable()
                                 .authorizeRequests()
                                 .antMatchers("/index").hasRole("USER")
+                                .antMatchers("/freeboard/**").hasRole("USER")
+                                .antMatchers("/draft/**").hasRole("USER")
                                 .antMatchers("/mailbox/**").hasRole("USER")
                                 .antMatchers("/freeboard/**").hasRole("USER")
                                 .antMatchers("/draft/**").hasRole("USER")
@@ -45,7 +47,7 @@ public class WebSecurityConfig implements WebMvcConfigurer { // 클래스 이름
                                                 "/assets/css/**", "/assets/img/**",
                                                 "/assets/js/**", "/assets/lib/**", "/assets/vendor/**")
                                 .permitAll() // 설정한 리소스의 접근을 인증절차 없이 허용
-                                // .anyRequest().authenticated() // 위의 경로 외에는 모두 로그인을 해야 함
+                                .anyRequest().authenticated() // 위의 경로 외에는 모두 로그인을 해야 함
                                 .and()
                                 .formLogin() // 일반적인 폼을 이용한 로그인 처리/실패 방법을 사용
                                 .loginPage("/employee/signin") // 시큐리티에서 제공하는 기본 폼이 아닌 사용자가 만든 폼 사용
@@ -69,18 +71,18 @@ public class WebSecurityConfig implements WebMvcConfigurer { // 클래스 이름
         // 인증을 위한 쿼리
         @Autowired
         public void configure(AuthenticationManagerBuilder auth) throws Exception {
-	        auth.jdbcAuthentication()
-	        .dataSource(dataSource)
-	        // 인증 (로그인)
-	        .usersByUsernameQuery(
-	        "select employee_id username, employee_pwd password, enabled " +
-	        "from team4_employee " +
-	        "where employee_id = ?")
-	        // 권한
-	        .authoritiesByUsernameQuery(
-	        "select employee_id username, role_name role_name " +
-	        "from team4_employee " +
-	        "where employee_id = ?");
+                auth.jdbcAuthentication()
+                                .dataSource(dataSource)
+                                // 인증 (로그인)
+                                .usersByUsernameQuery(
+                                                "select employee_id username, employee_pwd password, enabled " +
+                                                                "from team4_employee " +
+                                                                "where employee_id = ?")
+                                // 권한
+                                .authoritiesByUsernameQuery(
+                                                "select employee_id username, role_name role_name " +
+                                                                "from team4_employee " +
+                                                                "where employee_id = ?");
         }
 
         // 단방향 비밀번호 암호화
