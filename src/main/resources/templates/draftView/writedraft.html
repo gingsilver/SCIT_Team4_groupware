@@ -283,7 +283,7 @@
 		                    </div>
 		                    <div class="modal-footer">
 		                      <button type="button" class="btn btn-primary" id="addApprovalButton">결재선 추가</button>
-		                      <button type="button" class="btn btn-danger" data-bs-dismiss="modal">닫기</button>
+		                      <button type="button" class="btn btn-danger" id="closeButton" data-bs-dismiss="modal">닫기</button>
 		                    </div>
 		                  </div>
 		                </div>
@@ -332,6 +332,7 @@
   $(document).ready(function(){
 	  /* 페이지가 시작되자마자 조직도 출력 */
 	  readOrg();
+	  addDraftCode();
 	  
 	  /* 조직원 사원 목록 클릭시 이벤트 */
 	  $('.employeeInfo').on('click', addEmpl);
@@ -356,17 +357,54 @@
 		  $(".lastDiv").after(div);
 	  });
 	  
+	  $('#closeButton').on('click', readApprover);
+	  
 	  $('#deleteApprover').on('click', function(){
 		  $('.new:last').remove();
 	  });
 	  
-  });  
+  }); 
+  
+  /* 다른곳에서 사용하기 위해 선언하는 기안 예비 번호 */
+  let draft_code;
+  let employee_code
+  
+  function readApprover(){
+		$.ajax({
+			  url : 'readApprover',
+			  type : 'post',
+			  data : {draft_code : draft_code, employee_code : employee_code},
+			  dataType : 'json',
+			  success : function (data) {
+				  console.log('성공');
+			  },
+			  error : function () {
+					console.log('저장 실패');
+			  }
+		});		  
+  }
+  
+  /* 페이지 들어오자마자 기안 예비 번호 생성 */
+  function addDraftCode() {
+	  $.ajax({
+		  url : 'addDraftCode',
+		  type : 'post',
+		  dataType : 'text',
+		  success : function (data) {
+				draft_code = data;
+			  	console.log(draft_code);
+		  },
+		  error : function () {
+				console.log('저장 실패');
+		  }
+	  });
+  }
   
   /* 사원 목록 클릭 이벤트*/
   function addEmpl() {
 	  let count = $(this).attr('count');
 	  let employee_name = $(this).attr('empname');
-	  let employee_code = $(this).attr('empcode');
+	  employee_code = $(this).attr('empcode');
 	  let organization_name = $('#organization_name').val();
 	  
 	  if(count == 0) {
@@ -396,12 +434,12 @@
 		  $.ajax({
 				url : 'addApproval',
 				type : 'post',
-				data : {approver_name : employee_name, employee_code : employee_code, process_type : select},
+				data : {draft_code : draft_code, approver_name : employee_name, employee_code : employee_code, process_type : select},
 				success : function () {
-					alert('저장되었습니다.');
+					alter('저장되었습니다.');
 				},
 				error : function () {
-					alert('저장 실패');
+					console.log('저장 실패');
 				}
 			});
 	  }

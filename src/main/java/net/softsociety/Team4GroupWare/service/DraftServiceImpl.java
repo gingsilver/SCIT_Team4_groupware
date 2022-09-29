@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.Team4GroupWare.dao.DraftDAO;
-import net.softsociety.Team4GroupWare.domain.DraftApproval;
+import net.softsociety.Team4GroupWare.domain.DraftApprover;
 import net.softsociety.Team4GroupWare.domain.Employee;
 
 @Service
@@ -25,10 +25,8 @@ public class DraftServiceImpl implements DraftService {
 	}
 
 	@Override
-	public int addApproval(DraftApproval approval) {
-		int result = dao.addApproval(approval);
-		
-		log.debug("사원 : {}", approval);
+	public int addApprover(DraftApprover approver) {
+		int result = dao.addApprover(approver);
 		
 		return result;
 	}

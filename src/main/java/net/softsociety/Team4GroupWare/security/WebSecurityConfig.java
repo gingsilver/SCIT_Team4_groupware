@@ -29,6 +29,8 @@ public class WebSecurityConfig implements WebMvcConfigurer { // 클래스 이름
                                 .authorizeRequests()
                                 .antMatchers("/index").hasRole("USER")
                                 .antMatchers("/mailbox/**").hasRole("USER")
+                                .antMatchers("/freeboard/**").hasRole("USER")
+                                .antMatchers("/draft/**").hasRole("USER")
                                 .antMatchers("/admin/**").hasRole("ADMIN")
                                 .antMatchers("/", "/employee/signup" // 경섭 : 사원 생성 => 곧 지울 예정
                                                 , "/employee/checkRole" // 지은 : 로그인 시 권한 확인 ajax 페이지
@@ -39,7 +41,7 @@ public class WebSecurityConfig implements WebMvcConfigurer { // 클래스 이름
                                                 , "/company/findCompany" // 지은 : 회사 계정 찾기
                                                 , "/employee/findout" // 경섭 : 계정 찾기
                                                 , "/employee/renewpw" // 경섭 : 비밀번호 재설정
-                                                , "/freeboard/list", "/freeboard/read", "/fullcalendar/**",
+                                                , "/fullcalendar/**",
                                                 "/assets/css/**", "/assets/img/**",
                                                 "/assets/js/**", "/assets/lib/**", "/assets/vendor/**")
                                 .permitAll() // 설정한 리소스의 접근을 인증절차 없이 허용

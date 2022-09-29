@@ -1,6 +1,6 @@
 package net.softsociety.Team4GroupWare.service;
 
-import net.softsociety.Team4GroupWare.domain.DraftApproval;
+import net.softsociety.Team4GroupWare.domain.DraftApprover;
 import net.softsociety.Team4GroupWare.domain.Employee;
 
 public interface DraftService {
@@ -17,7 +17,7 @@ public interface DraftService {
 	 * @param approval
 	 * @return
 	 */
-	public int addApproval(DraftApproval approval);
+	public int addApprover(DraftApprover approver);
 
 	/**
 	 * create : 예비 기안 시퀀스 
