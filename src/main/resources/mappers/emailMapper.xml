@@ -102,7 +102,7 @@
 			T.email_code =	P.email_code 
 			and T.email_sender = #{email_sender}
 		ORDER BY
-			TO_CHAR(T.email_date, 'YYYY-MM-DD') DESC
+			TO_CHAR(T.email_date, 'YYYY-MM-DD')
 	</select>
 	
 	<!-- 페이지 나누기를 위한 글 개수 조회 -->
@@ -117,7 +117,7 @@
 	</select>	
 	
 	<!-- 전체 메일함 -->
-		<select id="readAllmail" parameterType="map" resultType="Mailinfo">
+		<select id="readAllmail" parameterType="String" resultType="Mailinfo">
 		SELECT DISTINCT
 			P.email_code
 			, P.company_code
@@ -128,11 +128,9 @@
 			team4_mailbox_total T, team4_mailbox_process P
 		WHERE 
 			T.email_code =	P.email_code 
-			and (P.email_receiver like '%' || #{email_sender} || '%')
-			
-			
+			and P.email_receiver = #{email_receiver}
 		ORDER BY
-			TO_CHAR(T.email_date, 'YYYY-MM-DD') DESC
+			TO_CHAR(T.email_date, 'YYYY-MM-DD')
 	</select>
 	
 	<!-- 메일 1개 불러오기 -->

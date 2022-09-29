@@ -81,7 +81,7 @@
           <div class="card">
             <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
               <span th:if="${employee_photo} == null"><img th:src="@{/image/default_photo.png}" class="shadow"></span>
-              <img th:src="@{/assets/upload/photo/} + ${employee_photo}" alt="Profile" class="rounded-circle">
+              <span th:if="${employee_photo} != null"><img th:src="@{/assets/upload/photo/} + ${employee_photo}" alt="Profile" class="rounded-circle"></span>
               <h2 th:text="${employee.employee_name}"></h2>
               <div class="social-links mt-2">
                 <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
@@ -160,7 +160,9 @@
                     <div class="row mb-3">
                       <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">프로필 사진</label>
                       <div class="col-md-8 col-lg-9">
-                        <img th:src="@{/assets/upload/photo/} + ${employee_photo}" alt="Upload photo">
+                      	<span th:if="${employee_photo} == null"><img th:src="@{/image/default_photo.png}" class="shadow"></span>
+                      	<span th:if="${employee_photo} != null">
+                        <img th:src="@{/assets/upload/photo/} + ${employee_photo}" alt="Upload photo"></span>
 
                         &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 
