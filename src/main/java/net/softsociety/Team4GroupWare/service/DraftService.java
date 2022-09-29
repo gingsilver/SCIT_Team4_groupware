@@ -26,10 +26,17 @@ public interface DraftService {
 	public String createCode();
 
 	/**
-	 * selecct : 기안 코드에 맞는 결재선 턴 코드 총합 리턴
+	 * select : 기안 코드에 맞는 결재선 턴 코드 총합 리턴
 	 * @param draft_code
 	 * @return
 	 */
 	public String countDraftCode(String draft_code);
+
+	/**
+	 * select : 가져온 데이터에 맞는 결재자 찾기
+	 * @param approver
+	 * @return
+	 */
+	public DraftApprover readApprover(DraftApprover approver);
 
 }

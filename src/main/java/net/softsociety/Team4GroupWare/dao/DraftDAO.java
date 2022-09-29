@@ -35,4 +35,11 @@ public interface DraftDAO {
 	 */
 	public String countDraftCode(String draft_code);
 
+	/**
+	 * select : 가져온 데이터에 맞는 결재자 찾기
+	 * @param approver
+	 * @return
+	 */
+	public DraftApprover readApprover(DraftApprover approver);
+
 }
