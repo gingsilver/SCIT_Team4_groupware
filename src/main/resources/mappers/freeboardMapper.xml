@@ -73,6 +73,7 @@
 		team4_free_board 
 	where company_code = #{company_code}
 	<if test="type != null and searchWord != null">
+	and
 	
 		<if test="type == 'free_title'">
 			free_title like '%' || #{searchWord} || '%'
@@ -109,7 +110,7 @@
 	where 
 		company_code = #{company_code}
 	<if test="type != null and searchWord != null">
-	
+	and
 		<if test="type == 'free_title'">
 			free_title like '%' || #{searchWord} || '%'
 		</if>	

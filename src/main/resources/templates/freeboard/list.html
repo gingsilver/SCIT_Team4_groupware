@@ -113,7 +113,7 @@ function pagingFormSubmit(currentPage) {
 	<br><br>
 	
 	<!-- 검색폼 -->
-	<form id="pagingForm" method="get" th:action="@{/board/list}">
+	<form id="pagingForm" method="get" th:action="@{/freeboard/list}">
 		<input type="hidden" name="page" id="page" />
 		<select id="type" name="type">
 			<option value="free_title" th:selected="${type} == 'free_title'">제목</option>
