@@ -43,14 +43,16 @@ tr.hover {
 th {
 	width:100px;
 	height: 30px;
-	background-color: #cccccc;
+	background-color: #6666CC;
+	color: white;
 	font-weight: bold;
 	text-align: left;
 	padding-left: 10px;
 }
 td {
 	padding: 3px;
-	background-color: #eeeeee;
+	background-color: #CCCCFF;
+	color: #333366;
 	text-align: left;
 }
 td.white1 {
@@ -105,27 +107,32 @@ td.replyid {
 	width: 100px;
 	padding-left: 10px;
 	border-style: none;
-	background-color: #cccccc;
+	background-color: #6666CC;
 	font-weight: bold;
+	color: white;
 }
 td.replytext {
 	width: 500px;
 	border-style: none;
-	background-color: #eeeeee;
+	background-color: #CCCCFF;
 }
 td.replydate {
 	width: 70px;
 	border-style: none;
-	background-color: #eeeeee;
+	background-color: #CCCCFF;
 	font-size: 10pt;
 	text-align: center;
 }
 td.replybutton {
 	width: 70px;
 	border-style: none;
-	background-color: #eeeeee;
+	background-color: #CCCCFF;
 	font-size: 10pt;
 	text-align: center;	
+}
+
+.repbtn {
+	background-color: #CCCCFF;
 }
 
 /* 에러 메시지 출력 */

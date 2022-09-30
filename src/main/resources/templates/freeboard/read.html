@@ -69,7 +69,7 @@ function validation() {
 	<table>
 	<tr>
 		<th style="width: 100px;">작성자</th>
-		<td th:text="${board.employee_id}" style="width: 600px;"></td>
+		<td th:text="${board.employee_id}" style="width: 1200px;"></td>
 	</tr>
 	<tr>
 		<th>작성일</th>
@@ -93,6 +93,7 @@ function validation() {
 
  <div th:if="${#authentication.name} == ${board.employee_id}">
 	<a th:href="@{/freeboard/update(free_code=${board.free_code})}">수정</a>
+	&nbsp;&nbsp;&nbsp;&nbsp;
 	<a th:href="@{/freeboard/delete(free_code=${board.free_code})}">삭제</a>
 </div> 
 <br>
@@ -103,7 +104,7 @@ function validation() {
 리플내용
 	<input type="hidden" name="free_code" th:value="${board.free_code}">
 	<input type="text" name="reply_contents" id="reply_contents" style="width:500px;">
-	<input type="submit" value="확인">
+	<input type="submit" value="확인" class="repbtn">
 </form>
 
 <!-- 리플 목록 출력 시작 -->
