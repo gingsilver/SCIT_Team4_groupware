@@ -67,9 +67,9 @@ function pagingFormSubmit(currentPage) {
 			<td class="white1">
 				전체 <span th:text="${navi.totalRecordsCount}"></span>
 			</td>
-			<td class="white2" colspan="3"></td>
+			<td class="white2" colspan="5"></td>
 			<td class="head">
-				<a sec:authorize="isAuthenticated()" th:href="@{/freeboard/write}">글쓰기</a>
+				<a sec:authorize="isAuthenticated()" th:href="@{/freeboard/write}" style="color: blue;">글쓰기</a>
 			</td>
 		</tr>
 		<tr>
