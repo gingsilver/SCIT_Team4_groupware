@@ -69,7 +69,9 @@ function pagingFormSubmit(currentPage) {
 			</td>
 			<td class="white2" colspan="5"></td>
 			<td class="head">
-				<a sec:authorize="isAuthenticated()" th:href="@{/freeboard/write}" style="color: blue;">글쓰기</a>
+				 <button type="button"
+           			 th:onclick="'location.href=\''+ @{/freeboard/write} + '\''"
+            			 style="background-color: #6666FF; width: 70px; height: 30px; color: white; font-weight: bold;">글작성</button>
 			</td>
 		</tr>
 		<tr>
