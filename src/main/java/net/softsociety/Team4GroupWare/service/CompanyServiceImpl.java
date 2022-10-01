@@ -72,4 +72,12 @@ public class CompanyServiceImpl implements CompanyService {
 		return employee;
 	}
 
+	//회사 정보 불러오기
+	@Override
+	public Company findCompanyByCompanycode(String company_code) {
+		Company company = dao.findCompanyByCompanicode(company_code);
+		
+		return company;
+	}
+
 }

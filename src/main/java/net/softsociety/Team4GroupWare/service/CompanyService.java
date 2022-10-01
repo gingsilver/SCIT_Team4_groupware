@@ -46,5 +46,12 @@ public interface CompanyService {
 	 * @return
 	 */
 	public Employee readAdmin(String company_code);
+	
+	/**
+	 * select : 회사 코드에 맞는 회사 정보 불러오기
+	 * @param company_code
+	 * @return
+	 */
+	public Company findCompanyByCompanycode(String company_code);
 
 }

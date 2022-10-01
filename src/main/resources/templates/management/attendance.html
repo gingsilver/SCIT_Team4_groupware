@@ -34,13 +34,70 @@
   <!-- data table -->
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
   
-  <style>
-  	hr#hr1 {
-  		margin : 0;
-  		padding : 0;
+<style>
+hr#hr1 {
+	margin : 0;
+  	padding : 0;
   	}
+#card{
+	width : 600px;
+	text-align: center;
+	margin : auto;
+}
+#employee_name{
+	font-style: italic; 
+	color : gray;
+}
+p.size20{ 
+font-size : 20px; 
+}
+table.realTime{
+	margin : auto;
+	border: 1px solid gray;
+	border-collapse : separate;
+	border-radius : 30px;
+	padding : 10px;
+
+}
   	
   </style>
+  <script>
+        window.onload = function(){
+            let target1 = document.getElementById("clock1");
+            let target2 = document.getElementById("clock2");
+            let timer1;
+            let timer2;
+
+                timer1 = setInterval(function(){
+                        let now = new Date();
+                        
+                        let year = now.getYear();
+                        let month = now.getMonth();
+                        let date = now.getDate();
+                        let day = now.getDay();
+                        let week = ['일', '월', '화', '수', '목', '금', '토'];
+                                                
+                        let currentTime1 = 
+                        `${1900+year}년 ${month + 1}월 ${date}일 (${week[day]}) `;
+                        
+                        target1.innerHTML = currentTime1; 
+                    }, 1000);
+          
+                timer2 = setInterval(function(){
+                    let now = new Date();
+                                            
+                    let h = now.getHours();
+                    let m = now.getMinutes();
+                    let s = now.getSeconds();
+                    let currentTime2 = 
+                    `${h < 10 ? `0${h}` : h}:${m < 10 ? `0${m}` : m}:${s < 10 ? `0${s}` : s}`;
+                    
+                    target2.innerHTML = currentTime2; 
+                }, 1000);
+           
+        }
+        </script>     
+
 
   <!-- =======================================================
   * Template Name: NiceAdmin - v2.3.1
@@ -69,12 +126,38 @@
       </nav>
     </div><!-- End Page Title -->
 
-    <section class="section dashboard">
-    
-    <div class="container-fluid">
-		
-		</div>
-    </section>
+		<section class="section dashboard">
+			<div class="card" id="card">
+				<div class="card-header">
+				<p class="size20">
+					<span th:text="${employee.employee_name}" id="employee_name"></span>
+					<span>님 환영합니다!</span></p>
+					<span th:text="${employee.organization}"></span>
+					<span th:text="${employee.position_type}"></span>
+				</div>
+				
+				
+				<div class="card-body">
+				
+ 				   </div>
+				
+					<table class="realTime">
+						<tr>
+							<td><span id="clock1"></span></td>
+							<th>|</th>
+							<td><img th:src="@{/image/clock1.png}" width="20px" height="20px"></td>
+							<th><span id="clock2"></span></th>
+						</tr>
+					</table>
+				</div>
+				
+				
+
+
+
+
+			<div class="container-fluid"></div>
+		</section>
 		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
