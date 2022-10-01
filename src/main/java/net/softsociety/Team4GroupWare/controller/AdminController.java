@@ -2,11 +2,7 @@ package net.softsociety.Team4GroupWare.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-
 import org.json.simple.JSONArray;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -18,20 +14,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.Team4GroupWare.domain.AttachedFile;
 import net.softsociety.Team4GroupWare.domain.Company;
+import net.softsociety.Team4GroupWare.domain.DocumentForm;
 import net.softsociety.Team4GroupWare.domain.Employee;
-import net.softsociety.Team4GroupWare.domain.Organization;
-import net.softsociety.Team4GroupWare.domain.Schedule;
 import net.softsociety.Team4GroupWare.service.AdminService;
-import net.softsociety.Team4GroupWare.service.EmployeeService;
-import net.softsociety.Team4GroupWare.service.ScheduleService;
 import net.softsociety.Team4GroupWare.util.FileService;
 
 @Slf4j
@@ -179,10 +168,40 @@ public class AdminController {
 	}
 
 	@GetMapping("adminDraft")
-	public String adminDraft() {
+	public String adminDraft(@AuthenticationPrincipal UserDetails user, Model model) {
+		Employee admin = service.readAdmin(user.getUsername());
+		ArrayList<DocumentForm> docform = service.readDocumentForm(admin.getCompany_code());
+		
+		model.addAttribute("docform", docform);
+		
 		return "adminView/adminDraft";
 	}
-
+	
+	@GetMapping({"readDoc"})
+	public String readDoc(
+			@RequestParam(name="document_form_code", defaultValue = "0") String document_form_code
+			, Model model
+			, @AuthenticationPrincipal UserDetails user) {
+		//db에서 글을 읽어서
+		log.debug("글 번호 : {}", document_form_code);
+		DocumentForm docform = service.findDocByCode(document_form_code);
+		
+		if(docform.equals(null)) {
+			return "redirect:/admin/adminDraft"; //글이 없을때
+		}
+		
+		//결과를 모델에 담아서 html에서 출력
+		model.addAttribute("docform", docform);
+		
+		return "adminView/readDoc";
+	}
+	
+	
+	@GetMapping("writedoc")
+	public String writedoc() {
+		return "adminView/writedoc";
+	}
+	
 	@GetMapping("adminBoard")
 	public String adminBoard() {
 

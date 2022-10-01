@@ -141,12 +141,10 @@
 								<span class="input-group-text">기안 종류</span>
 								<select class="form-select">
 									<option selected>----------------------기안 종류 선택----------------------</option>
-									<optgroup label="지정양식함"></optgroup>
-										<option value="회계">회계</option>
-										<option value="인사">인사</option>
-										<option value="총무">총무</option>
-									<optgroup label="자유양식함"></optgroup>
-									<option value="내양식">내 양식</option>
+									<option value="1">One</option>
+									<option value="2">Two</option>
+									<option value="3">Three</option>
+									<option>나오낭</option>
 								</select>
 							</div>
 						</div>
@@ -327,12 +325,10 @@
 	<script type="text/javascript" th:src="@{/zTree/jquery.ztree.core.min.js}"></script>
 
 	<SCRIPT LANGUAGE="JavaScript">
-	
 		$(document).ready(function () {
 			/* 페이지가 시작되자마자 조직도 출력 */
 			readOrg();
 			addDraftCode();
-			
 		});
 		
 		/* 다른곳에서 사용하기 위해 선언하는 기안 예비 번호 */
@@ -449,44 +445,47 @@
 
 						//목록 출력 영역에 내용 삽입
 						$('#employeeList').html(emp);
- 						
-					},
+/* 						
+						let id = $('.employeeInfo').attr('id');
+						console.log(id);
+
+						$('id').on('click', addEmpl);
+ */					},
 					error: function (e) {
 						console.log(e.responseText);
 					}
 				});
 			}
 		};
-		let appObj = {};
+		
 		/* 사원 목록 클릭 이벤트*/
 		let num = 1;
-		const appObjArr = [];
-		
+		var appObjArr = [];
+		var appObj = function(name, code, select, num){
+			this.name = name;
+			this.code = code;
+			this.select = select;
+			this.num = num;
+		}
 		let employee_name;
 		let employee_code;
 		let select;
-		let realId;
 		
 		function addEmpl(id) {
-			realId = id;
-			$('#' + realId).on('click', test);
-		}
-		
-		function test() {
-			let count = $(this).attr('count');
-			employee_name = $(this).attr('empname');
-			employee_code = $(this).attr('empcode');
+			let count = $('#'+ id).attr('count');
+			employee_name = $('#'+ id).attr('empname');
+			employee_code = $('#'+ id).attr('empcode');
 			
 			if (count == 0) {
-				$(this).mouseleave().css('background-color', '#EEF1FA');
-				$(this).attr('count', '1');
+				$('#'+ id).mouseleave().css('background-color', '#EEF1FA');
+				$('#'+ id).attr('count', '1');
 				
 				let insert = '<tr id=' + employee_name + '>';
 				insert += '<td>' + num + '</td>';
 				insert += '<td>' + employee_name + '</td>';
-				insert += '<td><select class="form-select selectedType">';
+				insert += '<td><select class="form-select" id="selectedType' + employee_code + '">';
 				insert += '<option>--결재 타입 선택--</option>';
-				insert += '<option value="결재">결재</option>';
+				insert += '<option name="결재" value="결재">결재</option>';
 				insert += '<option value="참조">참조</option>';
 				insert += '<option value="전결">전결</option></select></td></tr>';
 				
@@ -495,42 +494,37 @@
 				$('#selectedName').html(employee_name);
 				num += 1;
 			} else {
-				$(this).mouseenter().css('background-color', 'white');
-				$(this).attr('count', '0');
+				$('#'+ id).mouseenter().css('background-color', 'white');
+				$('#'+ id).attr('count', '0');
 				document.getElementById(employee_name).remove();
 				appObjArr.pop();
 				num -= 1;
 			}
+			
 			/* 추가 */
-			$('.selectedType').on('change', addArr);
+			$('#selectedType' + employee_code).on('change', addArr);
+			
 			/* 모달 속 결재자 추가를 누르면 실행 될 함수 => view단에 결재자 뿌리기 */
 			$('#addApprovalButton').on('click', readApp);
+			
 		}
 		
 		function addArr() {
-			select = $('.selectedType').children("option:selected").text();
-			console.log(employee_name);
-			console.log(employee_code);
-			console.log(select);
-			console.log(num);
-			
-			appObj.name = employee_name;
-			appObj.code = employee_code;
-			appObj.select = select;
-			appObj.num = num;
-			appObjArr.push(appObj);
-			appObj = {};
-			select = '';
+			let abc = new appObj(employee_name, employee_code, select, num);
+			select = $(this).children("option:selected").text();
+			appObjArr.push(abc);
+			abc = {};
+			console.log(abc);
 			console.log(appObjArr);
 		}
 		
 		function readApp(){
 			let insertTr;
 			let myClass;
-			
 			console.log(appObjArr);
 			
 			$(appObjArr).each(function(index, item){
+				console.log(item.name);
 				myClass = "col-lg-1 text-center";
 				insertTr = "<table class='table' style='width : 120px;'>";
 				insertTr += "<tr style='height : 40.5px;'>";

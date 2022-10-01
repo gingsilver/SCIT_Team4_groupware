@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ko"  
+	  xmlns:th="http://thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>KUROWARE ADMIN PAGE</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons  : 탭 창에서 보이는 이모티콘 -->
+  <link th:href="@{/assets/img/favicon.png}" rel="icon">
+  <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+  <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+  
+   <!-- data table -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+  
+  <style>
+	th, td, b {
+		vertical-align: middle;
+	}
+	
+	.btn-primary {
+		background-color : #606EBF;
+		border-color : #606EBF;
+		color:white;
+		font-size : 16px;
+	}
+	
+	.btn-danger {
+		background-color : #CC5749;
+		border-color : #CC5749;
+		color:white;
+		font-size : 16px;
+	}
+  </style>
+	
+</head>
+
+<body>
+  <!-- ======= Header ======= -->
+  <header th:replace="/admincommon/header :: header"></header><!-- End Header -->
+  <!-- ======= Sidebar ======= -->
+  <aside th:replace="/admincommon/aside :: aside"></aside><!-- End Sidebar-->
+
+	<main id="main" class="main">
+
+		<div class="pagetitle">
+			<h1>관리자 전자결재</h1>
+	      <nav>
+	        <ol class="breadcrumb">
+	          <li class="breadcrumb-item"><a th:href="@{/admin}">Home</a></li>
+	          <li class="breadcrumb-item active">Admin page</li>
+	          <li class="breadcrumb-item active"><a th:href="@{/admin/adminDraft}">관리자 전자결재</a></li>
+	          <li class="breadcrumb-item active">양식 작성</li>
+	        </ol>
+			</nav>
+		</div><!-- End Page Title -->
+		
+		<section class="section dashboard">
+			<div class="card">
+				<div class="card-body" style="height : 1000px;">
+					<!-- start 버튼 행 -->
+						<div class="d-flex align-items-center align-self-center justify-content-between">
+							<h4><b>● 양식 작성</b></h4>
+							<div>
+								<input id="addDoc" type="button" value="생성" class="btn btn-primary">&nbsp;
+								<input id="saveDoc" type="button" value="임시 저장" class="btn btn-primary">&nbsp;
+								<input id="cancelDoc" type="button" value="작성 취소" class="btn btn-danger">
+							</div>
+						</div>
+					<!-- start 기안내용 -->
+					<hr>
+					<div class="row">
+						<div class="col-lg-12">
+							<!-- 기안 시작 -->
+							<form id="documentForm" th:action="@{/admin/addDocForm}" method="post">
+								<table class="table text-center">
+									<colgroup>
+										<col width="10%">
+										<col width="40%">
+										<col width="10%">
+										<col width="40%">
+									</colgroup>
+									<tr>
+										<th>양식 종류</th>
+										<td>
+											<select id="document_form_type" name="document_form_type" class="form-select" multiple aria-label="multiple select example">
+												<optgroup label="저장할 양식의 종류를 선택해주세요.">
+								                    <option value="회계">회계</option>
+								                    <option value="인사">인사</option>
+								                    <option value="총무">총무</option>
+								                </optgroup>
+							                </select>
+										</td>
+										<th rowspan="3">전결자 선택</th>
+										<td rowspan="3"><input id="final_approver_name" name="final_approver_name" type="text" class="form-control"></td>
+									</tr>
+									<tr>
+										<th>양식 제목</th>
+										<td><input id="document_form_name" name="document_form_name" type="text" class="form-control"></td>
+									</tr>
+								</table>
+								<!-- 웹 에디터 시작 -->
+								<div id="document_form_contents" name="document_form_contents" class="quill-editor-full" style="height : 600px;">
+								</div>
+
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+	</main><!-- End #main -->
+
+	<!-- ======= Footer ======= -->
+	<footer id="footer" class="footer">
+		<div class="copyright">
+			&copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+		</div>
+		<div class="credits">
+			<!-- All the links in the footer should remain intact. -->
+			<!-- You can delete the links only if you purchased the pro version. -->
+			<!-- Licensing information: https://bootstrapmade.com/license/ -->
+			<!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+			Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+		</div>
+	</footer><!-- End Footer -->
+
+	<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+			class="bi bi-arrow-up-short"></i></a>
+
+	<!-- Vendor JS Files -->
+	<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+	<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+	<script th:src="@{/assets/vendor/chart.js/chart.min.js}"></script>
+	<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+	<script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+	<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+	<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+	<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+
+	<!-- Template Main JS File -->
+	<script th:src="@{/assets/js/main.js}"></script>
+
+	<!-- 제이쿼리, 에이젝스 -->
+	<script th:src="@{/assets/js/jquery-3.6.0.js}"></script>
+
+	<!-- zTree js : 조직도 라이브러리 입니다. -->
+	<script type="text/javascript" th:src="@{/zTree/jquery.ztree.core.min.js}"></script>
+
+	<script>
+	$(document).ready(function() {
+		
+		$('#addDoc').on('click', addDoc);
+	});
+	
+	function addDoc(){
+		let document_form_type = $('#document_form_type option:selected').val();
+		let document_form_name = $('#document_form_name').val();
+		let final_approver_name = $('#final_approver_name').val();
+		let contents = $('.quill-editor-full').html();
+		let document_form_contents = encodeURIComponent(contents);
+		
+		if(document_form_type == null || document_form_type == ''){
+			alert("양식 종류를 선택해주세요.");
+			return false;
+		}
+		
+		if(document_form_name == null || document_form_type == ''){
+			alert("양식 이름을 입력해주세요.");
+			return false;
+		}
+		
+		if(final_approver_name == null || final_approver_name == ''){
+			alert("전결자를 선택해주세요.");
+			return false;
+		}
+		
+		if(document_form_contents == null || document_form_contents == ''){
+			alert("양식 내용을 입력해주세요.");
+			return false;
+		}
+		
+		$.ajax({
+			url : 'addDocForm',
+			type : "post",
+			data : {document_form_type : document_form_type, document_form_name : document_form_name
+					, final_approver_name : final_approver_name, document_form_contents : document_form_contents},
+			success : function () {
+				alert('저장되었습니다.');
+				let url = '/team4/admin/adminDraft'
+				location.replace(url);
+			},
+			error : function () {
+				alert('저장 실패');
+			}
+		});
+	}
+	</script>
+
+</body>
+
+</html>

@@ -6,6 +6,7 @@ import org.json.simple.JSONArray;
 
 import net.softsociety.Team4GroupWare.domain.AttachedFile;
 import net.softsociety.Team4GroupWare.domain.Company;
+import net.softsociety.Team4GroupWare.domain.DocumentForm;
 import net.softsociety.Team4GroupWare.domain.Employee;
 import net.softsociety.Team4GroupWare.domain.Organization;
 
@@ -127,5 +128,26 @@ public interface AdminService {
 	 * @return
 	 */
 	public int addEmpForOrg(Employee employee);
+
+	/**
+	 * insert : 양식함에 양식 추가
+	 * @param docform
+	 * @return
+	 */
+	public int addDocumentForm(DocumentForm docform);
+
+	/**
+	 * select : 양식함 내용 가져오기
+	 * @param company_code
+	 * @return
+	 */
+	public ArrayList<DocumentForm> readDocumentForm(String company_code);
+
+	/**
+	 * select : 양식함 글 읽기
+	 * @param document_form_code
+	 * @return
+	 */
+	public DocumentForm findDocByCode(String document_form_code);
 
 }
