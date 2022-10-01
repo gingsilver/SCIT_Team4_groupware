@@ -1,10 +1,12 @@
 package net.softsociety.Team4GroupWare.util;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 게시판 페이징 처리 클래스
  */
+@Slf4j
 @Data
 public class PageNavigator {
 	//페이지 관련 정보 
@@ -22,6 +24,9 @@ public class PageNavigator {
 	 * 생성자
 	 */
 	public PageNavigator(int pagePerGroup, int countPerPage, int currentPage, int totalRecordsCount) {
+		log.debug("PageNavigator() called");
+		log.debug("currentPage : {}", currentPage);
+		
 		//그룹당 페이지 수, 페이지당 글 수, 현재 페이지, 전체 글 수를 전달받음
 		this.countPerPage = countPerPage;
 		this.pagePerGroup = pagePerGroup;
@@ -29,6 +34,8 @@ public class PageNavigator {
 		
 		//전체 페이지 수
 		totalPageCount = (totalRecordsCount + countPerPage - 1) / countPerPage;
+		if(totalPageCount < 1)
+			totalPageCount = 1;
 
 		//전달된 현재 페이지가 1보다 작으면 현재페이지를 1페이지로 지정
 		if (currentPage < 1)	currentPage = 1;
@@ -36,6 +43,7 @@ public class PageNavigator {
 		if (currentPage > totalPageCount)	currentPage = totalPageCount;
 		
 		this.currentPage = currentPage;
+		log.debug("currentPage : {}", currentPage);
 
 		//현재 그룹
 		currentGroup = (currentPage - 1) / pagePerGroup;

@@ -29,6 +29,8 @@ public class FreeBoardSeviceImpl implements FreeBoardService {
 	@Override
 	public PageNavigator getPageNavigator(
 			int pagePerGroup, int countPerPage, int page, String type, String searchWord, String company_code) {
+		log.debug("getPageNavigator() called");
+		log.debug("page : {}", page);
 		
 		HashMap<String, String> map = new HashMap<>();
 		map.put("type", type);
@@ -38,6 +40,7 @@ public class FreeBoardSeviceImpl implements FreeBoardService {
 		int total = boardDAO.countFreeBoard(map);
 		PageNavigator navi = new PageNavigator(pagePerGroup, countPerPage, page, total);
 		
+		log.debug("navi : {}", navi);
 		return navi;
 	}
 

@@ -104,7 +104,7 @@ function pagingFormSubmit(currentPage) {
 
 	<span th:each="counter : ${#numbers.sequence(navi.startPageGroup, navi.endPageGroup)}"> 
 		<th:block th:if="${counter == navi.currentPage}"><b></th:block>
-			<a th:text="${counter}" th:href="|javascript:pagingFormSubmit(${counter})|"></a>&nbsp;
+			<a  th:text="${counter}" th:href="|javascript:pagingFormSubmit(${counter})|"></a>&nbsp;
 		<th:block th:if="${counter == navi.currentPage}"></b></th:block>
 	</span>
 	

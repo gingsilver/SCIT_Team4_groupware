@@ -65,6 +65,7 @@ public class FreeBoardController {
 		ArrayList<FreeBoard> boardlist = service.list(navi, type, searchWord, company_code);
 
 		model.addAttribute("navi", navi);
+		log.debug("navi : {}", navi);
 		model.addAttribute("boardlist", boardlist);
 		model.addAttribute("type", type);
 		model.addAttribute("searchWord", searchWord);
