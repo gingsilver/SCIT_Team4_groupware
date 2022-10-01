@@ -84,18 +84,18 @@ function validation() {
 	<tr>
 		<th>제목</th>
 		<td>
-			<input type="text" name="free_title" id="free_title" style="width:400px;" th:value="${board.free_title}">
+			<input type="text" name="free_title" id="free_title" style="width:1200px;" th:value="${board.free_title}">
 		</td>
 	</tr>
 	<tr>
 		<th>내용</th> 
 		<td>
-			<textarea name="free_contents" id="free_contents" th:text="${board.free_contents}"></textarea>
+			<textarea name="free_contents" id="free_contents" style="width:1200px;" th:text="${board.free_contents}"></textarea>
 		</td>
 	</tr>
 	<tr>
 		<td colspan="2" class="white center">
-			<input type="submit" value="수정">
+			<input type="submit" value="수정" style="background-color: #6666FF; width: 70px; height: 30px; color: white; font-weight: bold;">
 		</td> 
 	</tr>
 	</table>
