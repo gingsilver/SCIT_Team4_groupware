@@ -49,26 +49,62 @@ hr#hr1 {
 	margin: 0;
 	padding: 0;
 }
-h5.card-title{
-font-weight : bold;
+h3.card-title{	
+	font-weight : bold;
 }
 
 #card{
 	width : 1000px;
 }
 div.employ-contract-top{
-margin-top : 20px;
-font-weight : bold;
+	margin-top : 20px;
+	font-weight : bold;
 }
 div.employ-contract-bottom{
-margin-bottom : 20px;
+	margin-bottom : 20px;
 }
 span.atmark{
-background-color: #ffe6a7;
-padding: 0.20rem 0.2rem;
-text-transform: uppercase;
-border: none;
+	background-color: #ffe6a7;
+	padding: 0.20rem 0.2rem;
+	text-transform: uppercase;
+	border: none;
 	border-radius: 1rem;
+}
+div.contractDate{
+	margin-top : 40px;
+	margin-bottom : 40px;
+	text-align: center;
+}
+div.yourpayment{
+	margin-top : 10px;
+	padding-left : 50px;
+	margin-bottom : 10px;
+}
+div.employerAndemployeeInfo {
+  width: 100%;
+  min-width: 500px;
+}
+
+table.employerInfo{
+	display :  inline-block;
+	width : 460px;
+}
+table.employerInfo th{
+	width : 13%;
+}
+table.employerInfo td{
+	width : 24%;
+}
+
+table.employeeInfo{
+	display :  inline-block;
+	width : 460px;
+}
+table.employeeInfo th{
+	width : 20%;
+}
+table.employeeInfo td{
+	width : 31%;
 }
 </style>
 
@@ -111,56 +147,132 @@ border: none;
 
 					<!-- Card with header and footer -->
 					<div class="card" id="card">
-						<div class="card-header">OOO사업부 OOO팀 OOO님</div>
-						<div class="card-body">
-						<hr>
-							<h5 class="card-title">근로 계약서</h5>
-							<div class="employ-contract-bottom">
-							쿠로웨어주식회사(이하'A'와) <span class="atmark">[@구성원이름]</span>(이하'B')은(는) 다음과 같이 근로계약을 체결하고, 이를 성실히 준수할 것을 약속하며 서명날인합니다.
-							</div>
-							<div class="employ-contract-top">
-							제1조 (근로계약기간)</div>
-							<div class="employ-contract-bottom">
-							근로계약기간은 <span class="atmark">[@근로계약]</span> 시작일 부터 기간의 정함이 없는 근로계약을 체결하기로 한다.
-							</div>
-							<div class="employ-contract-top">
-							제2조(수습 및 평가)</div>
-							<div class="employ-contract-bottom">
-							수습기간은 <span class="atmark">[@수습기간 종료일]</span>가지로 <span class="atmark">[@급여지급률]</span>이며, 기간 만료 시 채용불가능할 경우 본 채용을 취고할 수 있다.
-							</div>
-							<div class="employ-contract-top">
-							제3조(근무장소 및 업무)</div>
-							<div class="employ-contract-bottom">
-							'B'의 근무장소는 회사 내이며, 주요 업무는 <span class="atmark">[@직무]</span>이다.
-							'A'는 업무 필요 시 근로장소와 주요 업무를 변경할 수 있고 'B'는 이에 동의한다.
-							</div>
-							<div class="employ-contract-top">
-							제4조 (근로시간 및 휴게)</div>
-							<div class="employ-contract-bottom">
-							근로시간은 <span class="atmark">[@근무형태]</span>를 운영하는 것을 원칙으로 한다.
-							'B'의 근로일 및 휴게시간은 아래와 같으며, 업무 특성 또는 사업장에 따라 변할 수 있다.
-							</div>
+						<div class="card-header">
+						<span th:text="${employee.organization}"></span>
+						<span th:text="${employee.position_type}"></span>
+						<span th:text="${employee.employee_name}"></span>
 						</div>
-						<div class="card-footer">2022.05.29</div>
+						
+						
+						<div class="card-body">
+							<h3 class="card-title">근로 계약서</h3>
+						<hr>
+							<div class="employ-contract-bottom">
+							<span class="atmark" th:text="${company.company_name}"></span>(이하 "A"라 한다.) 
+							<span class="atmark" th:text="${employee.employee_name}"></span>(이하 "B"라 한다.)은(는) 다음과 같이 근로계약을 체결하고, 이를 상호 성실히 준수할 것을 약속하며 서명날인합니다.
+							</div>
+							
+							<div class="employ-contract-top">
+							제 1조 (근로계약기간)</div>
+							<div class="employ-contract-bottom">
+							근로계약기간은 <span class="atmark" th:text="${employee.hiredate}"></span>부터 기간의 정함이 없는 근로계약을 체결하기로 한다. "A"는 근로의 대가로 제 2조에서 정한 연봉을 지급한다.
+							</div>
+							
+							<div class="employ-contract-top">
+							제 2조(연봉계약기간 및 연봉)</div>
+							<div class="employ-contract-bottom">
+							"갑"은 "을"의 근로에 대한 대가로 본 연봉계약 기간 동안 다음과 같은 금액을 지불한다.
+							<div class="yourpayment">
+							기본급 : <span class="atmark" th:text="${company.company_name}"></span><br>
+							퇴직금 : <span class="atmark" th:text="${company.company_name}"></span><br>
+							직책수당 : <span class="atmark" th:text="${company.company_name}"></span><br>
+							정기상여금 : 기본급의 200%를 연 3회(2월, 7월, 10월) 지급한다.<br>
+							초과근무수당 : <span class="atmark" th:text="${company.company_name}"></span>
+							식대 : <span class="atmark" th:text="${company.company_name}"></span><br>
+							</div>
+							</div>
+							
+							<div class="employ-contract-top">
+							제 3조(임금지급일)</div>
+							<div class="employ-contract-bottom">
+							매월 1일부터 기산하여 당원 말일 마감하여 익월 <span class="atmark" th:text="${employee.employee_name}"></span>일 지급한다.
+							</div>
+							
+							<div class="employ-contract-top">
+							제 4조 (근로시간 및 휴게)</div>
+							<div class="employ-contract-bottom">
+							① 근로시간은 1일 8시간, 주 40시간으로 한다. 다만, 파견근무의 경우 파견근무지의 규정에 따른다.<br>
+							② 시업시간은 <span class="atmark" th:text="${company.company_name}"></span>시,
+							 종업시간은 <span class="atmark" th:text="${company.company_name}"></span>시로 한다.<br>
+							③ 휴게시간은 근로시간 내의 1시간으로 한다.<br>
+							④ 제 3항의 당사자 "A"와 "B"의 합의에 따라 법정한도 내에서 연장근로 할 수 있다.<br>
+							</div>
+							
+							<div class="employ-contract-top">
+							제 5조(직종, 전직)</div>
+							<div class="employ-contract-bottom">
+							"A"는 경영상의 필요, 업무수행능력, 적격성 등 제반 사정을 고려하여 "B"로 하여금 전항의 업무 이외의 업무를 담당하게 할 수 있다.
+							</div>							
+							
+							<div class="employ-contract-top">
+							제 6조(비밀유지의무)</div>
+							<div class="employ-contract-bottom">
+							① "B"이 업무와 관련하여 취득한 사항은 본 계약기간 중은 물론 본 계약 종료 후에도 제 3자에게 누설하여서는 아니 된다.<br>
+							② "B"은 "A"과 본 계약을 체결한 전후를 불문하고 "A"과의 사이에서 합의된 연봉 및 근로조건 일체를 누구에게든지 어떤 명목으로든지 공개하여서는 아니 된다. <br>
+							</div>
+							
+							<div class="contractDate"> 
+							<span class="atmark" th:text="${company.company_name}"></span>년 
+							<span class="atmark" th:text="${company.company_name}"></span>월 
+							<span class="atmark" th:text="${company.company_name}"></span>일 
+							</div>
+							
+							<div employerAndemployeeInfo>
+							<table class="employerInfo">
+								<tr>
+									<th>(사업주)</th>
+									<th>사업체명 : </th>
+									<td colspan="2"><span th:text="${company.company_name}"></span></td>
+								</tr>
+								<tr>
+									<th></th>
+									<th>전화 : </th>
+									<td colspan="2">02-4562-8890</td>
+								</tr>
+								<tr>
+									<th></th>
+									<th>주소: </th>
+									<td colspan="2"><span th:text="${company.company_name}"></span></td>
+								</tr>
+								<tr>
+									<th></th>
+									<th>대표자 : </th>
+									<td><span th:text="${company.company_ceo_name}"></span></td>
+									<td>(인)</td>
+								</tr>
+							</table>
+							
+							<table class="employeeInfo">
+								<tr>
+									<th>(근로자)</th>
+									<th>주소: </th>
+									<td colspan="3"><span th:text="${employee.employee_name}"></span></td>
+								</tr>
+								<tr>
+									<th></th>
+									<th>연락처: </th>
+									<td colspan="3"><span th:text="${employee.employee_name}"></span></td>
+									<td></td>
+								</tr>
+								<tr>
+									<th></th>
+									<th>성명 : </th>
+									<td><span th:text="${employee.employee_name}"></span></td>
+									<td>(인)</td>
+								</tr>
+								<tr>
+									<th colspan="4" style="color : white;">.</th>									
+								</tr>
+					
+							</table>
+						</div>
+														
+						</div>
+						<div class="card-footer"></div>
 					</div>
 					<!-- End Card with header and footer -->
-
-
-
 				</div>
-
-
-
-
-
-
-
 			</div>
-
-
-
-
-
 		</section>
 		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 		<script

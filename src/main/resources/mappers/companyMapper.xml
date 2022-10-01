@@ -91,4 +91,11 @@
 		from team4_employee
 		where COMPANY_CODE = #{COMPANY_CODE} and ROLE_NAME = 'ROLE_ADMIN'
 	</select>
+	
+	<!-- 회사 정보 불러오기 -->
+	<select id="findCompanyByCompanicode" parameterType="string" resultType="Company">
+		select *
+		from team4_company
+		where COMPANY_CODE = #{COMPANY_CODE}
+	</select>
 </mapper>

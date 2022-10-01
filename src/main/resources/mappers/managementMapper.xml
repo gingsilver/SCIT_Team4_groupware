@@ -4,5 +4,10 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="net.softsociety.Team4GroupWare.dao.ManagementDAO">
-
+	<!-- 개인의 연봉 정보 불러오기 -->
+	<select id="seleteSalaryOne" parameterType="string" resultType="Salary">
+		select *
+		from team4_salary
+		where EMPLOYEE_CODE = #{EMPLOYEE_CODE}
+	</select>    
 </mapper>

@@ -50,4 +50,11 @@ public interface CompanyDAO {
 	 */
 	public Employee readAdmin(String company_code);
 
+	/**
+	 * select : 회사 코드에 맞는 회사정보 불러오기
+	 * @param company_code
+	 * @return
+	 */
+	public Company findCompanyByCompanicode(String company_code);
+
 }
