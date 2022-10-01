@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.softsociety.Team4GroupWare.dao.AdminDAO;
 import net.softsociety.Team4GroupWare.domain.AttachedFile;
 import net.softsociety.Team4GroupWare.domain.Company;
+import net.softsociety.Team4GroupWare.domain.DocumentForm;
 import net.softsociety.Team4GroupWare.domain.Employee;
 import net.softsociety.Team4GroupWare.domain.Organization;
 
@@ -151,6 +152,27 @@ public class AdminServiceImpl implements AdminService {
 		int result = dao.addEmpForOrg(employee);
 		
 		return result;	
+	}
+
+	@Override
+	public int addDocumentForm(DocumentForm docform) {
+		int result = dao.addDocumentForm(docform);
+		
+		return result;
+	}
+
+	@Override
+	public ArrayList<DocumentForm> readDocumentForm(String company_code) {
+		ArrayList<DocumentForm> docform = dao.readDocumentForm(company_code);
+		
+		return docform;
+	}
+
+	@Override
+	public DocumentForm findDocByCode(String document_form_code) {
+		DocumentForm docform = dao.findDocByCode(document_form_code);
+		
+		return docform;
 	}
 
 }

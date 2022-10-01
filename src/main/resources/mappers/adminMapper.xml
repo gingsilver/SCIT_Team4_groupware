@@ -201,4 +201,48 @@
 		set organization = #{organization}
 		where employee_code =#{employee_code}
 	</update>
+	
+	<!-- 양식함 insert -->
+	<insert id="addDocumentForm" parameterType="DocumentForm">
+		insert into team4_document_form
+		(company_code
+		, document_form_code
+		, document_form_type
+		, document_form_name
+		, document_form_title
+		, document_form_contents
+		, final_approver_name
+		)
+		values
+		(#{company_code}
+		<if test="document_form_type == '인사'">
+		, 'HR'||LPAD(team4_document_seq.nextval, 4, 0)
+		</if>
+		<if test="document_form_type == '회계'">
+		, 'AC'||LPAD(team4_document_seq.nextval, 4, 0)
+		</if>
+		<if test="document_form_type == '총무'">
+		, 'ADM'||LPAD(team4_document_seq.nextval, 4, 0)
+		</if>
+		,#{document_form_type}
+		,#{document_form_name}
+		,#{document_form_name}
+		,#{document_form_contents}
+		,#{final_approver_name}
+		)
+	</insert>
+	
+	<!-- 양식함 내용 가져오기 -->
+	<select id="readDocumentForm" parameterType="String" resultType="DocumentForm">
+		select *
+		from team4_document_form
+		where company_code = #{company_code}
+	</select>
+	
+	<!-- 양식함 내용 한개 가져오기 -->
+	<select id="findDocByCode" parameterType="String" resultType="DocumentForm">
+		select *
+		from team4_document_form
+		where document_form_code = #{document_form_code}
+	</select>
 </mapper>
