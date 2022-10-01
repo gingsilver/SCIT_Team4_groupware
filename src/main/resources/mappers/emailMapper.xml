@@ -70,21 +70,29 @@
 	<insert id="insertMailAtteched" parameterType="AttachedFile">
 		insert into
 		team4_attached_file
-		(company_code
+		(
+		company_code
 		,attached_file_code
 		,document_code
 		,attached_file_origin_name
 		,attached_file_save_name
 		,attached_file_ext
+		,employee_code
+		,employee_id
+		,employee_name
 		)
 		values
-		(#{company_code}
+		(
+		#{company_code}
 		,'File'||LPAD(team4_attached_file_seq.nextval,
 		4, 0)
-		,#{email_code}
+		,#{document_code}
 		,#{attached_file_origin_name}
 		,#{attached_file_save_name}
 		,#{attached_file_ext}
+		,#{employee_code}
+		,#{employee_id}
+		,#{employee_name}
 		)
 	</insert>
 	
@@ -149,5 +157,24 @@
 		WHERE 
 			T.email_code =	P.email_code 
 			AND P.email_code = #{email_code}
+	</select>
+	
+		<!-- 메일 1개의 첨부파일 불러오기 -->
+		<select id="MailAttachedfile" parameterType="String" resultType="AttachedFile">
+		SELECT 
+			company_code
+			,attached_file_code
+			,document_code
+			,attached_file_origin_name
+			,attached_file_save_name
+			,attached_file_ext
+			,attached_file_date
+			,employee_code
+			,employee_id
+			,employee_name
+		FROM
+			team4_attached_file
+		WHERE 
+			document_code = #{email_code}
 	</select>
 </mapper>

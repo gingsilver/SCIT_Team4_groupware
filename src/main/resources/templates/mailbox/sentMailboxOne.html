@@ -83,9 +83,11 @@ div.text-right{
                                             <div class="right-box-padding">                                               
                                                 <div class="read-content">
                                                     <div class="media pt-3">
-                                                        <img class="mr-4 rounded-circle" alt="image" src="../image/1.png">
+                                                      <span th:if="${employee_photo} == null"><img th:src="@{/image/default_photo.png}" img class="mr-4 rounded-circle" style="width: 50px;"></span>
+                                                        <span th:if="${employee_photo} != null"><img th:src="@{/assets/upload/photo/} + ${employee_receiver_photo}" alt="Profile" img class="mr-4 rounded-circle" style="width: 50px;"></span>
                                                         <div class="media-body">
-                                                            <h5 class="text-primary">고사원(example3@gmail.com)</h5>
+                                                        	<h5 th:text="${employee_sender.employee_name}"></h5>
+                                                             <h5 class="text-primary" th:text="${mailinfo.email_sender}"></h5>
                                                             <p class="mb-0" th:text="${mailinfo.email_date}"></p>
                                                         </div>
                                                         <a href="javascript:void()" class="text-muted "><i
@@ -100,7 +102,8 @@ div.text-right{
                                                         <div class="media-body"><span class="pull-right "></span>
                                                             <h5 class="my-1 text-primary" th:text="${mailinfo.email_title}">A collection of textile samples lay spread</h5>
                                                             <p class="read-content-email">
-                                                                To: 나푸푸(popo@naver.com)</p>
+                                                              To :  <span th:text="|${employee_sender.employee_name} (${mailinfo.email_sender})|"></span>
+                                                                </p>
                                                         </div>
                                                     </div>
                                                     <div class="read-content-body">
@@ -111,24 +114,14 @@ div.text-right{
                                                     <div class="read-content-attachment">
                                                         <h6><i class="bi bi-paperclip"></i>첨부파일</h6>
                                                         <div class="row attachment">
-                                                            <div class="col-auto">
-                                                                <a href="javascript:void()" class="text-muted">My-Photo.png</a>
-                                                            </div>
-                                                            <div class="col-auto">
-                                                                <a href="javascript:void()" class="text-muted">My-File.docx</a>
-                                                            </div>
-                                                            <div class="col-auto">
-                                                                <a href="javascript:void()" class="text-muted">My-Resume.pdf</a>
+                                                             <div class="col-auto">
+                                                                <a th:text="${attachedfile.attached_file_origin_name}"
+																   th:href="@{/attachedfile/download(attachedfile=${attachedfile.attached_file_code})}"></a>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <hr>
-                                                    <div class="form-group pt-3">
-                                                        <textarea class="w-100" name="write-email" id="write-email" cols="30" rows="5" placeholder="내용을 입력해주세요"></textarea>
-                                                    </div>
                                                 </div>
-                                                <div class="text-right">
-                                                    <button class="btn btn-primary btn-sl-sm mb-5" type="button">Send</button>
                                                 </div>
                                             </div>
                                         </div>

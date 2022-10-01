@@ -73,15 +73,17 @@
                 <!-- row -->
                 <div class="row">
                     <div class="col-lg-12">
-                        
                                <div class="email-right-box " id="read-mail-box" style="margin : 0px;" >
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="right-box-padding" >                                               
                                                 <div class="read-content">
                                                     <div class="media pt-3">
-                                                        <img class="mr-4 rounded-circle" alt="image" src="../image/1.png">
+                                                        <span th:if="${employee_photo} == null"><img th:src="@{/image/default_photo.png}" img class="mr-4 rounded-circle" style="width: 50px;"></span>
+                                                        <span th:if="${employee_photo} != null"><img th:src="@{/assets/upload/photo/} + ${employee_receiver_photo}" alt="Profile" img class="mr-4 rounded-circle" style="width: 50px;"></span>
+                                                        
                                                         <div class="media-body">
+                                                        <h5 th:text="${employee_sender.employee_name}"></h5>
                                                             <h5 class="text-primary" th:text="${mailinfo.email_sender}"></h5>
                                                             <p class="mb-0" th:text="${mailinfo.email_date}"></p>
                                                         </div>
@@ -97,8 +99,8 @@
                                                         <div class="media-body"><span class="pull-right "></span>
                                                             <h5 class="my-1 text-primary" th:text="${mailinfo.email_title}">A collection of textile samples lay spread</h5>
                                                             <p class="read-content-email">
-                                                                To : Me,<div th:text="${mailinfo.email_receiver}"></div>
-                                                                CC : </p>
+                                                                To :  <span th:text="|${employee_receiver.employee_name} (${mailinfo.email_receiver})|"></span>
+                                                              </p>
                                                             
                                                         </div>
                                                     </div>
@@ -111,20 +113,13 @@
                                                         <h6><i class="bi bi-paperclip"></i>첨부파일</h6>
                                                         <div class="row attachment">
                                                             <div class="col-auto">
-                                                                <a href="javascript:void()" class="text-muted">My-Photo.png</a>
-                                                            </div>
-                                                            <div class="col-auto">
-                                                                <a href="javascript:void()" class="text-muted">My-File.docx</a>
-                                                            </div>
-                                                            <div class="col-auto">
-                                                                <a href="javascript:void()" class="text-muted">My-Resume.pdf</a>
-                                                            </div>
+                                                                <a th:text="${attachedfile.attached_file_origin_name}"
+																   th:href="@{/attachedfile/download(attachedfile=${attachedfile.attached_file_code})}"></a>
+                                                            </div>                                                        
                                                         </div>
                                                     </div>
                                                     <hr>
                                                 </div>
-                                                <div class="text-right">
-                                                    <button class="btn btn-primary btn-sl-sm mb-5" type="button">Send</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -137,7 +132,6 @@
             </div>
         </div>
      
-        </div>
     </section>
 
   </main><!-- End #main -->
