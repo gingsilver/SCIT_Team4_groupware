@@ -20,6 +20,4 @@ public class Email {
 	String email_important;			//중요메일여부 0 : 보통 메일, 1 : 중요 메일
 	String email_trash;				//휴지통 여부 0 : 보관 메일, 1: 휴지통 메일
 	
-	String originalfile;			//첨부파일의 원래 이름 ->삭제 예정
-	String savedfile;				//첨부파일이 서버에 저장된 이름 ->삭제 예정
 }

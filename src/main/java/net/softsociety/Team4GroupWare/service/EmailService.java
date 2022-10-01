@@ -32,8 +32,9 @@ public interface EmailService {
 	/**
 	 * 첨부파일 저장하기
 	 * @param file
+	 * @return 
 	 */
-	public void insertMailAtteched(AttachedFile file);
+	public int insertMailAtteched(AttachedFile file);
 	
 	/**
 	 * 수신인 저장
@@ -82,6 +83,13 @@ public interface EmailService {
 	 * @return mailinfo 메일 정보
 	 */
 	public Mailinfo selectOne(String email_code);
+
+	/**
+	 * 메일 1개 읽기의 첨부파일 불러오기
+	 * @param email_code
+	 * @return attachedfile
+	 */
+	public AttachedFile MailAttachedfile(String email_code);
 
 	
 }

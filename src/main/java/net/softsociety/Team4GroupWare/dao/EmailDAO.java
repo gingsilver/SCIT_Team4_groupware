@@ -18,7 +18,7 @@ public interface EmailDAO {
 	public int sendToMailbox(Email email);
 
 	//첨부파일 저장
-	public void insertMailAtteched(AttachedFile file);
+	public int insertMailAtteched(AttachedFile file);
 	
 	//임시 저장
 	public void sendMaildraft(Email email);
@@ -38,8 +38,11 @@ public interface EmailDAO {
 	//전체 메일함
 	public ArrayList<Mailinfo> readAllmail(String email_receiver);
 
-	//메일 1개 불러오기
+	//메일 1개 불러오기 - 메일내용
 	public Mailinfo selectOne(String email_code);
+
+	//메일 1개 불러오기 - 첨부파일
+	public AttachedFile MailAttachedfile(String email_code);
 
 
 
