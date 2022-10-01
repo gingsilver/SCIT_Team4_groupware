@@ -1,17 +1,27 @@
 package net.softsociety.Team4GroupWare.controller;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +37,7 @@ import net.softsociety.Team4GroupWare.domain.Mailinfo;
 import net.softsociety.Team4GroupWare.service.AdminService;
 import net.softsociety.Team4GroupWare.service.DraftService;
 import net.softsociety.Team4GroupWare.service.EmailService;
+import net.softsociety.Team4GroupWare.service.EmployeeService;
 import net.softsociety.Team4GroupWare.util.FileService;
 
 
@@ -37,7 +48,7 @@ public class EmailController {
 
 	// 메일 서비스 선언
 	@Autowired
-	EmailService service;
+	EmailService emailservice;
 	
 	// 기안 서비스 선언
 	@Autowired
@@ -47,12 +58,15 @@ public class EmailController {
 	@Autowired
 	AdminService adminservice;
 	
+	// 회원 서비스 선언
+	@Autowired
+	EmployeeService employservice;
 	
 	
 
 	//첨부파일 저장할 경로
 	@Value("${spring.servlet.multipart.location}")
-	String uploadPath;
+	String uploadMailPath;
 	
 	
 	/*------------------------------ 메일함 페이지 나누기 ------------------------------*/
@@ -139,10 +153,6 @@ public class EmailController {
 	
 	/*------------------------------ 메일 쓰기 ------------------------------*/
 	
-
-
-	
-	
 	//작성된 메일 내용 받아오기
 	@PostMapping("write")
 	public String sendMail(Email email
@@ -152,55 +162,73 @@ public class EmailController {
 			, @AuthenticationPrincipal UserDetails user
 			) throws Exception {
 
-		//회사코드, 관리자 내용 가져오기
-		/*
-		Employee admin = service.readAdmin(user.getUsername());
+		//회사코드, 로그인 한 사람 내용 가져오기
+		Employee employee = employservice.getEmployeeById(user.getUsername());
+
+		log.debug("Employee 받은 내용: {}", employee);
 		
-		file.setCompany_code(admin.getCompany_code());
-		file.setEmployee_code(admin.getEmployee_code());
-		file.setEmployee_id(admin.getEmployee_id());
-		file.setEmployee_name(admin.getEmployee_name());
-		*/
-		
-		Employee employee = adminservice.readAdmin(user.getUsername());
+		file.setCompany_code(employee.getCompany_code());
+		file.setEmployee_code(employee.getEmployee_code());
+		file.setEmployee_id(employee.getEmployee_id());
+		file.setEmployee_name(employee.getEmployee_name());
+		log.debug("file : {}", file);
 		
 		email.setEmail_sender(employee.getEmployee_email());
-		email.setCompany_code("COM0021"); //로그인 정보 받아와서 넣기 현재는 임시 정보
+		email.setCompany_code(employee.getCompany_code()); 
 
 		/*---------------------이메일 정보를 메일함에 보내기----------------------------*/
 		
-		int return_email_code = service.sendMailWithFiles(email, upload, mail_process); //성공1, 실패0으로 넘어옴
+		int return_email_code = emailservice.sendMailWithFiles(email, upload, mail_process); //성공1, 실패0으로 넘어옴
 		String new_email_code = email.getEmail_code();
 
-		System.out.println("컨트롤러에서 값이 잘 넘어오나 확인"+ email.getEmail_code());
+		log.debug("컨트롤러에서 값이 잘 넘어오나 확인 {}", email.getEmail_code());
 
 		
 		/*---------------------첨부파일 정보 입력--------------------------*/
 		
 		if (upload != null && !upload.isEmpty() && upload.getSize()!=0) {
-			
-				String savedfile = FileService.saveFile(upload, uploadPath+"/mail");
+
+			try {
+				String absoluteUploadPath = new ClassPathResource(uploadMailPath).getFile().getAbsolutePath();
+				log.debug("absoluteUploadPath : {}", absoluteUploadPath);
+				String savedfile = FileService.saveFile(upload, absoluteUploadPath);
 
 				//확장자 추출
 				String originalFilename = upload.getOriginalFilename();
 				int lastIndex = originalFilename.lastIndexOf('.');
 				String ext = lastIndex == -1 ? "" : originalFilename.substring(lastIndex);
-				
+
 				file.setAttached_file_ext(ext);
 				file.setAttached_file_origin_name(originalFilename);
 				file.setAttached_file_save_name(savedfile);
+
+				file.setDocument_code(email.getEmail_code());
+				log.debug("첨부파일 저장 전 파일 데이터 : {}", file);
 				
-				log.debug("파일 데이터 : {}", file);
-				
-				service.insertMailAtteched(file);
+				int result = emailservice.insertMailAtteched(file);
+				if(result == 1) {
+					log.debug("첨부파일 저장 성공 후 파일 데이터 : {}", file);
+
+				}
+			} catch (IOException e) {
+				log.debug(e.getMessage());
+			}
 		}
+			
+			
+			
+			
+
+		
+		
 	
 		/*-------------------수신인, 참조인 저장하기----------------------------*/
 
 		if(return_email_code == 1) {
 
 			mail_process.setEmail_code(new_email_code);
-			mail_process.setCompany_code("COM0021");
+			mail_process.setCompany_code(employee.getCompany_code()); 
+
 
 			//맵으로 메일 번호랑 수신인 배열 바라바라 하기
 			String[] ReceiverArr = mail_process.getEmail_receiver();
@@ -211,7 +239,7 @@ public class EmailController {
 				String email_code = mail_process.getEmail_code();
 				String company_code = mail_process.getCompany_code();
 
-				service.insertReceiver(email_code, company_code, Receiver);
+				emailservice.insertReceiver(email_code, company_code, Receiver);
 			}	
 
 			//맵으로 메일 번호랑 참조인 배열 바라바라 하기
@@ -223,13 +251,13 @@ public class EmailController {
 				String email_code = mail_process.getEmail_code();
 				String company_code = mail_process.getCompany_code();
 
-				service.insertCCreceiver(email_code, company_code, ccReceiver);
+				emailservice.insertCCreceiver(email_code, company_code, ccReceiver);
 			}			
 
 
 		}else {
 			//실패시, 임시저장
-			service.sendMaildraft(email);
+			emailservice.sendMaildraft(email);
 			return "mailbox/fail";
 		}
 		//성공시, 완료페이지 
@@ -247,10 +275,7 @@ public class EmailController {
 						, @AuthenticationPrincipal UserDetails user
 						) {
 		
-		//여기서 알아야할정보 '나'가 누군지
-		//Company_code("COM0007"); 로그인 정보 받아와서 넣기 현재는 임시 정보
-		//email_sender는 로그인 정보에서 가져와야함, 여기서는 모르니까 임의로 넣고 진행(pp2000pooh@naver.com)
-		//DB에서 글을 읽어서
+		
 		Employee employee = adminservice.readAdmin(user.getUsername());
 		
 		String email_sender = employee.getEmployee_email();
@@ -259,10 +284,10 @@ public class EmailController {
 		log.debug("페이지당 글 수 : {}, 페이지 이동 링크 수 : {}, 현재 페이지 : {}, 로그인 한 회원 아이디 : {}"
 				, countPerPage, pagePerGroup, page, email_sender);
 		
-		net.softsociety.Team4GroupWare.util.PageNavigator navi = service.getPageNavigator(
+		net.softsociety.Team4GroupWare.util.PageNavigator navi = emailservice.getPageNavigator(
 				pagePerGroup, countPerPage, page, email_sender);
 		
-		ArrayList<Mailinfo> mailinfo = service.selectSentmail(email_sender); 
+		ArrayList<Mailinfo> mailinfo = emailservice.selectSentmail(email_sender); 
 
 		
 		//모델에 담아서 html로 보내주기
@@ -282,15 +307,25 @@ public class EmailController {
 	@GetMapping("sentMailboxOne")
 	public String readSnetmail(
 		String email_code
-		, Model model) {
+		, Model model
+		, @AuthenticationPrincipal UserDetails user
+			) {
+		
 		log.debug("VIEW에서 넘어온 메일 번호 : {}", email_code);
 		
-		//DB에서 글을 읽어서
-		Mailinfo mailinfo = service.selectOne(email_code);
+		Mailinfo mailinfo = emailservice.selectOne(email_code);
+		AttachedFile attachedfile = emailservice.MailAttachedfile(email_code);
+		Employee employee_receiver= employservice.getEmployeeById(user.getUsername());
+		Employee employee_sender  = employservice.getEmployeeByEmail(mailinfo.getEmail_sender());
 		
-		log.debug("DB에서 넘어온 게시글 정보 : {} ", mailinfo);
+		log.debug("DB에서 넘어온 메일 정보 : {} ", mailinfo);
+		log.debug("DB에서 넘어온 첨부파일 정보 : {} ", attachedfile);
 	
 		model.addAttribute("mailinfo", mailinfo);
+		model.addAttribute("attachedfile", attachedfile);		
+		model.addAttribute("employee_sender", employee_sender);
+		model.addAttribute("employee_receiver", employee_receiver);
+		
 		
 		
 		//결과를 모델에 담아서 HTML에서 출력
@@ -316,7 +351,7 @@ public class EmailController {
 		String email_sender = "example3@gmail.com"; */
 		
 		
-		ArrayList<Mailinfo> mailinfo = service.readAllmail(email_receiver); 
+		ArrayList<Mailinfo> mailinfo = emailservice.readAllmail(email_receiver); 
 
 		System.out.println(mailinfo);
 		//모델에 담아서 html로 보내주기
@@ -329,19 +364,63 @@ public class EmailController {
 	@GetMapping("readOne")
 	public String read(
 		String email_code
-		, Model model) {
+		, Model model
+		, @AuthenticationPrincipal UserDetails user) {
+		
 		log.debug("VIEW에서 넘어온 메일 번호 : {}", email_code);
 		
-		//DB에서 글을 읽어서
-		Mailinfo mailinfo = service.selectOne(email_code);
+		Mailinfo mailinfo = emailservice.selectOne(email_code);
+		AttachedFile attachedfile = emailservice.MailAttachedfile(email_code);
+		Employee employee_receiver= employservice.getEmployeeById(user.getUsername());
+		Employee employee_sender  = employservice.getEmployeeByEmail(mailinfo.getEmail_sender());
 		
-		log.debug("DB에서 넘어온 게시글 정보 : {} ", mailinfo);
+		log.debug("DB에서 넘어온 메일 정보 : {} ", mailinfo);
+		log.debug("DB에서 넘어온 첨부파일 정보 : {} ", attachedfile);
 	
 		model.addAttribute("mailinfo", mailinfo);
+		model.addAttribute("attachedfile", attachedfile);		
+		model.addAttribute("employee_sender", employee_sender);
+		model.addAttribute("employee_receiver", employee_receiver);
 		
-		
-		//결과를 모델에 담아서 HTML에서 출력
 		return "/mailbox/readOne";
+	}
+	
+	/*------------------------------ 전체 메일함 - 메일 1개 읽기  첨부파일 다운로드------------------------------*/
+	@RequestMapping(value = "download", method = RequestMethod.GET)
+	public String fileDownload(String email_code, Model model, HttpServletResponse response) {
+		
+		AttachedFile attachedfile = emailservice.MailAttachedfile(email_code);
+
+		//파일의 원래 이름
+		String originalfile = new String(attachedfile.getAttached_file_origin_name());
+
+		try { 
+			response.setHeader("Content-Disposition", " attachment;filename="+ URLEncoder.encode(originalfile, "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+		//저장된 파일 경로
+		String fullPath = uploadMailPath + "/" + attachedfile.getAttached_file_save_name();
+		
+		//서버의 파일을 읽을 입력 스트림과 클라이언트에게 전달할 출력스트림
+		FileInputStream filein = null;
+		ServletOutputStream fileout = null;
+		
+		try {
+			filein = new FileInputStream(fullPath);
+			fileout = response.getOutputStream();
+			
+			//Spring의 파일 관련 유틸 이용하여 출력
+			FileCopyUtils.copy(filein, fileout);
+			
+			filein.close();
+			fileout.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 	
 	

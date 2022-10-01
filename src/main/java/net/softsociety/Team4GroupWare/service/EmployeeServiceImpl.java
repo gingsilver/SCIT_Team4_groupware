@@ -79,4 +79,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return result;
 	}
 
+	@Override
+	public Employee getEmployeeByEmail(String email_sender) {
+		Employee employee = employeeDAO.getEmployeeByEmail(email_sender);
+		return employee;
+	}
+
 }

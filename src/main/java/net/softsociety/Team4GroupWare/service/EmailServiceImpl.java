@@ -45,8 +45,8 @@ public class EmailServiceImpl implements EmailService {
 	
 	//첨부파일 저장
 	@Override
-	public void insertMailAtteched(AttachedFile file) {
-		emailDAO.insertMailAtteched(file);
+	public int insertMailAtteched(AttachedFile file) {
+		return emailDAO.insertMailAtteched(file);
 		
 	}
 
@@ -115,6 +115,13 @@ public class EmailServiceImpl implements EmailService {
 		Mailinfo mailinfo = emailDAO.selectOne(email_code);
 		
 		return mailinfo;
+	}
+
+	@Override
+	public AttachedFile MailAttachedfile(String email_code) {
+		AttachedFile attachedfile = emailDAO.MailAttachedfile(email_code);
+
+		return attachedfile;
 	}
 
 

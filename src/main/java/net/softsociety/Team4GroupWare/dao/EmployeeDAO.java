@@ -35,4 +35,7 @@ public interface EmployeeDAO {
 	public int updatePhoto(Employee employee);
 	//사원 개인정보 업데이트
 	public int updateinfo(Employee employee);
+	
+	//사원 이메일로 정보 불러오기 - 메일 기능(윤혜)
+	public Employee getEmployeeByEmail(String email_sender);
 }

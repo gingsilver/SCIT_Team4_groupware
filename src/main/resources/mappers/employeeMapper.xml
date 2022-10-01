@@ -134,5 +134,12 @@ where employee_id = #{employee_id}
 		where
 			employee_id = #{employee_id}
 	</update>
+	
+	<!-- 이메일로 사원 정보읽어오기(윤혜)  -->
+<select id="getEmployeeByEmail" parameterType="String" resultType="Employee">
+	select * 
+	from team4_employee	
+	where employee_email = #{email_sender} 
+</select>
 
 </mapper>
