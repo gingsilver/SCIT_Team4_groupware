@@ -34,28 +34,22 @@
   <!-- data table -->
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
   
-  <style>
-hr#hr1 {
-  		margin : 0;
-  		padding : 0;
+<style>
+#card{
+	width : 600px;
+	text-align: center;
+	margin : auto;
 }
 h3.title{
 	color : #798EB3;
-	margin : 20px 0 30px 0;
+	margin : 20px 0 20px 0;
 	font-family: "Poppins", sans-serif;
 	font-weight: bold;
-	text-align: center;
 }
-#card{
-	width : 800px;
-	text-align: center;
-	margin : auto;
-}
-
 table.changform{
 	margin : auto;
 	height : 50px;
-	width : 600px;
+	width : 400px;
 }
 table.changform th, table.changform td{
 	border: 1px solid #b8bbc1;
@@ -64,23 +58,9 @@ table.changform th, table.changform td{
 }
 table.changform th{
 	background-color: #ebebeb;
-	width : 30%;
-}
-table.changform td.days{
-	text-align: right;
-}
-#checkButton{
-	background-color: #fdd10d;
-	color: white;
-	padding: 0.40rem 2rem;
-	font-size: 0.85rem;
-	font-weight: 700;
-	text-transform: uppercase;
-	border: none;
-	border-radius: 10rem;
 }
 #sendButton{
-	background-color: #f7a62b;
+	background-color: rgb(255, 0, 0);
 	color: white;
 	padding: 0.40rem 2rem;
 	font-size: 0.85rem;
@@ -89,7 +69,6 @@ table.changform td.days{
 	border: none;
 	border-radius: 10rem;
 }
-
 #resetButton{
 	background-color: gray;
 	color: white;
@@ -101,19 +80,14 @@ table.changform td.days{
 	border-radius: 10rem;
 }
 div.buttonbox{
-	margin : 30px 0 40px 0;
+	margin : 20px 0 20px 0;
 }
-input[type="date"]{
-	width : 140px;
+input[type="date"], input[type="time"]{
+	width : 280px;
 	text-align: center;
-}
-#dayOffType{
-	width : 440px;
-	text-align: center;
-	border-style: none;
 }
 
-input:focus, textarea:focus{
+input:focus, textarea:focus {
     outline: none !important;
     background-color: #edf2f4;
    
@@ -121,10 +95,14 @@ input:focus, textarea:focus{
 
 input, textarea{
 	border-style: none;
-}
-
-  	
+}  	
   </style>
+  <script>
+              
+           
+            
+        </script>     
+
 
   <!-- =======================================================
   * Template Name: NiceAdmin - v2.3.1
@@ -148,80 +126,52 @@ input, textarea{
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a th:href="@{/index}">Home</a></li>
-          <li class="breadcrumb-item active">휴무 신청</li>
+          <li class="breadcrumb-item active">출·퇴근 기록 정정 신청</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
 
-    <section class="section dashboard">
-    	<div class="row align-items-top">
-			<div class="col-lg-6">
-				<!-- Card with header and footer -->
-					<div class="card" id="card">
-						<div class="card-body">
-							<h3 class="title">휴무 신청서</h3>
-							<table class="changform">
-								<tr>
-									<th>구분</th>
-									<td>
-										<select id="dayOffType" name="location">
-                                			<option value="연차" selected="selected">연차</option>
-                            			    <option value="병가">병가</option>
-                            			    <option value="군소집 훈련">군소집 훈련</option>
-                            			    <option value="특별휴가(관혼상제)">특별휴가(관혼상제)</option>
-                            			    <option value="정기휴가">정기휴가</option>
-										</select>
-									</td>
-								</tr>
-								<tr>
-									<th>휴가 기간</th>
-									<td><input type="date" name="today" min="2021-05-31" max="2022-12-12">
-										 ~ <input type="date" name="today" min="2021-05-31" max="2022-12-12">
-									</td>
-								</tr>
-								<tr>
-									<th>일수</th>
-									<td>총 <span></span> n 일</td>
-								</tr>								
-								<tr>
-									<th>사유</th>
-									<td><textarea id="opinion" rows="5" cols="50"></textarea></td>
-								</tr>
-							</table>
-							<div class="buttonbox">
-								<button type="submit" id="checkButton"><i class="bi bi-check-lg"> 확 인</i></button>&nbsp;
-								<button type="reset" id="resetButton"><i class="bi bi-x-lg" aria-hidden="true"> 리 셋</i></button>&nbsp;
-							</div>
-							<table class="changform">
-								<tr>
-									<th>구분</th>
-									<td>내용</td>
-									<td>일수</td>
-								</tr>
-								<tr>
-									<th rowspan="3">연차 휴가 일수</th>
-									<td>연차부여일수(A)</td>
-									<td class="days">일</td>
-								</tr>
-								<tr>
-									<td>기 사용한 휴가 일수(B)</td>
-									<td class="days">일</td>
-								</tr>
-								<tr>
-									<td>잔여 휴가일수(A-B-C)</td>
-									<td class="days">일</td>
-								</tr>	
-							</table>
-							<div class="buttonbox">
-								<button type="submit" id="sendButton"><i class="bi bi-check2-all"> 신 청</i></button>&nbsp;
-								<button type="reset" id="resetButton"><i class="bi bi-x-lg" aria-hidden="true"> 리 셋</i></button>&nbsp;
-							</div>
-						</div>
-    			</div>
-    		</div>
-    	</div>
- 
-    </section>
+		<section class="section dashboard">
+			<div class="card" id="card">
+				<div class="card-body">
+					<h3 class="title">출· 퇴근 기록 정정 신청</h3>
+					<table class="changform">
+						
+						<tr>
+							<th>신청 날짜</th>
+							<td><input type="date" name="today" min="2021-05-31" max="2022-12-12"></td>
+						</tr>
+						<tr>
+							<th>변경 항목</th>
+							<td>
+								<input id="female" type="radio" name="gender" value="female" checked="checked">
+                        		<label for="female">출근 시간</label>
+                        		<input id="male" type="radio" name="gender" value="male">
+                        		<label for="male">퇴근 시간</label>
+							</td>
+						</tr>
+						<tr>
+							<th>시간</th>
+							<td><input type="time" value="09:00" id="start1" ></td>
+						</tr>
+						<tr>
+							<th>사유</th>
+							<td><textarea id="opinion" rows="5" cols="30"></textarea></td>
+						</tr>
+					</table>
+					<div class="buttonbox">
+						<button type="submit" id="sendButton"><i class="bi bi-send" aria-hidden="true"> 신 청</i></button>&nbsp;
+						<button type="reset" id="resetButton"><i class="bi bi-x-lg" aria-hidden="true"> 리 셋</i></button>&nbsp;
+					</div>
+				</div>
+			</div>
+			
+
+
+
+
+			<div class="container-fluid"></div>
+		</section>
 		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>

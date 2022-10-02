@@ -46,42 +46,93 @@ hr#hr1 {
 }
 #employee_name{
 	font-style: italic; 
+	font-weight: bold;
 	color : gray;
 }
 p.size20{ 
-font-size : 20px; 
+	font-size : 20px; 
+	margin-top : 20px;
 }
 table.realTime{
 	margin : auto;
-	border: 1px solid gray;
+	border: 1px solid #b8bbc1;
 	border-collapse : separate;
 	border-radius : 30px;
 	padding : 10px;
-
+	width  : 350px;
+	margin-top : 15px;
+	margin-bottom : 20px;
 }
+table.realTime th{
+	font-size : 25px; 
+	color : #3c3c3c;
+}
+
+p.titleForTimelap{
+	font-size : 18px; 
+	font-weight: bold;
+	text-align : left;
+	padding-left : 50px;
+}
+#plusButton{
+	padding-right : 50px;
+	text-align : right;
+	margin-right : 50px;
+}
+table.TimeRecord{
+	margin : auto;
+	height : 50px;
+	width : 400px;
+}
+table.TimeRecord, table.TimeRecord th, table.TimeRecord td{
+	border: 1px solid #b8bbc1;
+	border-collapse : collapse;
+	padding : 8px;
+}
+table.TimeRecord th{
+	background-color: #ebebeb;
+	width : 70px; 
+}
+table.TimeRecord td{
+	width : 130px; 
+}
+input[type="submit"].goWork, input[type="submit"].goHome{
+	margin : 30px 10px 80px 10px;
+	border: 1px solid #ebebeb;
+	border-collapse : separate;
+	border-radius : 30px;
+	padding : 10px;
+	width  : 180px;
+	height : 45px;
+	background-color: white;
+}
+
   	
   </style>
   <script>
         window.onload = function(){
             let target1 = document.getElementById("clock1");
             let target2 = document.getElementById("clock2");
+            
+            
             let timer1;
             let timer2;
 
+
                 timer1 = setInterval(function(){
-                        let now = new Date();
-                        
+                        let now = new Date();                        
                         let year = now.getYear();
                         let month = now.getMonth();
                         let date = now.getDate();
                         let day = now.getDay();
                         let week = ['일', '월', '화', '수', '목', '금', '토'];
-                                                
+                        
                         let currentTime1 = 
                         `${1900+year}년 ${month + 1}월 ${date}일 (${week[day]}) `;
                         
                         target1.innerHTML = currentTime1; 
                     }, 1000);
+                
           
                 timer2 = setInterval(function(){
                     let now = new Date();
@@ -94,8 +145,13 @@ table.realTime{
                     
                     target2.innerHTML = currentTime2; 
                 }, 1000);
-           
+                
+                
+                
         }
+            
+           
+            
         </script>     
 
 
@@ -135,12 +191,6 @@ table.realTime{
 					<span th:text="${employee.organization}"></span>
 					<span th:text="${employee.position_type}"></span>
 				</div>
-				
-				
-				<div class="card-body">
-				
- 				   </div>
-				
 					<table class="realTime">
 						<tr>
 							<td><span id="clock1"></span></td>
@@ -149,9 +199,27 @@ table.realTime{
 							<th><span id="clock2"></span></th>
 						</tr>
 					</table>
+					<hr>
+				<div class="card-body">
+					<div>
+						<p class="titleForTimelap">
+						<span >출 · 퇴근시간</span>
+						<a th:href="@{/management/changetime}" id="plusButton"><img th:src="@{/image/add.png}" width="36px" height="36px" ></a>
+						</p>
+						<table class="TimeRecord">
+							<tr>
+								<th>출근</th>
+								<td id="goWorkTime">08:25:25</td>
+								<th>퇴근</th>
+								<td id="goHomeTime">12:12:12</td>
+							</tr>
+						</table>
+						<input type="submit" class="goWork" id="goWork"value="출근하기">
+						<input type="submit" class="goHome" id="goHome" value="퇴근하기">
+					</div>
 				</div>
-				
-				
+			</div>
+			
 
 
 

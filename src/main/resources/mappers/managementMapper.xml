@@ -5,9 +5,17 @@
 
 <mapper namespace="net.softsociety.Team4GroupWare.dao.ManagementDAO">
 	<!-- 개인의 연봉 정보 불러오기 -->
-	<select id="seleteSalaryOne" parameterType="string" resultType="Salary">
-		select *
-		from team4_salary
-		where EMPLOYEE_CODE = #{EMPLOYEE_CODE}
-	</select>    
+		<select id="seleteSalaryOne" parameterType="String" resultType="Salary">
+			select *
+			from team4_salary
+			where employee_code = #{employee_code}
+		</select>
+	
+	<!-- 개인의 세금 정보 불러오기 -->
+		<select id="selectTaxInfo" parameterType="map" resultType="Tax">
+			select *
+			from team4_tax
+			where employee_code = #{employee_code}
+				  AND tax_year = #{tax_year}
+		</select>      
 </mapper>

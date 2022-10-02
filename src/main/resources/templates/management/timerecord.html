@@ -113,35 +113,6 @@ table td.cost{
 </style>
 <script>
 
-/* 급여계 구하기 */
-window.onload = function(){
-    let a = document.getElementById('salary_basic');
-    let b = document.getElementById('salary_management');
-    let c = document.getElementById('salary_fixed_overtime');
-    let d = document.getElementById('salary_holiday');
-    let e = document.getElementById('saraly_regular_bonus');
-    let f = document.getElementById('salary_meal');
-
-    console.log(a); //td#salary_basic.cost
-    console.log(typeof(a)); //object 
-    console.log(a.value);  //undefined
-    console.log(typeof(a.value)); //undefined 
-
-    let g = document.getElementById('tax_income').value;
-    let h = document.getElementById('tax_inhabitants').value;
-    let i = document.getElementById('tax_employment').value;
-    let j = document.getElementById('tax_national').value;
-    let k = document.getElementById('tax_health').value;
-
-    let sum1 = Number(a) + Number(b) + Number(c) + Number(d) +Number(e) + Number(f);
-    let sum2 = Number(g) + Number(h) + Number(i) + Number(j) +Number(k);
-    let sum3 = sum1 + sum2;
-    
-    
-    document.getElementById("total1").innerHTML = sum1;
-    document.getElementById("total2").innerHTML = sum2;
-    document.getElementById("total3").innerHTML = sum3;
-} 
 
 </script>
 
@@ -192,57 +163,7 @@ window.onload = function(){
 						
 						
 						<div class="card-body">
-							<h2 class="card-title1">7월 급여명세서</h2>
-							<div class="monthlyButton">
-								<button type="submit" id="prevButton"><i class="bi bi-chevron-double-left"> prev</i></button>&nbsp;
-								<button type="reset" id="nextButton">next<i class="bi bi-chevron-double-right"> </i></button>&nbsp;
-							</div>
-						<hr>
-							<table>
-								<tr>
-									<th>지급항목</th><th class="money">지급액</th>
-									<th>공제항목</th><th class="money">공제액</th>
-								</tr>
-								<tr>
-									<td class="name">기본급</td><td class="cost" th:text="${salary.salary_basic}"  id="salary_basic"></td>
-									<td class="name">소득세</td><td class="cost" th:text="${tax.tax_income}" id="tax_income"></td>
-								</tr>
-								<tr>
-									<td class="name">직책수당</td><td class="cost" th:text="${salary.salary_management}" id="salary_management"></td>
-									<td class="name">주민세</td><td class="cost" th:text="${tax.tax_inhabitants}" id="tax_inhabitants"></td>
-								</tr>
-								<tr>
-									<td class="name">초과근무수당</td><td class="cost" th:text="${salary.salary_fixed_overtime}" id="salary_fixed_overtime"></td>
-									<td class="name">고용보험</td><td class="cost" th:text="${tax.tax_employment}" id="tax_employment"></td>
-								</tr>
-								<tr>
-									<td class="name">휴일수당</td><td class="cost" th:text="${salary.salary_holiday}" id="salary_holiday"></td>
-									<td class="name">국민연금</td><td class="cost" th:text="${tax.tax_national}" id="tax_national"></td>
-								</tr>
-								<tr>
-									<td class="name">상여금</td><td class="cost" th:text="${salary.saraly_regular_bonus}" id="saraly_regular_bonus"></td>
-									<td class="name">건강보험</td><td class="cost" th:text="${tax.tax_health}" id="tax_health"></td>
-								</tr>
-								<tr>
-									<td class="name">식대</td><td class="cost" th:text="${salary.salary_meal}" id="salary_meal"></td>
-									<td class="name"></td><td></td>
-								</tr>
-								<tr>
-									<td class="name">기타</td><td></td>
-									<td></td><td></td>
-								</tr>
-								<tr>
-									<td></td><td></td>
-									<th>공제합계</th><td class="cost" id="total2"></td>
-								</tr>
-								<tr>
-									<th>급여계</th><td class="cost" id="total1"></td>
-									<th>차감수령액</th><td class="cost" id="total3"></td>
-								</tr>
-								<tr>
-									<td colspan="4" class="cost">귀하의 노고에 감사드립니다. <span th:text="${company.company_name}"></span></td>
-								</tr>
-							</table>
+				
 							
 						</div>
 														
