@@ -1,5 +1,7 @@
 package net.softsociety.Team4GroupWare.controller;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.softsociety.Team4GroupWare.domain.Company;
 import net.softsociety.Team4GroupWare.domain.Employee;
 import net.softsociety.Team4GroupWare.domain.Salary;
+import net.softsociety.Team4GroupWare.domain.Tax;
 import net.softsociety.Team4GroupWare.service.CompanyService;
 import net.softsociety.Team4GroupWare.service.EmployeeService;
 import net.softsociety.Team4GroupWare.service.ManagementService;
@@ -58,13 +61,59 @@ public class ManagementController {
 		return "management/attendance";
 	}
 	
+	/*------------------------------ 출퇴근 전체보기 페이지 ------------------------------*/
+
+	
+	//출퇴근 기록 페이지로 이동
+	@GetMapping("timerecord")
+	public String timerecorde(
+			Model model
+			, @AuthenticationPrincipal UserDetails user	) {
+		
+		Employee employee= employservice.getEmployeeById(user.getUsername());			
+		Company company = companyservice.findCompanyByCompanycode(employee.getCompany_code());
+		Salary salary = managementservice.seleteSalaryOne(employee.getEmployee_code());
+		
+		model.addAttribute("salary", salary);
+		model.addAttribute("company", company);
+		model.addAttribute("employee", employee);
+		
+		
+		
+		
+		
+		return "management/timerecord";
+	}
+	
+	/*------------------------------ 시간 정정 페이지 ------------------------------*/
+
+	
+	//휴무 신청 페이지로 이동
+	@GetMapping("changetime")
+	public String changetime() {
+		return "management/changetime";
+	}
+	
 	
 	/*------------------------------ 휴무 신청 페이지 ------------------------------*/
 
 	
 	//휴무 신청 페이지로 이동
 	@GetMapping("dayoff")
-	public String dayoff() {
+	public String dayoff(
+			Model model
+			, @AuthenticationPrincipal UserDetails user) {
+		
+		Employee employee= employservice.getEmployeeById(user.getUsername());	
+		Company company = companyservice.findCompanyByCompanycode(employee.getCompany_code());
+		Salary salary = managementservice.seleteSalaryOne(employee.getEmployee_code());
+		
+	    
+		model.addAttribute("salary", salary);
+		model.addAttribute("company", company);
+		model.addAttribute("employee", employee);
+		
+		
 		return "management/dayoff";
 	}
 	
@@ -74,7 +123,28 @@ public class ManagementController {
 	
 	//급여 정산서 페이지로 이동
 	@GetMapping("salary")
-	public String salary() {
+	public String salary(
+			Model model
+			, @AuthenticationPrincipal UserDetails user	) {
+
+		Date date = new Date();
+		@SuppressWarnings("deprecation")
+		int year = date.getYear() -100;
+        String tax_year = Integer.toString(year);
+        log.debug("올해정보나오는지:{}", tax_year);
+		
+		Employee employee= employservice.getEmployeeById(user.getUsername());	
+		Company company = companyservice.findCompanyByCompanycode(employee.getCompany_code());
+		Salary salary = managementservice.seleteSalaryOne(employee.getEmployee_code());
+		Tax tax = managementservice.selectTaxInfo(employee.getEmployee_code(), tax_year);
+		
+	    log.debug("올해 세금 정보:{}", tax);
+	    
+	    model.addAttribute("tax", tax);
+		model.addAttribute("salary", salary);
+		model.addAttribute("company", company);
+		model.addAttribute("employee", employee);
+			
 		return "management/salary";
 	}
 	

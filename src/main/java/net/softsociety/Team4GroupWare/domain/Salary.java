@@ -1,5 +1,12 @@
 package net.softsociety.Team4GroupWare.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Salary {
 	String company_code;
 	String employee_code;
