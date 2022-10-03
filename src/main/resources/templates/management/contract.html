@@ -173,27 +173,27 @@ table.employeeInfo td{
 							<div class="employ-contract-bottom">
 							"갑"은 "을"의 근로에 대한 대가로 본 연봉계약 기간 동안 다음과 같은 금액을 지불한다.
 							<div class="yourpayment">
-							기본급 : <span class="atmark" th:text="${company.company_name}"></span><br>
-							퇴직금 : <span class="atmark" th:text="${company.company_name}"></span><br>
-							직책수당 : <span class="atmark" th:text="${company.company_name}"></span><br>
+							기본급 : <span class="atmark" th:text="${salary.salary_basic}"></span><br>
+							퇴직금 : <span class="atmark" th:text="${salary.salary_retirement}"></span><br>
+							직책수당 : <span class="atmark" th:text="${salary.salary_management}"></span><br>
 							정기상여금 : 기본급의 200%를 연 3회(2월, 7월, 10월) 지급한다.<br>
-							초과근무수당 : <span class="atmark" th:text="${company.company_name}"></span>
-							식대 : <span class="atmark" th:text="${company.company_name}"></span><br>
+							초과근무수당 : <span class="atmark" th:text="${salary.salary_fixed_overtime}"></span><br>
+							식대 : <span class="atmark" th:text="${salary.salary_meal}"></span><br>
 							</div>
 							</div>
 							
 							<div class="employ-contract-top">
 							제 3조(임금지급일)</div>
 							<div class="employ-contract-bottom">
-							매월 1일부터 기산하여 당원 말일 마감하여 익월 <span class="atmark" th:text="${employee.employee_name}"></span>일 지급한다.
+							매월 1일부터 기산하여 당원 말일 마감하여 익월 <span class="atmark" th:text="${salary.salary_date}"></span>일 지급한다.
 							</div>
 							
 							<div class="employ-contract-top">
 							제 4조 (근로시간 및 휴게)</div>
 							<div class="employ-contract-bottom">
 							① 근로시간은 1일 8시간, 주 40시간으로 한다. 다만, 파견근무의 경우 파견근무지의 규정에 따른다.<br>
-							② 시업시간은 <span class="atmark" th:text="${company.company_name}"></span>시,
-							 종업시간은 <span class="atmark" th:text="${company.company_name}"></span>시로 한다.<br>
+							② 시업시간은 <span class="atmark">[[${startTime}]]</span>시,
+							 종업시간은 <span class="atmark" >[[${endTime}]]</span>시로 한다.<br>
 							③ 휴게시간은 근로시간 내의 1시간으로 한다.<br>
 							④ 제 3항의 당사자 "A"와 "B"의 합의에 따라 법정한도 내에서 연장근로 할 수 있다.<br>
 							</div>
@@ -212,9 +212,7 @@ table.employeeInfo td{
 							</div>
 							
 							<div class="contractDate"> 
-							<span class="atmark" th:text="${company.company_name}"></span>년 
-							<span class="atmark" th:text="${company.company_name}"></span>월 
-							<span class="atmark" th:text="${company.company_name}"></span>일 
+							2019년 08월 12일
 							</div>
 							
 							<div employerAndemployeeInfo>
@@ -246,18 +244,18 @@ table.employeeInfo td{
 								<tr>
 									<th>(근로자)</th>
 									<th>주소: </th>
-									<td colspan="3"><span th:text="${employee.employee_name}"></span></td>
+									<td colspan="3"><span class="atmark" th:text="${employee.employee_address}"></span></td>
 								</tr>
 								<tr>
 									<th></th>
 									<th>연락처: </th>
-									<td colspan="3"><span th:text="${employee.employee_name}"></span></td>
+									<td colspan="3"><span class="atmark" th:text="${employee.employee_phone}"></span></td>
 									<td></td>
 								</tr>
 								<tr>
 									<th></th>
 									<th>성명 : </th>
-									<td><span th:text="${employee.employee_name}"></span></td>
+									<td><span class="atmark" th:text="${employee.employee_name}"></span></td>
 									<td>(인)</td>
 								</tr>
 								<tr>

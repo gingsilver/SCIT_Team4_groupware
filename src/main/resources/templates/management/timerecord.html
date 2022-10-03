@@ -54,6 +54,7 @@ h2.card-title1{
 	text-align: center;
 	color: #012970;
 	font-family: "Poppins", sans-serif;
+	margin : 20px 0 20px 0;
 }
 
 #card{
@@ -61,9 +62,10 @@ h2.card-title1{
 	padding-bottom: 50px;
 	}
 table{
-	margin : auto;
+	margin : 20px 10% 20px 8%;
 	height : 50px;
 	width : 800px;
+	text-align: center;
 }
 table th, table td{
 	border: 1px solid #b8bbc1;
@@ -75,15 +77,6 @@ table th{
 	text-align: center;
 }
 
-table th.money{
-	width : 270px;
-}
-table td.name{
-	text-align: center;
-}
-table td.cost{
-	text-align: right;
-}
 
 #prevButton{
 	background-color: #fdcc00;
@@ -110,11 +103,26 @@ table td.cost{
 	float: right;
 	margin-right : 30px;
 }
+div.onthlyButton{
+	margin : 20px 0 40px 0;
+	paddig : auto;
+}
+#totalworktime{
+	float: right;
+}
 </style>
-<script>
+    <script>
+        window.onload = function(){
+            let x       = document.getElementById("startTime");
+            let y       = document.getElementById("endTime");
+            let result  = document.getElementById("oneDayWorktime");
 
+            
 
-</script>
+            result.innerHTML = (starttime.value - endtime.value);
+
+        }
+    </script>
 
 <!-- =======================================================
   * Template Name: NiceAdmin - v2.3.1
@@ -156,17 +164,32 @@ table td.cost{
 					<!-- Card with header and footer -->
 					<div class="card" id="card">
 						<div class="card-header">
-						<span th:text="${employee.organization}"></span>
-						<span th:text="${employee.position_type}"></span>
-						<span th:text="${employee.employee_name}"></span>
+						<span id="totalworktime">이번 달 총 근무 시간 : </span>
+						<span></span>
 						</div>
 						
 						
 						<div class="card-body">
-				
-							
-						</div>
-														
+							<h2 class="card-title1">9월 출퇴근 기록표</h2>
+								<div class="monthlyButton">
+									<button type="submit" id="prevButton"><i class="bi bi-chevron-double-left"> prev</i></button>&nbsp;
+									<button type="reset" id="nextButton">next<i class="bi bi-chevron-double-right"> </i></button>&nbsp;
+								</div>
+								<table>
+									<tr>
+										<th>출근 시간</th>
+										<th>퇴근 시간</th>
+										<th>초과 근무 시간</th>
+										<th>총 근무 시간</th>
+									</tr>
+									<tr th:each="tl:${tlist}" class="list">
+										<td th:text="${tl.time_sheet_start}" id="startTime"></td>
+										<td th:text="${tl.time_sheet_end}" id="endTime"></td>
+										<td th:text="${tl.time_sheet_overtime}"></td>
+										<td id="oneDayWorktime"></td>
+									</tr>
+								</table>				
+							</div>
 						</div>
 					</div>
 					<!-- End Card with header and footer -->

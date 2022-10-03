@@ -122,10 +122,76 @@ input:focus, textarea:focus{
 input, textarea{
 	border-style: none;
 }
-
+#calc{
+	background-color: #fdd10d;
+	color: white;
+	padding: 0.20rem 2rem;
+	font-size: 0.85rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	border: none;
+	border-radius: 5rem;
+}
   	
   </style>
+<script th:inline="javascript">
+  	/*<![CDATA[*/ /*]]>*/
+        window.onload = function(){
+        	calc.onclick = function(){
+        	    let endDate = document.getElementById("dayoffend").value;
+        	    let startDate = document.getElementById("dayOffstart").value;
+        		
+        	    console.log(endDate);
+        	    console.log(startDate);
+        	    
+        	    if(endDate < startDate){
+        	    	alert('올바른 날짜를 지정해주세요.');
+        	    }else{
+        	    	
+        	    	var arr1 = endDate.split('-');
+        	    	var arr2 = startDate.split('-');
+        	    	
+            	    console.log(arr1[2]);
+            	    console.log(arr2[2]);
+            	    
 
+                	let sum1 = Number(arr1[2]) - Number(arr2[2]);
+	                console.log(sum1);
+   		            document.getElementById("result").innerHTML = sum1;
+
+   		            
+   		            checkButton.onclick = function (){
+		
+		                const a = /*[[${vacation.vacation_annual_all}]]*/;
+		                const b = /*[[${vacation.vacation_annual_minus}]]*/;
+		            	
+		                let sum2 = Number(a) - Number(b) - sum1;
+		                
+		                document.getElementById("target1").innerHTML = a;
+		                document.getElementById("target2").innerHTML = b;
+		                document.getElementById("target3").innerHTML = sum2;
+		            }
+        	    }
+
+        	    
+        		
+        	}
+        	function validation(){
+        		let opinion = document.getElementById('opinion'); 
+        		        		
+        		if(opinion.value.length==0 ){
+        			alert("사유는 필수 기재사항입니다.");
+        			return false;		
+        		}
+        		
+        		confirm("연차를 신청하겠습니까?");
+        		
+        		}   	
+        	
+  		
+  	}
+        /*]]>*/
+    </script>
   <!-- =======================================================
   * Template Name: NiceAdmin - v2.3.1
   * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
@@ -160,6 +226,7 @@ input, textarea{
 					<div class="card" id="card">
 						<div class="card-body">
 							<h3 class="title">휴무 신청서</h3>
+							<form id="write" action="write" method="post" onsubmit="return validation();" enctype="multipart/form-data">
 							<table class="changform">
 								<tr>
 									<th>구분</th>
@@ -175,19 +242,22 @@ input, textarea{
 								</tr>
 								<tr>
 									<th>휴가 기간</th>
-									<td><input type="date" name="today" min="2021-05-31" max="2022-12-12">
-										 ~ <input type="date" name="today" min="2021-05-31" max="2022-12-12">
+									<td><input type="date" name="today" min="2021-05-31" max="2022-12-12" id="dayOffstart">
+										 ~ <input type="date" name="today" min="2021-05-31" max="2022-12-12" id="dayoffend">
+										 <input type="button" id="calc" value="계산">
+										 
 									</td>
 								</tr>
 								<tr>
 									<th>일수</th>
-									<td>총 <span></span> n 일</td>
+									<td>총 <span id="result"></span> 일 (C)</td>
 								</tr>								
 								<tr>
 									<th>사유</th>
 									<td><textarea id="opinion" rows="5" cols="50"></textarea></td>
 								</tr>
 							</table>
+							</form>
 							<div class="buttonbox">
 								<button type="submit" id="checkButton"><i class="bi bi-check-lg"> 확 인</i></button>&nbsp;
 								<button type="reset" id="resetButton"><i class="bi bi-x-lg" aria-hidden="true"> 리 셋</i></button>&nbsp;
@@ -201,15 +271,15 @@ input, textarea{
 								<tr>
 									<th rowspan="3">연차 휴가 일수</th>
 									<td>연차부여일수(A)</td>
-									<td class="days">일</td>
+									<td class="days" id="target1">일</td>
 								</tr>
 								<tr>
 									<td>기 사용한 휴가 일수(B)</td>
-									<td class="days">일</td>
+									<td class="days" id="target2">일</td>
 								</tr>
 								<tr>
 									<td>잔여 휴가일수(A-B-C)</td>
-									<td class="days">일</td>
+									<td class="days" id="target3">일</td>
 								</tr>	
 							</table>
 							<div class="buttonbox">
