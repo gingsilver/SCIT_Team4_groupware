@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.Team4GroupWare.domain.Company;
+import net.softsociety.Team4GroupWare.domain.DocumentForm;
 import net.softsociety.Team4GroupWare.domain.DraftApprover;
 import net.softsociety.Team4GroupWare.domain.Employee;
 import net.softsociety.Team4GroupWare.service.AdminService;
@@ -102,5 +103,43 @@ public class DraftRestController {
 			log.debug("가져온 결재선 : {}", approver2);
 			
 			return approver2;
+		}
+		
+		//양식함 추가
+		@PostMapping("selectDoc")
+		public ArrayList<DocumentForm> selectDoc(@AuthenticationPrincipal UserDetails user, String document_form_type){
+			Employee employee = adminservice.readAdmin(user.getUsername());
+			DocumentForm doc = new DocumentForm();
+			
+			doc.setCompany_code(employee.getCompany_code());
+			doc.setDocument_form_type(document_form_type);
+			
+			ArrayList<DocumentForm> docList = draftservice.selectByType(doc);
+			
+			log.debug("가져온 객체 : {}", docList);
+			
+			return docList;
+		}
+		
+		//양식 가져오기
+		@PostMapping("showDoc")
+		public DocumentForm showDoc(String document_form_code) {
+			DocumentForm doc = draftservice.readDocumentForm(document_form_code);
+			
+			return doc;
+		}
+		
+		//양식 만들기
+		@PostMapping("addDocForm")
+		public int addDocForm(@AuthenticationPrincipal UserDetails user, DocumentForm docform) {
+			Employee admin = adminservice.readAdmin(user.getUsername());
+			docform.setCompany_code(admin.getCompany_code());
+			docform.setDocument_form_writer_code(admin.getEmployee_code());
+			docform.setDocument_form_writer_name(admin.getEmployee_name());
+			log.debug("가져온 폼 내용 : {}", docform);
+			
+			int result = adminservice.addDocumentForm(docform);
+			
+			return result;
 		}
 }

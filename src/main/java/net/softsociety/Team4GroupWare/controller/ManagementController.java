@@ -11,8 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.multipart.MultipartFile;
-
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.Team4GroupWare.domain.Company;
 import net.softsociety.Team4GroupWare.domain.Employee;
@@ -23,8 +21,6 @@ import net.softsociety.Team4GroupWare.domain.Vacation;
 import net.softsociety.Team4GroupWare.service.CompanyService;
 import net.softsociety.Team4GroupWare.service.EmployeeService;
 import net.softsociety.Team4GroupWare.service.ManagementService;
-import net.softsociety.spring5.domain.Board;
-import net.softsociety.spring5.util.FileService;
 
 @Slf4j
 @Controller

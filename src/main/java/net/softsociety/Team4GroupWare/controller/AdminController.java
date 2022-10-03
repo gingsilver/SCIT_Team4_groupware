@@ -170,7 +170,11 @@ public class AdminController {
 	@GetMapping("adminDraft")
 	public String adminDraft(@AuthenticationPrincipal UserDetails user, Model model) {
 		Employee admin = service.readAdmin(user.getUsername());
-		ArrayList<DocumentForm> docform = service.readDocumentForm(admin.getCompany_code());
+		DocumentForm doc = new DocumentForm();
+		doc.setCompany_code(admin.getCompany_code());
+		doc.setDocument_form_writer_code(admin.getEmployee_code());
+		
+		ArrayList<DocumentForm> docform = service.readDocumentForm(doc);
 		
 		model.addAttribute("docform", docform);
 		

@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>KUROWARE ADMIN PAGE</title>
+  <title>KUROWARE Document Form Write PAGE</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -57,34 +57,34 @@
 </head>
 
 <body>
+
   <!-- ======= Header ======= -->
-  <header th:replace="/admincommon/header :: header"></header><!-- End Header -->
+  <header th:replace="/indexcommon/header :: header"></header><!-- End Header -->
   <!-- ======= Sidebar ======= -->
-  <aside th:replace="/admincommon/aside :: aside"></aside><!-- End Sidebar-->
+  <aside th:replace="/indexcommon/aside :: aside"></aside><!-- End Sidebar-->
 
 	<main id="main" class="main">
 
 		<div class="pagetitle">
-			<h1>관리자 전자결재</h1>
-	      <nav>
-	        <ol class="breadcrumb">
-	          <li class="breadcrumb-item"><a th:href="@{/admin}">Home</a></li>
-	          <li class="breadcrumb-item active">Admin page</li>
-	          <li class="breadcrumb-item active"><a th:href="@{/admin/adminDraft}">관리자 전자결재</a></li>
-	          <li class="breadcrumb-item active">양식 작성</li>
-	        </ol>
-			</nav>
+			<h1>전자결재</h1>
+		    <nav>
+		        <ol class="breadcrumb">
+		          <li class="breadcrumb-item"><a th:href="@{/index}">Home</a></li>
+		          <li class="breadcrumb-item active"><a th:href="@{/draft/main}">전자결재</a></li>
+		          <li class="breadcrumb-item active">양식 작성</li>
+		        </ol>
+		    </nav>
 		</div><!-- End Page Title -->
 		
 		<section class="section dashboard">
 			<div class="card">
-				<div class="card-body" style="height : 1000px;">
+				<div class="card-body" style="height : 850px;">
 					<!-- start 버튼 행 -->
 						<div class="d-flex align-items-center align-self-center justify-content-between">
 							<h4><b>● 양식 작성</b></h4>
 							<div>
 								<input id="addDoc" type="button" value="생성" class="btn btn-primary">&nbsp;
-								<a th:href="@{/admin/adminDraft}"><input id="cancelDoc" type="button" value="작성 취소" class="btn btn-danger"></a>
+								<a th:href="@{/draft/main}"><input id="cancelDoc" type="button" value="작성 취소" class="btn btn-danger"></a>
 							</div>
 						</div>
 					<!-- start 기안내용 -->
@@ -92,37 +92,30 @@
 					<div class="row">
 						<div class="col-lg-12">
 							<!-- 기안 시작 -->
-							<form id="documentForm" th:action="@{/admin/addDocForm}" method="post">
-								<table class="table text-center">
-									<colgroup>
-										<col width="10%">
-										<col width="40%">
-										<col width="10%">
-										<col width="40%">
-									</colgroup>
-									<tr>
-										<th>양식 종류</th>
-										<td>
-											<select id="document_form_type" name="document_form_type" class="form-select" multiple aria-label="multiple select example">
-												<optgroup label="저장할 양식의 종류를 선택해주세요.">
-								                    <option value="회계">회계</option>
-								                    <option value="인사">인사</option>
-								                    <option value="총무">총무</option>
-								                </optgroup>
-							                </select>
-										</td>
-										<th rowspan="3">전결자 선택</th>
-										<td rowspan="3"><input id="final_approver_name" name="final_approver_name" type="text" class="form-control"></td>
-									</tr>
-									<tr>
-										<th>양식 제목</th>
-										<td><input id="document_form_name" name="document_form_name" type="text" class="form-control"></td>
-									</tr>
-								</table>
+							<form id="documentForm">
+								<div class="row">
+									<div class="col-lg-2">
+										<div class="input-group mb-3 text-center">
+					                      <span class="input-group-text" id="basic-addon1">양식종류</span>
+					                      <input value="내양식" type="text" class="form-control" readonly="readonly" id="document_form_type">
+					                    </div>
+									</div>
+									<div class="col-lg-6">
+										<div class="input-group mb-3 text-center">
+					                      <span class="input-group-text" id="basic-addon1">양식제목</span>
+					                      <input type="text" id="document_form_name" name="document_form_name" class="form-control">
+					                    </div>
+									</div>
+									<div class="col-lg-4">
+										<div class="input-group mb-3 text-center">
+					                      <span class="input-group-text" id="basic-addon1">전결자</span>
+					                      <input type="text" id="final_approver_name" name="final_approver_name" class="form-control" >
+					                    </div>
+									</div>
+								</div>
 								<!-- 웹 에디터 시작 -->
 								<div id="document_form_contents" name="document_form_contents" class="quill-editor-full" style="height : 600px;">
 								</div>
-
 							</form>
 						</div>
 					</div>
@@ -174,11 +167,13 @@
 	});
 	
 	function addDoc(){
-		let document_form_type = $('#document_form_type option:selected').val();
+		let document_form_type = $('#document_form_type').val();
 		let document_form_name = $('#document_form_name').val();
 		let final_approver_name = $('#final_approver_name').val();
 		let contents = $('.quill-editor-full').html();
 		let document_form_contents = encodeURIComponent(contents);
+		
+		console.log(document_form_type);
 		
 		if(document_form_type == null || document_form_type == ''){
 			alert("양식 종류를 선택해주세요.");
@@ -207,7 +202,7 @@
 					, final_approver_name : final_approver_name, document_form_contents : document_form_contents},
 			success : function () {
 				alert('저장되었습니다.');
-				let url = '/team4/admin/adminDraft'
+				let url = '/team4/draft/main'
 				location.replace(url);
 			},
 			error : function () {

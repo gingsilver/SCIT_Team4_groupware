@@ -121,6 +121,8 @@ public class AdminRestController {
 	public int addDocForm(@AuthenticationPrincipal UserDetails user, DocumentForm docform) {
 		Employee admin = service.readAdmin(user.getUsername());
 		docform.setCompany_code(admin.getCompany_code());
+		docform.setDocument_form_writer_code(admin.getEmployee_code());
+		docform.setDocument_form_writer_name(admin.getEmployee_name());
 		log.debug("가져온 폼 내용 : {}", docform);
 		
 		int result = service.addDocumentForm(docform);
