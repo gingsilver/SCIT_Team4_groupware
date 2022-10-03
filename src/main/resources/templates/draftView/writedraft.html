@@ -139,26 +139,22 @@
 							<h5>● 기안 선택</h5>
 							<div class="input-group mb-3">
 								<span class="input-group-text">기안 종류</span>
-								<select class="form-select">
-									<option selected>----------------------기안 종류 선택----------------------</option>
-									<optgroup label="지정양식함"></optgroup>
+								<select class="form-select" id="document_form_type">
+									<option selected="selected">----------------------기안 종류 선택----------------------</option>
+									<optgroup label="지정양식함">
 										<option value="회계">회계</option>
 										<option value="인사">인사</option>
 										<option value="총무">총무</option>
-									<optgroup label="자유양식함"></optgroup>
-									<option value="내양식">내 양식</option>
+									</optgroup>
+									<optgroup label="자유양식함">
+										<option value="내양식">내 양식</option>
+									</optgroup>
 								</select>
 							</div>
 						</div>
 						<div class="col-lg-8">
 							<h5>● 양식함</h5>
-							<div style="background-color : lightgrey;">
-								<ul>
-									<li>테스트~</li>
-									<li>테스트~</li>
-									<li>테스트~</li>
-									<li>테스트~</li>
-								</ul>
+							<div style="background-color : lightgrey;" class="docList">
 							</div>
 
 						</div>
@@ -185,14 +181,13 @@
 								</tr>
 								<tr>
 									<th>문서 제목</th>
-									<td><input type="text" class="form-control"></td>
+									<td><input type="text" class="form-control" id="selectedDocName"></td>
 									<th>마감일</th>
 									<td><input type="date" class="form-control"></td>
 								</tr>
 							</table>
 							<!-- 웹 에디터 시작 -->
 							<div class="quill-editor-full">
-								<textarea rows="10" cols="50"></textarea>
 							</div>
 							<hr>
 							<!-- 파일 첨부 시작 -->
@@ -333,7 +328,49 @@
 			readOrg();
 			addDraftCode();
 			
+			$('#document_form_type').on('change', function() {
+				let document_form_type = $("#document_form_type option:selected").val();
+				
+				$.ajax({
+					url: 'selectDoc',
+					type: 'post',
+					data : {document_form_type : document_form_type},
+					dataType : 'json',
+					success: function (data) {
+						console.log(data);
+						let s;
+						s = '<ul>';
+						$.each(data, function(idx, ob){
+							s += '<li class="list" id=' + ob.document_form_code + ' onclick="javascript:showDoc(id)">' + ob.document_form_name + '</li>';
+						});
+						s += '</ul>';
+						
+						$('.docList').html(s);
+					},
+					error: function (e) {
+						console.log(e.responseText);
+					}
+				});
+			});
 		});
+		
+		function showDoc(code) {
+			$.ajax({
+				url: 'showDoc',
+				type: 'post',
+				data : {document_form_code : code},
+				success: function (data) {
+					$('#selectedDocName').val(data.document_form_title);
+					
+					let contents = decodeURIComponent(data.document_form_contents);
+					let replaced_str = contents.replace('<input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL"><a class="ql-action"></a><a class="ql-remove"></a>', '');
+					$('.quill-editor-full').html(replaced_str);
+				},
+				error: function (e) {
+					console.log(e.responseText);
+				}				
+			})
+		}
 		
 		/* 다른곳에서 사용하기 위해 선언하는 기안 예비 번호 */
 		let draft_code;

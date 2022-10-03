@@ -162,8 +162,8 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public ArrayList<DocumentForm> readDocumentForm(String company_code) {
-		ArrayList<DocumentForm> docform = dao.readDocumentForm(company_code);
+	public ArrayList<DocumentForm> readDocumentForm(DocumentForm doc) {
+		ArrayList<DocumentForm> docform = dao.readDocumentForm(doc);
 		
 		return docform;
 	}

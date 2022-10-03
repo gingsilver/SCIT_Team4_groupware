@@ -52,4 +52,26 @@
 		from team4_draft_approver
 		where draft_code = #{draft_code} and employee_code = #{employee_code}
 	</select>
+	
+	<!-- 양식 찾기 -->
+	<select id="selectByType" parameterType="DocumentForm" resultType="DocumentForm">
+		select *
+		from team4_document_form
+		where company_code = #{company_code} and document_form_type = #{document_form_type}
+	</select>
+	
+	<!-- 한 가지 양식 불러오기 -->
+	<select id="readDocumentForm" parameterType="String" resultType="DocumentForm">
+		select *
+		from team4_document_form
+		where document_form_code = #{document_form_code}
+	</select>
+	
+	<!-- 개인 양식 불러오기 -->
+	<select id="selectAllDoc" parameterType="DocumentForm" resultType="DocumentForm">
+		select *
+		from team4_document_form
+		where company_code = #{company_code} and document_form_writer_code = #{document_form_writer_code}
+		order by document_form_code desc
+	</select>
 </mapper>

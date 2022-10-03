@@ -138,10 +138,10 @@ public interface AdminService {
 
 	/**
 	 * select : 양식함 내용 가져오기
-	 * @param company_code
+	 * @param doc
 	 * @return
 	 */
-	public ArrayList<DocumentForm> readDocumentForm(String company_code);
+	public ArrayList<DocumentForm> readDocumentForm(DocumentForm doc);
 
 	/**
 	 * select : 양식함 글 읽기

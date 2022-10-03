@@ -10,12 +10,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import lombok.extern.slf4j.Slf4j;
 import net.softsociety.Team4GroupWare.domain.Company;
+import net.softsociety.Team4GroupWare.domain.DocumentForm;
 import net.softsociety.Team4GroupWare.domain.Employee;
 import net.softsociety.Team4GroupWare.service.AdminService;
 import net.softsociety.Team4GroupWare.service.DraftService;
 
+@Slf4j
 @Controller
 @RequestMapping("/draft")
 public class DraftController {
@@ -27,7 +31,17 @@ public class DraftController {
 	AdminService adminservice;
 	
 	@GetMapping("/main")
-	public String draftmain() {
+	public String draftmain(@AuthenticationPrincipal UserDetails user, Model model) {
+		Employee admin = adminservice.readAdmin(user.getUsername());
+		
+		DocumentForm doc = new DocumentForm();
+		doc.setCompany_code(admin.getCompany_code());
+		doc.setDocument_form_writer_code(admin.getEmployee_code());
+		
+		ArrayList<DocumentForm> docform = draftservice.selectAllDoc(doc);
+		
+		model.addAttribute("docform", docform);
+		
 		return "draftView/draftmain";
 	}
 	
@@ -52,5 +66,29 @@ public class DraftController {
 		model.addAttribute("empList",empList);
 		
 		return "draftView/writedraft";
+	}
+	
+	@GetMapping("/writedoc")
+	public String writedoc() {
+		return "draftView/writedoc";
+	}
+	
+	@GetMapping({"readDoc"})
+	public String readDoc(
+			@RequestParam(name="document_form_code", defaultValue = "0") String document_form_code
+			, Model model
+			, @AuthenticationPrincipal UserDetails user) {
+		//db에서 글을 읽어서
+		log.debug("글 번호 : {}", document_form_code);
+		DocumentForm docform = adminservice.findDocByCode(document_form_code);
+		
+		if(docform.equals(null)) {
+			return "redirect:/admin/adminDraft"; //글이 없을때
+		}
+		
+		//결과를 모델에 담아서 html에서 출력
+		model.addAttribute("docform", docform);
+		
+		return "draftView/readDoc";
 	}
 }

@@ -1,10 +1,13 @@
 package net.softsociety.Team4GroupWare.service;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.Team4GroupWare.dao.DraftDAO;
+import net.softsociety.Team4GroupWare.domain.DocumentForm;
 import net.softsociety.Team4GroupWare.domain.DraftApprover;
 import net.softsociety.Team4GroupWare.domain.Employee;
 
@@ -49,6 +52,27 @@ public class DraftServiceImpl implements DraftService {
 		DraftApprover approver2 = dao.readApprover(approver);
 		
 		return approver2;
+	}
+
+	@Override
+	public ArrayList<DocumentForm> selectByType(DocumentForm doc) {
+		ArrayList<DocumentForm> docList = dao.selectByType(doc);
+		
+		return docList;
+	}
+
+	@Override
+	public DocumentForm readDocumentForm(String document_form_code) {
+		DocumentForm doc = dao.readDocumentForm(document_form_code);
+		
+		return doc;
+	}
+
+	@Override
+	public ArrayList<DocumentForm> selectAllDoc(DocumentForm doc) {
+		ArrayList<DocumentForm> docform = dao.selectAllDoc(doc);
+		
+		return docform;
 	}
 
 }

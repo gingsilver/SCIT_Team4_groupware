@@ -1,5 +1,8 @@
 package net.softsociety.Team4GroupWare.service;
 
+import java.util.ArrayList;
+
+import net.softsociety.Team4GroupWare.domain.DocumentForm;
 import net.softsociety.Team4GroupWare.domain.DraftApprover;
 import net.softsociety.Team4GroupWare.domain.Employee;
 
@@ -38,5 +41,26 @@ public interface DraftService {
 	 * @return
 	 */
 	public DraftApprover readApprover(DraftApprover approver);
+
+	/**
+	 * select : 타입에 따른 양식 가져오기
+	 * @param doc
+	 * @return
+	 */
+	public ArrayList<DocumentForm> selectByType(DocumentForm doc);
+
+	/**
+	 * select : 클릭한 양식의 내용을 가져오기
+	 * @param document_form_code
+	 * @return
+	 */
+	public DocumentForm readDocumentForm(String document_form_code);
+
+	/**
+	 * select : 개인 양식 리스트 가져오기
+	 * @param doc
+	 * @return
+	 */
+	public ArrayList<DocumentForm> selectAllDoc(DocumentForm doc);
 
 }

@@ -212,6 +212,8 @@
 		, document_form_title
 		, document_form_contents
 		, final_approver_name
+		, document_form_writer_name
+		, document_form_writer_code
 		)
 		values
 		(#{company_code}
@@ -224,19 +226,25 @@
 		<if test="document_form_type == '총무'">
 		, 'ADM'||LPAD(team4_document_seq.nextval, 4, 0)
 		</if>
+		<if test="document_form_type == '내양식'">
+		, 'MY'||LPAD(team4_document_seq.nextval, 4, 0)
+		</if>
 		,#{document_form_type}
 		,#{document_form_name}
 		,#{document_form_name}
 		,#{document_form_contents}
 		,#{final_approver_name}
+		,#{document_form_writer_name}
+		,#{document_form_writer_code}
 		)
 	</insert>
 	
 	<!-- 양식함 내용 가져오기 -->
-	<select id="readDocumentForm" parameterType="String" resultType="DocumentForm">
+	<select id="readDocumentForm" parameterType="DocumentForm" resultType="DocumentForm">
 		select *
 		from team4_document_form
-		where company_code = #{company_code}
+		where company_code = #{company_code} and document_form_writer_code = #{document_form_writer_code}
+		order by document_form_code desc
 	</select>
 	
 	<!-- 양식함 내용 한개 가져오기 -->
