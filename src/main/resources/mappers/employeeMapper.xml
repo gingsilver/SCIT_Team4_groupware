@@ -77,7 +77,24 @@ where employee_id = #{employee_id}
 
 <!-- 사원 정보읽어오기  -->
 <select id="getEmployeeById" parameterType="String" resultType="Employee">
-	select * 
+	select
+		employee_code
+		, company_code
+		, employee_id
+		, employee_pwd
+		, employee_name
+		, employee_gender
+		, employee_email
+		, employee_birthdate
+		, employee_phone
+		, employee_address
+		, employee_address2
+		, TO_CHAR(hiredate, 'YYYY-MM-DD') as hiredate
+		, role_name
+		, position_type
+		, RETIREDATE
+		, ORGANIZATION
+		, enabled
 	from team4_employee	
 	where employee_id = #{employee_id} 
 </select>

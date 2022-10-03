@@ -111,28 +111,26 @@ table td.cost{
 	margin-right : 30px;
 }
 </style>
-<script>
+<script th:inline="javascript">
+	/*<![CDATA[*/ /*]]>*/
 
 /* 급여계 구하기 */
 window.onload = function(){
-    let a = document.getElementById('salary_basic');
-    let b = document.getElementById('salary_management');
-    let c = document.getElementById('salary_fixed_overtime');
-    let d = document.getElementById('salary_holiday');
-    let e = document.getElementById('saraly_regular_bonus');
-    let f = document.getElementById('salary_meal');
-
-    console.log(a); //td#salary_basic.cost
-    console.log(typeof(a)); //object 
-    console.log(a.value);  //undefined
-    console.log(typeof(a.value)); //undefined 
-
-    let g = document.getElementById('tax_income').value;
-    let h = document.getElementById('tax_inhabitants').value;
-    let i = document.getElementById('tax_employment').value;
-    let j = document.getElementById('tax_national').value;
-    let k = document.getElementById('tax_health').value;
-
+ 
+    const a = /*[[${salary.salary_basic}]]*/;
+    const b = /*[[${salary.salary_management}]]*/;
+    const c = /*[[${salary.salary_fixed_overtime}]]*/;
+    const d = /*[[${salary.salary_holiday}]]*/;
+    const e = /*[[${salary.saraly_regular_bonus}]]*/;
+    const f = /*[[${salary.salary_meal}]]*/;
+    
+    const g = /*[[${tax.tax_income}]]*/;
+    const h = /*[[${tax.tax_inhabitants}]]*/;
+    const i = /*[[${tax.tax_employment}]]*/;
+    const j = /*[[${tax.tax_national}]]*/;
+    const k = /*[[${tax.tax_health}]]*/;
+    
+    
     let sum1 = Number(a) + Number(b) + Number(c) + Number(d) +Number(e) + Number(f);
     let sum2 = Number(g) + Number(h) + Number(i) + Number(j) +Number(k);
     let sum3 = sum1 + sum2;
@@ -143,6 +141,7 @@ window.onload = function(){
     document.getElementById("total3").innerHTML = sum3;
 } 
 
+	/*]]>*/
 </script>
 
 <!-- =======================================================
