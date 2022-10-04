@@ -128,65 +128,11 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>135421</td>
-									<td>테스트</td>
-									<td>김지은</td>
-									<td>2022.09.25</td>
-								</tr>
-								<tr>
-									<td>135421</td>
-									<td>테스트</td>
-									<td>김지은</td>
-									<td>2022.09.25</td>
-								</tr>
-								<tr>
-									<td>135421</td>
-									<td>테스트</td>
-									<td>김지은</td>
-									<td>2022.09.25</td>
-								</tr>
-								<tr>
-									<td>135421</td>
-									<td>테스트</td>
-									<td>김지은</td>
-									<td>2022.09.25</td>
-								</tr>
-								<tr>
-									<td>135421</td>
-									<td>테스트</td>
-									<td>김지은</td>
-									<td>2022.09.25</td>
-								</tr>
-								<tr>
-									<td>135421</td>
-									<td>테스트</td>
-									<td>김지은</td>
-									<td>2022.09.25</td>
-								</tr>
-								<tr>
-									<td>135421</td>
-									<td>테스트</td>
-									<td>김지은</td>
-									<td>2022.09.25</td>
-								</tr>
-								<tr>
-									<td>135421</td>
-									<td>테스트</td>
-									<td>김지은</td>
-									<td>2022.09.25</td>
-								</tr>
-								<tr>
-									<td>135421</td>
-									<td>테스트</td>
-									<td>김지은</td>
-									<td>2022.09.25</td>
-								</tr>
-								<tr>
-									<td>135421</td>
-									<td>테스트</td>
-									<td>김지은</td>
-									<td>2022.09.25</td>
+								<tr th:each="draft : ${draft}">
+									<td th:text="${draft.draft_code}"></td>
+									<td th:text="${draft.draft_title}"></td>
+									<td th:text="${draft.employee_name}"></td>
+									<td th:text="${draft.draft_inputdate}"></td>
 								</tr>
 							</tbody>
 						</table>

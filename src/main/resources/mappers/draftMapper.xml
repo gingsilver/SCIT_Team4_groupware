@@ -107,4 +107,60 @@
 		from team4_attached_file
 		where document_code = #{document_code}
 	</select>
+	
+	<!-- 기안 의견 추가 -->
+	<insert id="addOpinion" parameterType="DraftOpnion">
+		insert into team4_draft_opinion
+		(opinion_code
+		,draft_code
+		,opinion_writer_code
+		,opinion_writer_name
+		,opinion_contents
+		)
+		values
+		('OP'||LPAD(team4_opinion_seq.nextval, 4, 0)
+		, #{draft_code}
+		, #{opinion_writer_code}
+		, #{opinion_writer_name}
+		, #{opinion_contents}
+		)
+	</insert>
+	
+	<!-- 모든 기안 불러오기 -->
+	<select id="selectAllOpinion" parameterType="String" resultType="DraftOpnion">
+		select
+			opinion_code
+			, draft_code
+			, opinion_writer_code
+			, opinion_writer_name
+			, opinion_contents
+			, to_char(opinion_date, 'yyyy/mm/dd') as opinion_date
+		from team4_draft_opinion
+		where draft_code = #{draft_code}
+	</select>
+	
+	<!-- 기안 저장하기 -->
+	<insert id="addDraft" parameterType="Draft">
+		insert into team4_draft
+		values
+		(#{company_code}
+		,#{draft_code}
+		,#{employee_code}
+		,#{employee_name}
+		,#{employee_organization}
+		,#{draft_title}
+		,#{draft_contents}
+		,#{draft_inputdate}
+		,#{draft_duedate}
+		,#{process_type}
+		,#{draft_saved}
+		,#{process_enabled})
+	</insert>
+	
+	<!-- 모든 기안 가져오기 -->
+	<select id="selectAllDraft" parameterType="Draft" resultType="Draft">
+		select *
+		from team4_draft
+		where company_code = #{company_code} and employee_code = #{employee_code}
+	</select>
 </mapper>

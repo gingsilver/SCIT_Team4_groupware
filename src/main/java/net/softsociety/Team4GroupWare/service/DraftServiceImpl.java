@@ -9,7 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import net.softsociety.Team4GroupWare.dao.DraftDAO;
 import net.softsociety.Team4GroupWare.domain.AttachedFile;
 import net.softsociety.Team4GroupWare.domain.DocumentForm;
+import net.softsociety.Team4GroupWare.domain.Draft;
 import net.softsociety.Team4GroupWare.domain.DraftApprover;
+import net.softsociety.Team4GroupWare.domain.DraftOpnion;
 import net.softsociety.Team4GroupWare.domain.Employee;
 
 @Service
@@ -88,6 +90,34 @@ public class DraftServiceImpl implements DraftService {
 		ArrayList<AttachedFile> attFileList = dao.selectAllDraftFile(draft_code);
 		
 		return attFileList;
+	}
+
+	@Override
+	public int addOpinion(DraftOpnion opinion) {
+		int result = dao.addOpinion(opinion);
+		
+		return result;
+	}
+
+	@Override
+	public ArrayList<DraftOpnion> selectAllOpinion(String draft_code) {
+		ArrayList<DraftOpnion> opList = dao.selectAllOpinion(draft_code);
+		
+		return opList;
+	}
+
+	@Override
+	public int addDraft(Draft draft) {
+		int result = dao.addDraft(draft);
+		
+		return result;
+	}
+
+	@Override
+	public ArrayList<Draft> selectAllDraft(Draft selectDF) {
+		ArrayList<Draft> draft = dao.selectAllDraft(selectDF);
+		
+		return draft;
 	}
 
 }

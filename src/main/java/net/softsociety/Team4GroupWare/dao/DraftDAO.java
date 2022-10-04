@@ -6,7 +6,9 @@ import org.apache.ibatis.annotations.Mapper;
 
 import net.softsociety.Team4GroupWare.domain.AttachedFile;
 import net.softsociety.Team4GroupWare.domain.DocumentForm;
+import net.softsociety.Team4GroupWare.domain.Draft;
 import net.softsociety.Team4GroupWare.domain.DraftApprover;
+import net.softsociety.Team4GroupWare.domain.DraftOpnion;
 import net.softsociety.Team4GroupWare.domain.Employee;
 
 @Mapper
@@ -80,5 +82,33 @@ public interface DraftDAO {
 	 * @return
 	 */
 	public ArrayList<AttachedFile> selectAllDraftFile(String draft_code);
+
+	/**
+	 * insert : 기안에 의견 추가
+	 * @param opinion
+	 * @return
+	 */
+	public int addOpinion(DraftOpnion opinion);
+
+	/**
+	 * select : 기안 코드에 맞는 모든 의견
+	 * @param draft_code
+	 * @return
+	 */
+	public ArrayList<DraftOpnion> selectAllOpinion(String draft_code);
+
+	/**
+	 * insert : 기안 자체 추가
+	 * @param draft
+	 * @return
+	 */
+	public int addDraft(Draft draft);
+
+	/**
+	 * select : 모든 기안 가져오기
+	 * @param selectDF
+	 * @return
+	 */
+	public ArrayList<Draft> selectAllDraft(Draft selectDF);
 
 }
