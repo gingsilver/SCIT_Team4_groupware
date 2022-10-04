@@ -38,6 +38,20 @@
 		th, td {
 			vertical-align: middle;
 		}
+		
+		.btn-primary {
+		background-color : #606EBF;
+		border-color : #606EBF;
+		color:white;
+		font-size : 16px;
+	}
+	
+	.btn-danger {
+		background-color : #CC5749;
+		border-color : #CC5749;
+		color:white;
+		font-size : 16px;
+	}
 	</style>
 
 </head>
@@ -64,7 +78,7 @@
 
 		<section class="section dashboard">
 			<div class="card">
-				<div class="card-body" style="height : 1550px;">
+				<div class="card-body" style="height : 1750px;">
 					<!-- start 버튼 행 -->
 					<div class="row">
 						<div class="col-lg-12">
@@ -114,6 +128,7 @@
 								</tr>
 							</table>
 						</div><!-- end 전자결재 기안자 -->
+						<div class="col-lg-1" id="finalApprover"></div>
 						
 						<!-- start 전자결재 결재자 추가 -->
 						<!-- <div class="col-lg-1 ">
@@ -154,7 +169,8 @@
 						</div>
 						<div class="col-lg-8">
 							<h5>● 양식함</h5>
-							<div style="background-color : lightgrey;" class="docList">
+							<div style="background-color : rgb(225, 229, 255); font-weight: bold; overflow-x:hidden; width:auto; height:120px; border-radius: 10px;">
+								<div class="docList my-2"></div>
 							</div>
 
 						</div>
@@ -194,13 +210,15 @@
 							<h5>● 파일 첨부</h5>
 							<div class="card">
 								<div class="card-body">
-									<input class="form-control form-control-user" type="file" size="30" name="upload"
-										id="product_image" onchange="setThumbnail(event);">
-									<ul>
-										<li>테스트~</li>
-										<li>테스트~</li>
-										<li>테스트~</li>
-									</ul>
+									<form id="attachedFilesForm">
+									<div class="input-group">
+										<input class="form-control form-control-user product_files" type="file" name="upload" multiple="multiple">
+										<div class="input-group-append">
+                                                <button class="btn btn-primary" type="button" id="attachedFilesButton">업로드</button>
+                                            </div>
+									</div>
+									</form>
+									<div id="attachedFilesList" style="overflow-x:hidden; width:auto; height:200px;"></div>
 								</div>
 							</div>
 						</div>
@@ -328,6 +346,49 @@
 			readOrg();
 			addDraftCode();
 			
+			/* 추가 */
+			$('.selectedType').on('change', addArr);
+			/* 모달 속 결재자 추가를 누르면 실행 될 함수 => view단에 결재자 뿌리기 */
+			$('#addApprovalButton').on('click', readApp);
+			
+			$('#attachedFilesButton').on('click', function(){
+				var formData = new FormData();
+				
+				var inputFile = $("input[name='upload']");
+				
+				var files = inputFile[0].files;
+				
+				console.log(files);
+				
+				for(var i = 0; i < files.length; i++){
+					formData.append("upload", files[i]);
+				}
+				
+				$.ajax({
+					url: 'uploadFile',
+					type: 'post',
+					data : formData,
+					processData : false,
+					contentType : false,
+					dataType : 'json',
+					success: function (data) {
+						console.log(data);
+						
+						let s;
+						s = '<ul>';
+						$.each(data, function(idx, ob){
+							s += '<li>' + ob.attached_file_origin_name + '</li>';
+						});
+						s += '</ul>';
+						
+						$('#attachedFilesList').html(s); 
+					},
+					error: function (e) {
+						console.log(e.responseText);
+					}
+				});
+			});
+			
 			$('#document_form_type').on('change', function() {
 				let document_form_type = $("#document_form_type option:selected").val();
 				
@@ -365,6 +426,17 @@
 					let contents = decodeURIComponent(data.document_form_contents);
 					let replaced_str = contents.replace('<input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL"><a class="ql-action"></a><a class="ql-remove"></a>', '');
 					$('.quill-editor-full').html(replaced_str);
+					
+					let s;
+					if(data.final_approver_name != null){
+						s = '<table class="table text-center" style="width : 120px;">';
+						s += '<tr><th>전결자</th></tr>';
+						s += '<tr style="height : 100px;">';
+						s += '<td>' + data.final_approver_name + '</td>';
+						s += '</tr></table>'
+					}
+					
+					$('#finalApprover').html(s);
 				},
 				error: function (e) {
 					console.log(e.responseText);
@@ -494,22 +566,16 @@
 				});
 			}
 		};
-		let appObj = {};
 		/* 사원 목록 클릭 이벤트*/
+		let appObj = {};
 		let num = 1;
 		const appObjArr = [];
 		
 		let employee_name;
 		let employee_code;
 		let select;
-		let realId;
 		
 		function addEmpl(id) {
-			realId = id;
-			$('#' + realId).on('click', test);
-		}
-		
-		function test() {
 			let count = $(this).attr('count');
 			employee_name = $(this).attr('empname');
 			employee_code = $(this).attr('empcode');
@@ -538,10 +604,6 @@
 				appObjArr.pop();
 				num -= 1;
 			}
-			/* 추가 */
-			$('.selectedType').on('change', addArr);
-			/* 모달 속 결재자 추가를 누르면 실행 될 함수 => view단에 결재자 뿌리기 */
-			$('#addApprovalButton').on('click', readApp);
 		}
 		
 		function addArr() {

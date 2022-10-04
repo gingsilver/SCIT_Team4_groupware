@@ -2,6 +2,7 @@ package net.softsociety.Team4GroupWare.service;
 
 import java.util.ArrayList;
 
+import net.softsociety.Team4GroupWare.domain.AttachedFile;
 import net.softsociety.Team4GroupWare.domain.DocumentForm;
 import net.softsociety.Team4GroupWare.domain.DraftApprover;
 import net.softsociety.Team4GroupWare.domain.Employee;
@@ -62,5 +63,19 @@ public interface DraftService {
 	 * @return
 	 */
 	public ArrayList<DocumentForm> selectAllDoc(DocumentForm doc);
+
+	/**
+	 * insert : 기안 내 첨부파일 insert
+	 * @param file
+	 * @return
+	 */
+	public int addDraftAttFile(AttachedFile file);
+
+	/**
+	 * select : 기안 내 모든 첨부파일 select
+	 * @param draft_code 
+	 * @return
+	 */
+	public ArrayList<AttachedFile> selectAllDraftFile(String draft_code);
 
 }

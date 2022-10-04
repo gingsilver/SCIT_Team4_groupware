@@ -74,4 +74,37 @@
 		where company_code = #{company_code} and document_form_writer_code = #{document_form_writer_code}
 		order by document_form_code desc
 	</select>
+	
+	<!-- 기안 첨부파일 추가 -->
+	<insert id="addDraftAttFile" parameterType="AttachedFile">
+		insert into team4_attached_file
+		(company_code
+		,attached_file_code
+		,document_code
+		,attached_file_origin_name
+		,attached_file_save_name
+		,attached_file_ext
+		,employee_code
+		,employee_id
+		,employee_name
+		)
+		values
+		(#{company_code}
+		,'File'||LPAD(team4_attached_file_seq.nextval, 4, 0)
+		, #{document_code}
+		,#{attached_file_origin_name}
+		,#{attached_file_save_name}
+		,#{attached_file_ext}
+		,#{employee_code}
+		,#{employee_id}
+		,#{employee_name}
+		)
+	</insert>
+	
+	<!-- 기안 첨부파일 모두 가져오기 -->
+	<select id="selectAllDraftFile" parameterType="String" resultType="AttachedFile">
+		select *
+		from team4_attached_file
+		where document_code = #{document_code}
+	</select>
 </mapper>
