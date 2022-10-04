@@ -95,6 +95,7 @@ where employee_id = #{employee_id}
 		, RETIREDATE
 		, ORGANIZATION
 		, enabled
+		, employee_photo
 	from team4_employee	
 	where employee_id = #{employee_id} 
 </select>

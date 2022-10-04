@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.Team4GroupWare.dao.DraftDAO;
+import net.softsociety.Team4GroupWare.domain.AttachedFile;
 import net.softsociety.Team4GroupWare.domain.DocumentForm;
 import net.softsociety.Team4GroupWare.domain.DraftApprover;
 import net.softsociety.Team4GroupWare.domain.Employee;
@@ -73,6 +74,20 @@ public class DraftServiceImpl implements DraftService {
 		ArrayList<DocumentForm> docform = dao.selectAllDoc(doc);
 		
 		return docform;
+	}
+
+	@Override
+	public int addDraftAttFile(AttachedFile file) {
+		int result = dao.addDraftAttFile(file);
+		
+		return result;
+	}
+
+	@Override
+	public ArrayList<AttachedFile> selectAllDraftFile(String draft_code) {
+		ArrayList<AttachedFile> attFileList = dao.selectAllDraftFile(draft_code);
+		
+		return attFileList;
 	}
 
 }
