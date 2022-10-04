@@ -20,7 +20,9 @@ import lombok.extern.slf4j.Slf4j;
 import net.softsociety.Team4GroupWare.domain.AttachedFile;
 import net.softsociety.Team4GroupWare.domain.Company;
 import net.softsociety.Team4GroupWare.domain.DocumentForm;
+import net.softsociety.Team4GroupWare.domain.Draft;
 import net.softsociety.Team4GroupWare.domain.DraftApprover;
+import net.softsociety.Team4GroupWare.domain.DraftOpnion;
 import net.softsociety.Team4GroupWare.domain.Employee;
 import net.softsociety.Team4GroupWare.service.AdminService;
 import net.softsociety.Team4GroupWare.service.DraftService;
@@ -205,4 +207,44 @@ public class DraftRestController {
 
 		return attFileList;
 	}
+	
+	//의견 추가
+	@PostMapping("addOpinion")
+	public int addOpinion(@AuthenticationPrincipal UserDetails user, String opinion_contents, String draft_code) {
+		log.debug("가져옴 : {}, {}", opinion_contents, draft_code);
+		
+		Employee admin = adminservice.readAdmin(user.getUsername());
+		DraftOpnion opinion = new DraftOpnion();
+		
+		opinion.setDraft_code(draft_code);
+		opinion.setOpinion_writer_code(admin.getEmployee_code());
+		opinion.setOpinion_writer_name(admin.getEmployee_name());
+		opinion.setOpinion_contents(opinion_contents);
+		
+		int result = draftservice.addOpinion(opinion);
+		
+		return result;
+	}
+	
+	//의견 가져오기
+	@PostMapping("readOpinion")
+	public ArrayList<DraftOpnion> readOpinion(String draft_code){
+		ArrayList<DraftOpnion> opList = draftservice.selectAllOpinion(draft_code);
+		
+		return opList;
+	}
+	
+	//기안 저장
+	@PostMapping("addDraft")
+	public int addDraft(@AuthenticationPrincipal UserDetails user, Draft draft) {
+		log.debug("가져옴 : {}", draft);
+		Employee admin = adminservice.readAdmin(user.getUsername());
+		draft.setCompany_code(admin.getCompany_code());
+		draft.setEmployee_code(admin.getEmployee_code());
+		draft.setEmployee_name(admin.getEmployee_name());
+		int result = draftservice.addDraft(draft);
+		
+		return result;
+	}
+	
 }

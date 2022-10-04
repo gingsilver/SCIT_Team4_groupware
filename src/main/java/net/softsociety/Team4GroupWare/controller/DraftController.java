@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.Team4GroupWare.domain.Company;
 import net.softsociety.Team4GroupWare.domain.DocumentForm;
+import net.softsociety.Team4GroupWare.domain.Draft;
 import net.softsociety.Team4GroupWare.domain.Employee;
 import net.softsociety.Team4GroupWare.service.AdminService;
 import net.softsociety.Team4GroupWare.service.DraftService;
@@ -40,7 +41,14 @@ public class DraftController {
 		
 		ArrayList<DocumentForm> docform = draftservice.selectAllDoc(doc);
 		
+		Draft selectDF = new Draft();
+		selectDF.setCompany_code(admin.getCompany_code());
+		selectDF.setEmployee_code(admin.getEmployee_code());
+		
+		ArrayList<Draft> draft = draftservice.selectAllDraft(selectDF);
+		
 		model.addAttribute("docform", docform);
+		model.addAttribute("draft", draft);
 		
 		return "draftView/draftmain";
 	}

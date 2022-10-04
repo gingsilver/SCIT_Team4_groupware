@@ -52,6 +52,10 @@
 		color:white;
 		font-size : 16px;
 	}
+	
+	textarea {
+    	resize: none;
+  	}
 	</style>
 
 </head>
@@ -82,10 +86,10 @@
 					<!-- start 버튼 행 -->
 					<div class="row">
 						<div class="col-lg-12">
-							<input type="button" value="상신" class="btn btn-primary">&nbsp;
-							<input type="button" value="의견 추가" class="btn btn-primary">&nbsp;
-							<input type="button" value="임시 저장" class="btn btn-primary">&nbsp;
-							<input type="button" value="작성 취소" class="btn btn-danger">
+							<input type="button" value="상신" class="btn btn-primary" id="addDraftButton">&nbsp;
+							<input type="button" value="의견 추가" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#largeModal">&nbsp;
+							<input type="button" value="임시 저장" class="btn btn-primary" id="saveDraftButton">&nbsp;
+							<input type="button" value="작성 취소" class="btn btn-danger" id="returnDraftMain">
 						</div>
 					</div><!-- end 버튼 행 -->
 
@@ -112,16 +116,16 @@
 								</tr>
 								<tr>
 									<th>부서</th>
-									<td th:text="${employee.organization}"></td>
+									<td id="employee_organization" th:text="${employee.organization}"></td>
 								</tr>
 							</table>
 						</div><!-- end 기안자 정보 -->
 						
 						<!-- start 전자결재 기안자 -->
-						<div class="col-lg-1 lastDiv">
+						<div class="col-lg-1">
 							<table class="table text-center" style="width : 120px;">
 								<tr>
-									<th>기안자</th>
+									<th><span id="process_type">기안</span><span>자</span></th>
 								</tr>
 								<tr style="height : 100px;">
 									<td th:text="${employee.employee_name}"></td>
@@ -129,22 +133,6 @@
 							</table>
 						</div><!-- end 전자결재 기안자 -->
 						<div class="col-lg-1" id="finalApprover"></div>
-						
-						<!-- start 전자결재 결재자 추가 -->
-						<!-- <div class="col-lg-1 ">
-							<table class="table text-center">
-								<tr style="height : 40.5px;">
-									<th></th>
-								</tr>
-								<tr style="height : 60px;">
-									<td></td>
-								</tr>
-								<tr>
-									<td>
-									</td>
-								</tr>
-							</table>
-						</div> --><!-- end 전자결재 결재자 추가 -->
 					</div><!-- end 기안자 정보, 결재선, 기안 선택 -->
 
 					<!-- start 양식함 -->
@@ -193,13 +181,13 @@
 									<th>문서 번호</th>
 									<td></td>
 									<th>기안일</th>
-									<td><input type="date" class="form-control"></td>
+									<td><input type="date" class="form-control" id="draft_inputdate"></td>
 								</tr>
 								<tr>
 									<th>문서 제목</th>
 									<td><input type="text" class="form-control" id="selectedDocName"></td>
 									<th>마감일</th>
-									<td><input type="date" class="form-control"></td>
+									<td><input type="date" class="form-control" id="draft_duedate"></td>
 								</tr>
 							</table>
 							<!-- 웹 에디터 시작 -->
@@ -225,7 +213,29 @@
 					</div>
 				</div>
 			</div>
-
+			
+			<!-- start 의견 모달 -->
+			<div class="modal fade" id="largeModal" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">● 의견함</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    	<h5><b>● 의견 목록</b></h5>
+                    	<div id="opnionList"></div>
+                    	<hr>
+                    	<textarea id="opinionVal" class="form-control" rows="8"></textarea>
+                    	<hr>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                      <button type="button" class="btn btn-primary" id="addOpinion">의견 추가</button>
+                    </div>
+                  </div>
+                </div>
+              </div><!-- End 의견 모달-->
 
 			<!-- start 전자결재 결재자 modal -->
 			<div class="modal fade" id="approvalModal" tabindex="-1">
@@ -235,7 +245,6 @@
 							<h5 class="modal-title"><b>결재선 선택</b></h5>
 							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
-
 						<!-- 조직도 -->
 						<div class="modal-body">
 							<div class="row">
@@ -300,7 +309,6 @@
 				</div><!-- End 전자결재 결재자1 modal-->
 			</div>
 		</section>
-
 	</main><!-- End #main -->
 
 	<!-- ======= Footer ======= -->
@@ -346,8 +354,87 @@
 			readOrg();
 			addDraftCode();
 			
-			/* 추가 */
-			$('.selectedType').on('change', addArr);
+			$('#addDraftButton').on('click', function(){
+				let employee_organization = $('#employee_organization').text();
+				let draft_title = $('#selectedDocName').val();
+				let contents = $('.quill-editor-full').html();
+				let draft_contents = encodeURIComponent(contents);
+				let draft_inputdate = $('#draft_inputdate').val();
+				let draft_duedate = $('#draft_duedate').val();
+				let process_type = $('#process_type').text();
+				let draft_saved = 0;
+				let process_enabled = 0;
+				
+				console.log(employee_organization);
+				console.log(draft_title);
+				console.log(contents);
+				console.log(draft_contents);
+				console.log(draft_inputdate);
+				console.log(draft_duedate);
+				console.log(process_type);
+				
+				$.ajax({
+					url: 'addDraft',
+					type: 'post',
+					data : {employee_organization : employee_organization
+							, draft_code : draft_code
+							, draft_title : draft_title
+							, draft_contents : draft_contents
+							, draft_inputdate : draft_inputdate
+							, draft_duedate : draft_duedate
+							, process_type : process_type
+							, draft_saved : draft_saved
+							, process_enabled : process_enabled},
+					success: function (data) {
+						if(data == 1){
+							alert('성공적으로 상신했습니다.');
+							let url = '/team4/draft/main'
+							location.replace(url);
+						} else {
+							alert('상신할 수 없습니다. 기안 내용을 확인해 주세요.');
+						}
+					},
+					error: function (e) {
+						console.log(e.responseText);
+					}
+				});
+				
+			});
+			
+			$('#addOpinion').on('click', function(){
+				let opinionVal = $('#opinionVal').val();
+				
+				if(opinionVal == null){
+					return false;
+				}
+				
+				$.ajax({
+					url: 'addOpinion',
+					type: 'post',
+					data : {opinion_contents : opinionVal, draft_code : draft_code},
+					success: function (data) {
+						if(data == 1){
+							console.log('저장 성공');
+							showOp();
+						} else {
+							console.log('저장 실패');
+						}
+					},
+					error: function (e) {
+						console.log(e.responseText);
+					}
+				});
+			});
+			
+			$('#returnDraftMain').on('click', function(){
+				if(confirm('작성을 취소하시겠습니까?')){
+					let url = '/team4/draft/main'
+					location.replace(url);
+				} else {
+					alert('작성 페이지로 돌아갑니다.');
+				}
+			});
+						
 			/* 모달 속 결재자 추가를 누르면 실행 될 함수 => view단에 결재자 뿌리기 */
 			$('#addApprovalButton').on('click', readApp);
 			
@@ -414,6 +501,37 @@
 				});
 			});
 		});
+		
+		function showOp() {
+			$.ajax({
+				url: 'readOpinion',
+				type: 'post',
+				data : {draft_code : draft_code},
+				dataType : 'json',
+				success: function (data) {
+					let s;
+					
+					s = '<table class="table text-center">';
+					s += '<tr>';
+					s += '<th>작성자</th><th>내용</th><th>작성일시</th>';
+					s += '</tr>';
+					$.each(data, function(idx, ob){
+						s += '<tr>';
+						s += '<td>' + ob.opinion_writer_name + '</td>';
+						s += '<td>' + ob.opinion_contents + '</td>';
+						s += '<td>' + ob.opinion_date + '</td>';
+						s += '</tr>'
+					});
+					s += '</table>'
+					
+					$('#opnionList').html(s);
+				},
+				error: function (e) {
+					console.log(e.responseText);
+				}
+				
+			});	
+		}
 		
 		function showDoc(code) {
 			$.ajax({
@@ -567,22 +685,28 @@
 			}
 		};
 		/* 사원 목록 클릭 이벤트*/
-		let appObj = {};
 		let num = 1;
-		const appObjArr = [];
-		
 		let employee_name;
 		let employee_code;
 		let select;
+		let appObj = {};
+		var appObjArr = [];
+		
+		/* var appObj = function(name, code, select, num){
+			this.name = name;
+			this.code = code;
+			this.select = select;
+			this.num = num;
+		} */
 		
 		function addEmpl(id) {
-			let count = $(this).attr('count');
-			employee_name = $(this).attr('empname');
-			employee_code = $(this).attr('empcode');
+			let count = $('#'+ id).attr('count');
+			employee_name = $('#'+ id).attr('empname');
+			employee_code = $('#'+ id).attr('empcode');
 			
 			if (count == 0) {
-				$(this).mouseleave().css('background-color', '#EEF1FA');
-				$(this).attr('count', '1');
+				$('#'+ id).mouseleave().css('background-color', '#EEF1FA');
+				$('#'+ id).attr('count', '1');
 				
 				let insert = '<tr id=' + employee_name + '>';
 				insert += '<td>' + num + '</td>';
@@ -594,24 +718,28 @@
 				insert += '<option value="전결">전결</option></select></td></tr>';
 				
 				$('#selectedEmp').append(insert);
-				
-				$('#selectedName').html(employee_name);
 				num += 1;
+				
 			} else {
-				$(this).mouseenter().css('background-color', 'white');
-				$(this).attr('count', '0');
+				$('#'+ id).mouseenter().css('background-color', 'white');
+				$('#'+ id).attr('count', '0');
 				document.getElementById(employee_name).remove();
 				appObjArr.pop();
 				num -= 1;
 			}
+			
+			$('.selectedType').on('change', addArr);
 		}
 		
 		function addArr() {
-			select = $('.selectedType').children("option:selected").text();
+			select = $(this).children("option:selected").text();
 			console.log(employee_name);
 			console.log(employee_code);
 			console.log(select);
 			console.log(num);
+			
+			/* appObj = new appObj(employee_name, employee_code, select, num);
+			appObjArr.push(appObj); */
 			
 			appObj.name = employee_name;
 			appObj.code = employee_code;
@@ -619,29 +747,26 @@
 			appObj.num = num;
 			appObjArr.push(appObj);
 			appObj = {};
-			select = '';
-			console.log(appObjArr);
+			
 		}
 		
 		function readApp(){
 			let insertTr;
 			let myClass;
 			
-			console.log(appObjArr);
-			
 			$(appObjArr).each(function(index, item){
 				myClass = "col-lg-1 text-center";
 				insertTr = "<table class='table' style='width : 120px;'>";
 				insertTr += "<tr style='height : 40.5px;'>";
-				insertTr += "<th>" + item.select + '자' + "</th>";
+				insertTr += "<th>" + index + item.select + '자' + "</th>";
 				insertTr += "</tr>";
 				insertTr += "<tr style='height : 100px;'>";
 				insertTr += "<td>" + item.name + "</td>";
 				insertTr += "</tr>";
 				insertTr += "</table><p></p>";
+				let div = $("<div>" + insertTr + "</div>").addClass(myClass);
+				$("#finalApprover").before(div);
 			});
-			let div = $("<div>" + insertTr + "</div>").addClass(myClass);
-			$(".lastDiv").after(div);
 			
 			$('#approvalModal').modal('hide');
 		}
