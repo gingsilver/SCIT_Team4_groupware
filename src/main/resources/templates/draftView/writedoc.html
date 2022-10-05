@@ -164,6 +164,24 @@
 	<script>
 	$(document).ready(function() {
 		$('#addDoc').on('click', addDoc);
+		$('#final_approver_name').on('keyup', function(){
+			let word = $('#final_approver_name').val();
+			
+			$.ajax({
+				url : 'findByName',
+				type : "post",
+				data : {final_approver_name : word},
+				dataType : 'json',
+				success : function (data) {
+					alert('저장되었습니다.');
+					let url = '/team4/draft/main'
+					location.replace(url);
+				},
+				error : function () {
+					alert('저장 실패');
+				}
+			});
+		});
 	});
 	
 	function addDoc(){

@@ -5,19 +5,13 @@
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>KUROWARE 캘린더</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <!-- jquery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     
-	<!-- bootstrap 4 -->
-	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-	
-	<!-- fullcalendar CDN -->
-	<link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.css' rel='stylesheet'/>
-	<script th:src='@{/js/calendar/fullcalendar.js}'></script>
-	
+  <!-- bootstrap 4 -->
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+  <!-- fullcalendar CDN -->
+  <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.css' rel='stylesheet'/>
 	
   <!-- Favicons -->
   <link th:href="@{/assets/img/favicon.png}" rel="icon">
@@ -38,8 +32,31 @@
 
   <!-- Template Main CSS File -->
   <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+  
+  <!-- Vendor JS Files -->
+  <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+	<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+	<script th:src="@{/assets/vendor/chart.js/chart.min.js}"></script>
+	<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+	<script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+	<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+	<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+	<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
 
-    <script type="text/javascript" th:inline="javascript">
+	<!-- Template Main JS File -->
+	<script th:src="@{/assets/js/main.js}"></script>
+  
+  <!-- jquery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  
+  <!-- 부트스트랩4 js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  
+  <!-- 풀캘린더 js -->
+  <script th:src='@{/js/calendar/fullcalendar.js}'></script>
+
+  <script type="text/javascript" th:inline="javascript">
         $(document).ready(function () {
         	selectScheduleList();
         	
@@ -133,28 +150,6 @@
             calendar.render();
         }
         
-        
-        /* 클릭이벤트 추가 코드 
-        
-        
-        var calendar = new Calendar(calendarEl, {
-
-	  eventClick: function(info) {
-	    alert('Event: ' + info.event.title);
-	    alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-	    alert('View: ' + info.view.type);
-	
-	    // change the border color just for fun
-	    info.el.style.borderColor = 'red';
-	  }
-	
-	});
-        
-     클릭이벤트 코드 끝   
-        
-        */
-        
-        
         function selectScheduleList(){
         	$.ajax({
         		url: 'selectScheduleList',
@@ -199,97 +194,127 @@
         	return arrEvent;
         }
     </script>
-    <style>
-        #calendarBox{
-            width: 70%;
-            padding-left: 15%;
-        }
-
-    </style>
     
 </head>
 
 <body>
-    <div class="d-flex align-items-center justify-content-between">
-      <a th:href="@{/index}" class="logo d-flex align-items-center">
-        <img th:src="@{/assets/img/logo.png}" alt="">
-        <span class="d-none d-lg-block">KuroWare</span>
-      </a>
-    </div><!-- End Logo -->
 
-
-    <div id="calendarBox">
-        <div id="calendar"></div>
-    </div>
-
-    <!-- 일정추가 때의 modal -->
-    <div class="modal fade" id="calendarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">일정을 입력하세요.</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form class="form-group" method="post" th:action="@{/schedule/save}">
-                <div class="modal-body">
-                        <label for="taskId" class="col-form-label">일정 제목</label>
-                        <input type="text" class="form-control" id="schedule_title" name="schedule_title">                    
-                        <label for="taskId" class="col-form-label">일정 내용</label>
-                        <input type="text" class="form-control" id="schedule_contents" name="schedule_contents">
-                        <label for="taskId" class="col-form-label">시작 날짜</label>
-                        <input type="datetime-local" class="form-control" id="schedule_startDate" name="schedule_startDate">
-                        <label for="taskId" class="col-form-label">종료 날짜</label>
-                        <input type="datetime-local" class="form-control" id="schedule_endDate" name="schedule_endDate">
-                    
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-warning" id="addCalendar">추가</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
-                        id="sprintSettingModalClose">취소</button>
-                </div>
-                </form>
-    
-            </div>
-        </div>
-    </div>
-    
-    <!-- 일정클릭 때의 modal -->
-    <div class="modal fade" id="calendarModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">일정을 확인하세요.</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                        <label for="schedule_title2" class="col-form-label">일정 제목</label>
-                        <input type="text" class="form-control" id="schedule_title2" >                    
-                        <label for="schedule_contents2" class="col-form-label">일정 내용</label>
-                        <input type="text" class="form-control" id="schedule_contents2">
-                        <label for="schedule_startDate2" class="col-form-label">시작 날짜</label>
-                        <input type="datetime-local" class="form-control" id="schedule_startDate2">
-                        <label for="schedule_endDate2" class="col-form-label">종료 날짜</label>
-                        <input type="datetime-local" class="form-control" id="schedule_endDate2">
-                </div>
-                <div class="modal-footer">
-                	<form method="post" th:action="@{deleteSchedule}" id="deleteScheduleForm">
-                		<input type="hidden" name="schedule_num" id="deleteSchedule_num">
-                	</form>
-                	<button type="button" class="btn btn-warning" id="deleteSchedule">삭제</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
-                        id="sprintSettingModalClose2">취소</button>
-                </div>
-            </div>
-        </div>
-    </div>
-     <!-- 일정클릭 때의 modal 끝 -->
+ <!-- ======= Header ======= -->
+  <header th:replace="/indexcommon/header :: header"></header><!-- End Header -->
+  <!-- ======= Sidebar ======= -->
+  <aside th:replace="/indexcommon/aside :: aside"></aside><!-- End Sidebar-->
   
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Schedule</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a th:href="@{/index}">Home</a></li>
+          <li class="breadcrumb-item"><a th:href="@{/employee/mypage}">Users</a></li>
+          <li class="breadcrumb-item active">Schedule</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+    	<div class="row">
+    		<div class="col-10">
+		    	<div class="card">
+					<div class="card-body">
+					    <div id="calendarBox">
+					        <div id="calendar"></div>
+					    </div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	    <!-- 일정추가 때의 modal -->
+	    <div class="modal fade" id="calendarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+	        aria-hidden="true">
+	        <div class="modal-dialog" role="document">
+	            <div class="modal-content">
+	                <div class="modal-header">
+	                    <h5 class="modal-title" id="exampleModalLabel">일정을 입력하세요.</h5>
+	                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                        <span aria-hidden="true">&times;</span>
+	                    </button>
+	                </div>
+	                <form class="form-group" method="post" th:action="@{/schedule/save}">
+	                <div class="modal-body">
+	                        <label for="taskId" class="col-form-label">일정 제목</label>
+	                        <input type="text" class="form-control" id="schedule_title" name="schedule_title">                    
+	                        <label for="taskId" class="col-form-label">일정 내용</label>
+	                        <input type="text" class="form-control" id="schedule_contents" name="schedule_contents">
+	                        <label for="taskId" class="col-form-label">시작 날짜</label>
+	                        <input type="datetime-local" class="form-control" id="schedule_startDate" name="schedule_startDate">
+	                        <label for="taskId" class="col-form-label">종료 날짜</label>
+	                        <input type="datetime-local" class="form-control" id="schedule_endDate" name="schedule_endDate">
+	                    
+	                </div>
+	                <div class="modal-footer">
+	                    <button type="submit" class="btn btn-warning" id="addCalendar">추가</button>
+	                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+	                        id="sprintSettingModalClose">취소</button>
+	                </div>
+	                </form>
+	    
+	            </div>
+	        </div>
+	    </div>
+	    
+	    <!-- 일정클릭 때의 modal -->
+	    <div class="modal fade" id="calendarModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+	        aria-hidden="true">
+	        <div class="modal-dialog" role="document">
+	            <div class="modal-content">
+	                <div class="modal-header">
+	                    <h5 class="modal-title" id="exampleModalLabel">일정을 확인하세요.</h5>
+	                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                        <span aria-hidden="true">&times;</span>
+	                    </button>
+	                </div>
+	                <div class="modal-body">
+	                        <label for="schedule_title2" class="col-form-label">일정 제목</label>
+	                        <input type="text" class="form-control" id="schedule_title2" >                    
+	                        <label for="schedule_contents2" class="col-form-label">일정 내용</label>
+	                        <input type="text" class="form-control" id="schedule_contents2">
+	                        <label for="schedule_startDate2" class="col-form-label">시작 날짜</label>
+	                        <input type="datetime-local" class="form-control" id="schedule_startDate2">
+	                        <label for="schedule_endDate2" class="col-form-label">종료 날짜</label>
+	                        <input type="datetime-local" class="form-control" id="schedule_endDate2">
+	                </div>
+	                <div class="modal-footer">
+	                	<form method="post" th:action="@{deleteSchedule}" id="deleteScheduleForm">
+	                		<input type="hidden" name="schedule_num" id="deleteSchedule_num">
+	                	</form>
+	                	<button type="button" class="btn btn-warning" id="deleteSchedule">삭제</button>
+	                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+	                        id="sprintSettingModalClose2">취소</button>
+	                </div>
+	            </div>
+	        </div>
+	    </div><!-- 일정클릭 때의 modal 끝 -->
+      </section>
+  </main><!-- End #main -->
+  
+  <!-- ======= Footer ======= -->
+	<footer id="footer" class="footer">
+		<div class="copyright">
+			&copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+		</div>
+		<div class="credits">
+			<!-- All the links in the footer should remain intact. -->
+			<!-- You can delete the links only if you purchased the pro version. -->
+			<!-- Licensing information: https://bootstrapmade.com/license/ -->
+			<!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+			Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+		</div>
+	</footer><!-- End Footer -->
+
+	<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+			class="bi bi-arrow-up-short"></i></a>
 </body>
 
 </html>
