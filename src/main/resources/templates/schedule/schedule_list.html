@@ -64,6 +64,22 @@
 	       		$('#deleteSchedule_num').val($(this).attr('schedule_num'));
 	       		$('#deleteScheduleForm').submit();F
 	        });
+	       	
+	       	$('#sprintSettingModalClose').on('click', function(){
+	       		$('#calendarModal').modal('hide');
+	       	});
+	       	
+	       	$('#sprintSettingModalClose2').on('click', function(){
+	       		$('#calendarModal2').modal('hide');
+	       	});
+	       	
+	       	$('#closeButton1').on('click', function(){
+	       		$('#calendarModal').modal('hide');
+	       	});
+	       	
+	       	$('#closeButton2').on('click', function(){
+	       		$('#calendarModal2').modal('hide');
+	       	});
 	        
 		});
         
@@ -237,7 +253,7 @@
 	            <div class="modal-content">
 	                <div class="modal-header">
 	                    <h5 class="modal-title" id="exampleModalLabel">일정을 입력하세요.</h5>
-	                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                    <button type="button" id="closeButton1" class="close" data-dismiss="modal" aria-label="Close">
 	                        <span aria-hidden="true">&times;</span>
 	                    </button>
 	                </div>
@@ -271,7 +287,7 @@
 	            <div class="modal-content">
 	                <div class="modal-header">
 	                    <h5 class="modal-title" id="exampleModalLabel">일정을 확인하세요.</h5>
-	                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                    <button type="button" id="closeButton2" class="close" data-dismiss="modal" aria-label="Close">
 	                        <span aria-hidden="true">&times;</span>
 	                    </button>
 	                </div>
