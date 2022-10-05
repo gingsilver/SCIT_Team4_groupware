@@ -110,13 +110,9 @@
                 </li>
 
                 <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-settings">스케줄 관리</button>
+                  <button class="nav-link" th:onclick="'location.href=\''+ @{/schedule/list} + '\''">스케줄 관리</button>
                 </li>
 
-                <li class="nav-item">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">미확인
-                    결재</button>
-                </li>
 
               </ul>
               <div class="tab-content pt-2">
@@ -248,13 +244,8 @@
 
                 </div>
 
-                <div class="tab-pane fade pt-3" id="profile-change-password">
-                  <!-- 미확인 결재사항 코드 시작 -->
-                  <span>미확인 결재사항</span>
 
-                </div>
-
-              </div><!-- 미확인 결재사항 코드 끝 -->
+              </div>
 
             </div>
           </div>

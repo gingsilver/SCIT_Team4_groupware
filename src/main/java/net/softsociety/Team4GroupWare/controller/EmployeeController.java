@@ -190,7 +190,7 @@ public class EmployeeController {
 		log.debug("입력받은 정보: {}", employee);
 		int result = service.updateinfo(employee);
 
-		return "redirect:/index";
+		return "redirect:/employee/mypage";
 	}
 
 }
