@@ -160,7 +160,8 @@
 		function decode() {
 			let content = [[${docform.document_form_contents}]];
 			let contents = decodeURIComponent(content);
-			let replaced_str = contents.replace('<input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL"><a class="ql-action"></a><a class="ql-remove"></a>', '');
+			let replaced_str = contents.replace('<input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL">', '');
+			replaced_str = contents.replace('<input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL" style="user-select: auto;">', '');
 			$('#contents').html(replaced_str);
 		}
 	</script>

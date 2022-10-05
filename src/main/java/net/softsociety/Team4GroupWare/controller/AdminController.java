@@ -202,7 +202,25 @@ public class AdminController {
 	
 	
 	@GetMapping("writedoc")
-	public String writedoc() {
+	public String writedoc(@AuthenticationPrincipal UserDetails user, Model model) {
+		// 회사코드, 관리자 내용 가져오기
+		Employee admin = service.readAdmin(user.getUsername());
+		Company company = service.readCompany(admin.getCompany_code());
+		JSONArray json = service.readOrg(company);
+								
+		ArrayList<Employee> empList = service.employeeList(admin);
+								
+		for(int i = 0; i < empList.size(); i++) {
+			if(empList.get(i).getRole_name().equals("ROLE_ADMIN")) {
+				empList.remove(i);
+			}
+		}
+						
+		model.addAttribute("employee", admin);
+		model.addAttribute("company", company);
+		model.addAttribute("json", json);
+		model.addAttribute("empList",empList);
+		
 		return "adminView/writedoc";
 	}
 	

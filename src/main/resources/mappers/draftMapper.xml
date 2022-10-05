@@ -163,4 +163,38 @@
 		from team4_draft
 		where company_code = #{company_code} and employee_code = #{employee_code}
 	</select>
+	
+	<!-- 결재선 추가 -->
+	<insert id="addDraftApprover" parameterType="DraftApprover">
+		insert into team4_draft_approver
+		(draft_code
+		, approver_code
+		, employee_code
+		, approver_name
+		, process_type
+		, process_turn_code
+		, process_enabled)
+		values
+		(#{draft_code}
+		, #{approver_code}
+		, #{employee_code}
+		, #{approver_name}
+		, #{process_type}
+		, #{process_turn_code}
+		, #{process_enabled})
+	</insert>
+	
+	<!-- 기안 내용 가져오기 -->
+	<select id="readDraft" parameterType="String" resultType="Draft">
+		select *
+		from team4_draft
+		where draft_code = #{draft_code}
+	</select>
+	
+	<!-- 결재선 내용 가져오기 -->
+	<select id="selectAllDraftApprover" parameterType="String" resultType="DraftApprover">
+		select *
+		from team4_draft_approver
+		where draft_code = #{draft_code}
+	</select>
 </mapper>
