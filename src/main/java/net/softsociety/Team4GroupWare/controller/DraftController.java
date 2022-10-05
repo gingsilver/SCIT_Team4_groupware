@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.softsociety.Team4GroupWare.domain.Company;
 import net.softsociety.Team4GroupWare.domain.DocumentForm;
 import net.softsociety.Team4GroupWare.domain.Draft;
+import net.softsociety.Team4GroupWare.domain.DraftApprover;
 import net.softsociety.Team4GroupWare.domain.Employee;
 import net.softsociety.Team4GroupWare.service.AdminService;
 import net.softsociety.Team4GroupWare.service.DraftService;
@@ -77,7 +78,25 @@ public class DraftController {
 	}
 	
 	@GetMapping("/writedoc")
-	public String writedoc() {
+	public String writedoc(@AuthenticationPrincipal UserDetails user, Model model) {
+		// 회사코드, 관리자 내용 가져오기
+		Employee employee = draftservice.readEmployee(user.getUsername());
+		Company company = adminservice.readCompany(employee.getCompany_code());
+		JSONArray json = adminservice.readOrg(company);
+						
+		ArrayList<Employee> empList = adminservice.employeeList(employee);
+						
+		for(int i = 0; i < empList.size(); i++) {
+			if(empList.get(i).getRole_name().equals("ROLE_ADMIN")) {
+				empList.remove(i);
+			}
+		}
+						
+		model.addAttribute("employee", employee);
+		model.addAttribute("company", company);
+		model.addAttribute("json", json);
+		model.addAttribute("empList",empList);
+		
 		return "draftView/writedoc";
 	}
 	
@@ -98,5 +117,27 @@ public class DraftController {
 		model.addAttribute("docform", docform);
 		
 		return "draftView/readDoc";
+	}
+	
+	@GetMapping({"read"})
+	public String read(
+			@RequestParam(name="draft_code", defaultValue = "0") String draft_code
+			, Model model
+			, @AuthenticationPrincipal UserDetails user) {
+		//db에서 글을 읽어서
+		log.debug("글 번호 : {}", draft_code);
+		Employee admin = adminservice.readAdmin(user.getUsername());
+		
+		Draft draft = draftservice.readDraft(draft_code);
+		
+		if(draft.equals(null)) {
+			return "redirect:/draft/main"; //글이 없을때
+		}
+		
+		//결과를 모델에 담아서 html에서 출력
+		model.addAttribute("draft", draft);
+		model.addAttribute("employee", admin);
+		
+		return "draftView/readdraft";
 	}
 }

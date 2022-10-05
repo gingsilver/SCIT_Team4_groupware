@@ -15,9 +15,7 @@
 
 	<!-- Google Fonts -->
 	<link href="https://fonts.gstatic.com" rel="preconnect">
-	<link
-		href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-		rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
 	<!-- Vendor CSS Files -->
 	<link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
@@ -365,13 +363,22 @@
 				let draft_saved = 0;
 				let process_enabled = 0;
 				
-				console.log(employee_organization);
-				console.log(draft_title);
-				console.log(contents);
-				console.log(draft_contents);
-				console.log(draft_inputdate);
-				console.log(draft_duedate);
-				console.log(process_type);
+				console.log(appObj);
+				
+				$.ajax({
+					url : 'realAddApp',
+					type : 'post',
+					success: function (data) {
+						if(data == 1){
+							console.log('성공');
+						} else {
+							console.log('실패');
+						}
+					},
+					error: function (e) {
+						console.log(e.responseText);
+					}
+				});
 				
 				$.ajax({
 					url: 'addDraft',
@@ -542,7 +549,8 @@
 					$('#selectedDocName').val(data.document_form_title);
 					
 					let contents = decodeURIComponent(data.document_form_contents);
-					let replaced_str = contents.replace('<input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL"><a class="ql-action"></a><a class="ql-remove"></a>', '');
+					let replaced_str = contents.replace('<input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL">', '');
+					replaced_str = contents.replace('<input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL" style="user-select: auto;">', '');
 					$('.quill-editor-full').html(replaced_str);
 					
 					let s;
@@ -689,15 +697,8 @@
 		let employee_name;
 		let employee_code;
 		let select;
-		let appObj = {};
+		var appObj = {};
 		var appObjArr = [];
-		
-		/* var appObj = function(name, code, select, num){
-			this.name = name;
-			this.code = code;
-			this.select = select;
-			this.num = num;
-		} */
 		
 		function addEmpl(id) {
 			let count = $('#'+ id).attr('count');
@@ -738,15 +739,24 @@
 			console.log(select);
 			console.log(num);
 			
-			/* appObj = new appObj(employee_name, employee_code, select, num);
-			appObjArr.push(appObj); */
-			
 			appObj.name = employee_name;
 			appObj.code = employee_code;
 			appObj.select = select;
 			appObj.num = num;
 			appObjArr.push(appObj);
 			appObj = {};
+			
+			$.ajax({
+				url: 'addApproverList',
+				type: 'post',
+				data: { approver_code : employee_code, approver_name : employee_name, process_type : select, process_turn_code : num },
+				success: function (data) {
+					console.log(data);
+				},
+				error: function (e) {
+					console.log(e.responseText);
+				}
+			});
 			
 		}
 		

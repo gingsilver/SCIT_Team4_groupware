@@ -135,7 +135,7 @@
 							<tbody>
 								<tr th:each="draft : ${draft}">
 									<td th:text="${draft.draft_code}"></td>
-									<td th:text="${draft.draft_title}"></td>
+									<td><a th:text="${draft.draft_title}" th:href="@{/draft/read(draft_code=${draft.draft_code})}"></a></td>
 									<td th:text="${draft.employee_name}"></td>
 									<td th:text="${draft.draft_inputdate}"></td>
 								</tr>

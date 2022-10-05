@@ -211,7 +211,9 @@
 		, document_form_name
 		, document_form_title
 		, document_form_contents
+		, final_approver_code
 		, final_approver_name
+		, final_approver_email
 		, document_form_writer_name
 		, document_form_writer_code
 		)
@@ -233,7 +235,9 @@
 		,#{document_form_name}
 		,#{document_form_name}
 		,#{document_form_contents}
+		,#{final_approver_code}
 		,#{final_approver_name}
+		,#{final_approver_email}
 		,#{document_form_writer_name}
 		,#{document_form_writer_code}
 		)

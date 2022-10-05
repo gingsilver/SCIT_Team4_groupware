@@ -2,7 +2,12 @@ package net.softsociety.Team4GroupWare.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -10,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -74,29 +80,34 @@ public class DraftRestController {
 
 		return empList;
 	}
+	
+	ArrayList<DraftApprover> appList = new ArrayList<>();
 
-	// 결재선 추가
-	@PostMapping("addApprover")
-	public int addapprover(DraftApprover approver) {
-		log.debug("가져온 결재선 : {}", approver);
-
-		String process_turn_code = draftservice.countDraftCode(approver.getDraft_code());
-		if (process_turn_code == null) {
-			process_turn_code = "0";
-			approver.setProcess_turn_code(process_turn_code);
-		} else {
-			approver.setProcess_turn_code(process_turn_code);
+	//결재선추가 : 배열에 추가
+	@PostMapping("addApproverList")
+	public void addApproverList(DraftApprover approver) {
+		log.debug("가져온 데이터 : {}", approver);
+		
+		appList.add(approver);
+		
+/*		for(int i=0; i<appList.size(); i++) {
+			System.out.println(appList.get(i).toString());
+		}*/
+	}
+	
+	//결재선 추가 : db저장
+	@PostMapping("realAddApp")
+	public void realAddApp(@AuthenticationPrincipal UserDetails user) {
+		Employee employee = adminservice.readAdmin(user.getUsername());
+		
+		for(int i=0; i<appList.size(); i++) {
+			appList.get(i).setEmployee_code(employee.getEmployee_code());
+			appList.get(i).setDraft_code(draft_code);
+			appList.get(i).setProcess_enabled(3);
+			
+			int result = draftservice.addDraftApprover(appList.get(i));
+			System.out.println(result);
 		}
-
-		if (approver.getProcess_type().equals("참조")) {
-			approver.setProcess_enabled(4);
-		} else if (approver.getProcess_type().equals("결재") || approver.getProcess_type().equals("전결")) {
-			approver.setProcess_enabled(3);
-		}
-		log.debug("가져온 결재선 : {}", approver);
-		int result = draftservice.addApprover(approver);
-
-		return result;
 	}
 
 	String draft_code;
@@ -106,18 +117,6 @@ public class DraftRestController {
 		draft_code = draftservice.createCode();
 
 		return draft_code;
-	}
-
-	// 기안자 추가
-	@PostMapping("readApprover")
-	public DraftApprover readApprover(DraftApprover approver) {
-		log.debug("가져온 결재선 : {}", approver);
-
-		DraftApprover approver2 = draftservice.readApprover(approver);
-
-		log.debug("가져온 결재선 : {}", approver2);
-
-		return approver2;
 	}
 
 	// 양식함 추가
@@ -245,6 +244,14 @@ public class DraftRestController {
 		int result = draftservice.addDraft(draft);
 		
 		return result;
+	}
+	
+	//결재선 가져오기
+	@PostMapping("selectApp")
+	public ArrayList<DraftApprover> selectApp(String draft_code) {
+		ArrayList<DraftApprover> appList = draftservice.selectAllDraftApprover(draft_code);
+	
+		return appList;
 	}
 	
 }

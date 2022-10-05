@@ -19,4 +19,5 @@ public class DocumentForm {
 	String process_type;
 	String document_form_writer_name;
 	String document_form_writer_code;
+	String final_approver_email;
 }

@@ -31,13 +31,6 @@ public class DraftServiceImpl implements DraftService {
 	}
 
 	@Override
-	public int addApprover(DraftApprover approver) {
-		int result = dao.addApprover(approver);
-		
-		return result;
-	}
-
-	@Override
 	public String createCode() {
 		String draft_code = dao.createCode();
 		return draft_code;
@@ -48,13 +41,6 @@ public class DraftServiceImpl implements DraftService {
 		String process_turn_code = dao.countDraftCode(draft_code);
 		
 		return process_turn_code;
-	}
-
-	@Override
-	public DraftApprover readApprover(DraftApprover approver) {
-		DraftApprover approver2 = dao.readApprover(approver);
-		
-		return approver2;
 	}
 
 	@Override
@@ -118,6 +104,27 @@ public class DraftServiceImpl implements DraftService {
 		ArrayList<Draft> draft = dao.selectAllDraft(selectDF);
 		
 		return draft;
+	}
+
+	@Override
+	public int addDraftApprover(DraftApprover draftApprover) {
+		int result = dao.addDraftApprover(draftApprover);
+		
+		return result;
+	}
+
+	@Override
+	public Draft readDraft(String draft_code) {
+		Draft draft = dao.readDraft(draft_code);
+		
+		return draft;
+	}
+
+	@Override
+	public ArrayList<DraftApprover> selectAllDraftApprover(String draft_code) {
+		ArrayList<DraftApprover> appList = dao.selectAllDraftApprover(draft_code);
+		
+		return appList;
 	}
 
 }
