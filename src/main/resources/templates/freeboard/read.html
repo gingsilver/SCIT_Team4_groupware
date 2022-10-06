@@ -1,146 +1,153 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org" 
-     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
-<meta charset="UTF-8">
-<title>KUROWARE 자유게시판</title>
-<link rel="stylesheet" type="text/css" th:href="@{/ko/main.css}" />
-<script th:src="@{/js/jquery-3.6.0.js}"></script>
-<script>
-//리플 작성
-function validation() {
-	let reply_contents = document.getElementById('reply_contents');
-	if (reply_contents.value.length < 1) {
-		alert('리플 내용을 입력하세요.');
-		return false;
-	}
-	return true;
-}
+	<meta charset="UTF-8">
+	<title>KUROWARE 자유게시판</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/ko/main.css}" />
+	<script th:src="@{/js/jquery-3.6.0.js}"></script>
+	<script>
+		//리플 작성
+		function validation() {
+			let reply_contents = document.getElementById('reply_contents');
+			if (reply_contents.value.length < 1) {
+				alert('리플 내용을 입력하세요.');
+				return false;
+			}
+			return true;
+		}
 
-</script>
+	</script>
 
-  <meta content="" name="description">
-  <meta content="" name="keywords">
+	<meta content="" name="description">
+	<meta content="" name="keywords">
 
-  <!-- Favicons -->
-  <link th:href="@{/assets/img/favicon.png}" rel="icon">
-  <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+	<!-- Favicons -->
+	<link th:href="@{/assets/img/favicon.png}" rel="icon">
+	<link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
 
-  <!-- Google Fonts -->
-  <link th:href="@{https://fonts.gstatic.com}" rel="preconnect">
-  <link th:href="@{https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i}" rel="stylesheet">
+	<!-- Google Fonts -->
+	<link th:href="@{https://fonts.gstatic.com}" rel="preconnect">
+	<link
+		th:href="@{https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i}"
+		rel="stylesheet">
 
-  <!-- Vendor CSS Files -->
-  <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
-  <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+	<!-- Vendor CSS Files -->
+	<link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+	<link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+	<link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+	<link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+	<link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+	<link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+	<link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
 
-  <!-- Template Main CSS File -->
-  <link th:href="@{/assets/css/style.css}" rel="stylesheet">
+	<!-- Template Main CSS File -->
+	<link th:href="@{/assets/css/style.css}" rel="stylesheet">
 
 
 </head>
+
 <body>
 
- 
+
 	<!-- ======= Header ======= -->
 	<header th:replace="/indexcommon/header :: header"></header><!-- End Header -->
 	<!-- ======= Sidebar ======= -->
 	<aside th:replace="/indexcommon/aside :: aside"></aside><!-- End Sidebar-->
-  
-    <main id="main" class="main">
-    <div class="pagetitle">
-      <h1><a th:href="@{/freeboard/list}" style="color: #012970;" >자유게시판</a></h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a th:href="@{/index}">Home</a></li>
-          <li class="breadcrumb-item active">Free Board</li>
-          <li class="breadcrumb-item active">Board Read</li>
-        </ol>
-      </nav>
-    </div><!-- End Page Title -->
-   </main>
 
-<section>
-	<table>
-	<tr>
-		<th style="width: 100px;">작성자</th>
-		<td th:text="${board.employee_id}" style="width: 1200px;"></td>
-	</tr>
-	<tr>
-		<th>작성일</th>
-		<td th:text="${board.inputdate}"></td>
-	</tr>
-	<tr>
-		<th>조회수</th>
-		<td th:text="${board.hitcounts}"></td>
-	</tr>
-	<tr>
-		<th>제목</th>
-		<td th:text="${board.free_title}"></td>
-	</tr>
-	<tr>
-		<th>내용</th>
-		<td><pre th:text="${board.free_contents}"></pre></td>
-	</tr>
+	<main id="main" class="main">
+		<div class="pagetitle">
+			<h1><a th:href="@{/freeboard/list}" style="color: #012970;">자유게시판</a></h1>
+			<nav>
+				<ol class="breadcrumb">
+					<li class="breadcrumb-item"><a th:href="@{/index}">Home</a></li>
+					<li class="breadcrumb-item active">Free Board</li>
+					<li class="breadcrumb-item active">Board Read</li>
+				</ol>
+			</nav>
+		</div><!-- End Page Title -->
+	</main>
 
-</table>
-<br>
+	<section>
+		<table>
+			<tr>
+				<th style="width: 100px;">작성자</th>
+				<td th:text="${board.employee_id}" style="width: 1200px;"></td>
+			</tr>
+			<tr>
+				<th>작성일</th>
+				<td th:text="${board.inputdate}"></td>
+			</tr>
+			<tr>
+				<th>조회수</th>
+				<td th:text="${board.hitcounts}"></td>
+			</tr>
+			<tr>
+				<th>제목</th>
+				<td th:text="${board.free_title}"></td>
+			</tr>
+			<tr>
+				<th>내용</th>
+				<td>
+					<pre th:text="${board.free_contents}"></pre>
+				</td>
+			</tr>
 
- <div th:if="${#authentication.name} == ${board.employee_id}">
-	<a th:href="@{/freeboard/update(free_code=${board.free_code})}">수정</a>
-	&nbsp;&nbsp;&nbsp;&nbsp;
-	<a th:href="@{/freeboard/delete(free_code=${board.free_code})}">삭제</a>
-</div> 
-<br>
-<br>
+		</table>
+		<br>
 
-<!-- 리플 작성 폼 시작 -->
-<form th:action="@{/freeboard/writeReply}" method="post" onsubmit="return validation();">
-리플내용
-	<input type="hidden" name="free_code" th:value="${board.free_code}">
-	<input type="text" name="reply_contents" id="reply_contents" style="width:500px;">
-	<input type="submit" value="확인" class="repbtn">
-</form>
+		<div th:if="${#authentication.name} == ${board.employee_id}">
+			<a th:href="@{/freeboard/update(free_code=${board.free_code})}">수정</a>
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			<a th:href="@{/freeboard/delete(free_code=${board.free_code})}">삭제</a>
+		</div>
+		<br>
+		<br>
 
-<!-- 리플 목록 출력 시작 -->
-<input type="hidden" id="reply_num" th:value="reply.reply_num">
-<input type="hidden" id="free_code" th:value="reply.free_code">
-<table class="reply">
-	<tr th:each="reply : ${replylist}">
-		<td class="replyid" th:text="${reply.employee_id}"></td>
-		<td class="replytext" th:text="${reply.reply_contents}"></td>
-		<td class="replydate" th:text="${reply.inputdate}"></td>
-		<td class="white">
-			<span th:if="${#authentication.name} == ${reply.employee_id}">
-				<a th:href="@{/freeboard/deleteReply(free_code=${reply.free_code}, reply_num=${reply.reply_num})}">
-					<img th:src="@{/image/icon_delete_24.png}">
-				</a>
-			</span>
-		</td>
-	</tr>	
-</table>
+		<!-- 리플 작성 폼 시작 -->
+		<form th:action="@{/freeboard/writeReply}" method="post" onsubmit="return validation();">
+			리플내용
+			<input type="hidden" name="free_code" th:value="${board.free_code}">
+			<input type="text" name="reply_contents" id="reply_contents" style="width:500px;">
+			<input type="submit" value="확인" class="repbtn">
+		</form>
+
+		<!-- 리플 목록 출력 시작 -->
+		<input type="hidden" id="reply_num" th:value="reply.reply_num">
+		<input type="hidden" id="free_code" th:value="reply.free_code">
+		<table class="reply">
+			<tr th:each="reply : ${replylist}">
+				<td class="replyid" th:text="${reply.employee_id}"></td>
+				<td class="replytext" th:text="${reply.reply_contents}"></td>
+				<td class="replydate" th:text="${reply.inputdate}"></td>
+				<td class="white">
+					<span th:if="${#authentication.name} == ${reply.employee_id}">
+						<a
+							th:href="@{/freeboard/deleteReply(free_code=${reply.free_code}, reply_num=${reply.reply_num})}">
+							<img th:src="@{/image/icon_delete_24.png}">
+						</a>
+					</span>
+				</td>
+			</tr>
+		</table>
 
 
 
-</section>
+	</section>
 
-  <!-- Vendor JS Files -->
-  <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
-  <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
-  <script th:src="@{/assets/vendor/chart.js/chart.min.js}"></script>
-  <script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
-  <script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
-  <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
-  <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
-  <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
+	<!-- Vendor JS Files -->
+	<script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+	<script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+	<script th:src="@{/assets/vendor/chart.js/chart.min.js}"></script>
+	<script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
+	<script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
+	<script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+	<script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+	<script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
 
-  <!-- Template Main JS File -->
-  <script th:src="@{/assets/js/main.js}"></script>
+	<!-- Template Main JS File -->
+	<script th:src="@{/assets/js/main.js}"></script>
 
 </body>
+
 </html>

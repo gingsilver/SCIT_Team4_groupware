@@ -1,20 +1,18 @@
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="net.softsociety.Team4GroupWare.dao.FreeBoardDAO">
 
-<!-- 작성자 정보읽어오기  -->
-<select id="findEmployee" parameterType="String" resultType="Employee">
+	<!-- 작성자 정보읽어오기  -->
+	<select id="findEmployee" parameterType="String" resultType="Employee">
 	select * 
 	from team4_employee	
 	where employee_id = #{employee_id} 
 		
 </select>
 
-<!-- 게시글 작성  -->
+	<!-- 게시글 작성  -->
 
-<insert id="insertFreeBoard" parameterType="FreeBoard">
+	<insert id="insertFreeBoard" parameterType="FreeBoard">
 	insert 
 	into 
 		team4_free_board (
@@ -36,8 +34,8 @@
 </insert>
 
 
-<!-- 게시글 읽기  -->
-<select id="selectFreeBoard" parameterType="String" resultType="FreeBoard">
+	<!-- 게시글 읽기  -->
+	<select id="selectFreeBoard" parameterType="String" resultType="FreeBoard">
 	select 
 		free_code
 		, employee_id
@@ -52,9 +50,8 @@
 </select>
 
 
-
-<!-- 조회수 1 증가  -->
-<update id="updateHits" parameterType="String">
+	<!-- 조회수 1 증가  -->
+	<update id="updateHits" parameterType="String">
 	update
 		team4_free_board
 	set
@@ -64,40 +61,37 @@
 </update>
 
 
-
-<!-- 전체 글 개수 (검색 필터링 후) -->
-<select id="countFreeBoard" parameterType="map" resultType="int">
-	select 
+	<!-- 전체 글 개수 (검색 필터링 후) -->
+	<select id="countFreeBoard" parameterType="map" resultType="int">
+		select 
 		count(*)
 	from 
 		team4_free_board 
 	where company_code = #{company_code}
-	<if test="type != null and searchWord != null">
-	and
-	
-		<if test="type == 'free_title'">
+		<if test="type != null and searchWord != null">
+			and
+			<if test="type == 'free_title'">
 			free_title like '%' || #{searchWord} || '%'
-		</if>	
-		<if test="type == 'free_contents'">
+		</if>
+			<if test="type == 'free_contents'">
 			free_contents like '%' || #{searchWord} || '%'
-		</if>	
-		<if test="type == 'employee_id'">
+		</if>
+			<if test="type == 'employee_id'">
 			employee_id like '%' || #{searchWord} || '%'
-		</if>	
-		<if test="type == 'all'">
+		</if>
+			<if test="type == 'all'">
 			free_title like '%' || #{searchWord} || '%'
 			or free_contents like '%' || #{searchWord} || '%'
 			or employee_id like '%' || #{searchWord} || '%'
-		</if>	
-	
-	</if>
-</select>
+		</if>
+
+		</if>
+	</select>
 
 
-
-<!-- 현재 페이지 목록 (검색 필터링 후) -->
-<select id="selectFreeBoardList" parameterType="map" resultType="FreeBoard">
-	select 
+	<!-- 현재 페이지 목록 (검색 필터링 후) -->
+	<select id="selectFreeBoardList" parameterType="map" resultType="FreeBoard">
+		select 
 		free_code
 		, company_code
 		, employee_id
@@ -109,29 +103,29 @@
 		team4_free_board 
 	where 
 		company_code = #{company_code}
-	<if test="type != null and searchWord != null">
-	and
-		<if test="type == 'free_title'">
+		<if test="type != null and searchWord != null">
+			and
+			<if test="type == 'free_title'">
 			free_title like '%' || #{searchWord} || '%'
-		</if>	
-		<if test="type == 'free_contents'">
+		</if>
+			<if test="type == 'free_contents'">
 			free_contents like '%' || #{searchWord} || '%'
-		</if>	
-		<if test="type == 'employee_id'">
+		</if>
+			<if test="type == 'employee_id'">
 			employee_id like '%' || #{searchWord} || '%'
-		</if>	
-		<if test="type == 'all'">
+		</if>
+			<if test="type == 'all'">
 			free_title like '%' || #{searchWord} || '%'
 			or free_contents like '%' || #{searchWord} || '%'
 			or employee_id like '%' || #{searchWord} || '%'
-		</if>	
-	
-	</if>
-	order by free_code desc
-</select>
+		</if>
 
-<!-- 글 삭제 -->
-<delete id="deleteFreeBoard" parameterType="FreeBoard">
+		</if>
+		order by free_code desc
+	</select>
+
+	<!-- 글 삭제 -->
+	<delete id="deleteFreeBoard" parameterType="FreeBoard">
 	delete
 	from
 		team4_free_board
@@ -140,8 +134,8 @@
 		and employee_id = #{employee_id}
 </delete>
 
-<!-- 글 수정 -->
-<update id="updateFreeBoard" parameterType="FreeBoard">
+	<!-- 글 수정 -->
+	<update id="updateFreeBoard" parameterType="FreeBoard">
 	update
 		team4_free_board
 	set
@@ -154,8 +148,8 @@
 		and employee_id = #{employee_id}
 </update>
 
-<!-- 리플 저장 -->
-<insert id="insertReply" parameterType="FreeReply">
+	<!-- 리플 저장 -->
+	<insert id="insertReply" parameterType="FreeReply">
 	insert 
 	into 
 		team4_free_reply (
@@ -172,8 +166,8 @@
 	)
 </insert>
 
-<!-- 리플 목록 -->
-<select id="selectReplyList" parameterType="String" resultType="FreeReply">
+	<!-- 리플 목록 -->
+	<select id="selectReplyList" parameterType="String" resultType="FreeReply">
 	select
 		reply_num
 		, free_code
@@ -188,8 +182,8 @@
 		reply_num
 </select>
 
-<!-- 리플 삭제 -->
-<delete id="deleteReply" parameterType="FreeReply">
+	<!-- 리플 삭제 -->
+	<delete id="deleteReply" parameterType="FreeReply">
 	delete 
 	from 
 		team4_free_reply 

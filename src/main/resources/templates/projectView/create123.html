@@ -69,12 +69,13 @@
                             <h5 class="card-title">프로젝트 작성</h5>
 
                             <!-- General Form Elements -->
-                            <form th:action="@{/project/create}" method="post" id="createForm">
+                            <form th:action="@{/project/create}" method="post" enctype="multipart/form-data"
+                                onsubmit="return validation();">
                                 <div class="row mb-3">
 
                                     <label for="inputText" class="col-sm-2 col-form-label">프로젝트 명</label>
                                     <div class="col-sm-10">
-                                        <input type="text" name="pj_name" id="pj_name" class="form-control" required>
+                                        <input type="text" name="pj_name" id="pj_name" class="form-control">
                                     </div>
                                 </div>
 
@@ -83,7 +84,7 @@
                                     <div class="col-sm-10">
                                         <label>
                                             <input type="date" name="pj_startdate" id="pj_startdate"
-                                                class="form-control" required>
+                                                class="form-control">
                                         </label>
                                     </div>
                                 </div>
@@ -91,8 +92,7 @@
                                     <label for="inputDate" class="col-sm-2 col-form-label">마감날짜</label>
                                     <div class="col-sm-10">
                                         <label>
-                                            <input type="date" name="pj_enddate" id="pj_enddate" class="form-control"
-                                                required>
+                                            <input type="date" name="pj_enddate" id="pj_enddate" class="form-control">
                                         </label>
                                     </div>
                                 </div>
@@ -101,26 +101,34 @@
                                     <label for="inputPassword" class="col-sm-2 col-form-label">프로젝트 내용</label>
                                     <div class="col-sm-10">
                                         <textarea name="pj_content" id="pj_content" class="form-control"
-                                            style="height: 100px" required></textarea>
+                                            style="height: 100px"></textarea>
                                     </div>
                                 </div>
 
 
                                 <div class="col-sm-10">
                                     <table class="table table-hover text-center">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">이름</th>
-                                                <th scope="col">부서</th>
-                                                <th scope="col">직급</th>
-                                                <th scope="col">일반/리더</th>
-                                                <th><button type="button" id="btnModal">팀원추가</button></th>
-                                            </tr>
-                                        </thead>
+                                        <tr id="memberList">
+                                            <th scope="col">이름</th>
+                                            <th scope="col">부서</th>
+                                            <th scope="col">직급</th>
+                                            <th scope="col">일반/리더</th>
+                                            <th><button type="button" id="btnModal">팀원추가</button></th>
+                                        </tr>
 
 
                                         <!-- 팀원 추가 -->
-                                        <tbody id="memberList">
+                                        <tbody>
+
+                                            <tr>
+
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+
+                                            </tr>
+
 
                                             <!-- 파트추가 제거-->
 
@@ -143,7 +151,7 @@
 
                                         <tr>
                                             <td><input type="button" id="btn" name="btn" value="프로젝트 생성"></td>
-                                            <td><input type="button" value="초기화" id="resetBtn"></td>
+                                            <td><input type="button" value="초기화"></td>
                                         </tr>
 
 
@@ -227,43 +235,15 @@
             $('.modalCloseBtn').click(function () {
                 $('#myModal').modal('hide');
             });
-
+            $('#btn').click(function () {
+                alert('프로젝트가 저장되었습니다')
+            });
         });
     </script>
 
+
     <SCRIPT LANGUAGE="JavaScript">
         var zNodes;
-        var thiss;
-
-
-        var array = [];
-
-        $('#resetBtn').click(function () {
-            $('#memberList').empty();
-            array = [];
-        });
-
-        var flag = 0;
-        $('#btn').click(function () {
-            if ($("#pj_name").val() === "" || $("#pj_name").val() === " ") {
-                alert("프로젝트명을 입력해주세요");
-                return;
-            }
-            if ($("#pj_startdate").val() === "" || $("#pj_startdate").val() === " ") {
-                alert("날짜를 선택해주세요");
-                return;
-            }
-            if ($("#pj_enddate").val() === "" || $("#pj_enddate").val() === " ") {
-                alert("날짜를 선택해주세요");
-                return;
-            }
-            if ($("#pj_content").val() === "" || $("#pj_content").val() === " ") {
-                alert("내용을 입력해주세요");
-                return;
-            }
-            $('#createForm').submit();
-            alert('프로젝트가 저장되었습니다');
-        });
 
         $.ajax({
             url: 'readOrg',
@@ -306,24 +286,13 @@
             /* 조직원 사원 목록 클릭시 이벤트 */
             $('.employeeInfo').on('click', addEmpl);
         });
-        let employee_code;
-        let employee_name;
-        let employee_position;
-        let organizations;
         /* 사원 목록 클릭 이벤트*/
         function addEmpl() {
-            $("#selectedType option:eq(0)").prop("selected", true);
             let count = $(this).attr('count');
-            employee_name = $(this).attr('empname');
-            employee_code = $(this).attr('empcode');
-            employee_position = $(this).attr('empposition');
-            let sp = $(this).attr('organization').split(" ");
-            organizations = sp[sp.length - 1];
-            thiss = $(this);
-
-            // let employee_id = $(this).attr('empid');
+            let employee_name = $(this).attr('empname');
+            let employee_code = $(this).attr('empcode');
+            let employee_id = $(this).attr('empid');
             let organization_name = $('#organization_name').val();
-
 
             if (count == 0) {
                 $('.selectedEmp').append('<li>' + employee_name + '</li>');
@@ -335,51 +304,39 @@
                 $(this).attr('count', '0');
                 $('#selectedName').html("");
             }
+            let select;
 
+            /* 프로젝트 리더, 일반 지정 */
+            $('#selectedType').on('change', function () {
+                select = $("#selectedType option:selected").val();
+
+            });
 
             /* 결재선 추가 버튼 : 결재자 정보 결재 페이지에 넘기기 */
-        }
-        /* 결재선 추가 버튼 : 결재자 정보 결재 페이지에 넘기기 */
-        $(document).on('click', '#addMember', function () {
-            for (let i = 0; i < array.length; i++) {
-                $('#memberList').append(
-                    "<tr><td>" + array[i].employee_name + "</td><td>" + array[i].organization + "</td><td>" + array[i].employee_position + "</td><td>" + array[i].position_type + "</td></tr>" +
-                    "<input type='hidden' name='memberList[" + i + "].employee_code' value='" + array[i].employee_code + "'>" +
-                    "<input type='hidden' name='memberList[" + i + "].position_type' value='" + array[i].position_type + "'>");
-            }
+            $('#addMember').on('click', addMember);
 
-            array = [];
-            $.ajax({
-                url: 'addMember',
-                type: 'post',
-                data: { "employee_code": employee_code },
-                success: function () {
-                    alert('저장되었습니다.');
-                },
-                error: function () {
-                    // alert('저장 실패');
-                }
-            });
-        });
-        /* 프로젝트 리더, 일반 지정 */
-        $(document).on('change', '#selectedType', function () {
-            let data = $("#selectedType option:eq(0):selected").length;
-            let html = $('#selectedName').html();
-            if (html == null || html == "" || data >= 1) {
-                return;
-            } else {
-                let select = $("#selectedType option:selected").val();
-                thiss.attr('selectedType', select);
-                var user = {
-                    "employee_code": employee_code,
-                    "position_type": select,
-                    "employee_name": employee_name,
-                    "organization": organizations,
-                    "employee_position": employee_position,
-                };
-                array.push(user)
+            /* 결재선 추가 버튼 : 결재자 정보 결재 페이지에 넘기기 */
+            function addMember() {
+                $.ajax({
+                    url: 'addMember',
+                    type: 'post',
+                    data: { employee_id: employee_id },
+                    success: function () {
+                        alert('저장되었습니다.');
+
+                    },
+                    error: function () {
+                        alert('저장 실패');
+                    }
+                });
+                $('#memberList').after(`<tr>
+                        <td>김지은</td>
+                        <td>일반영업</td>
+                        <td>과장</td>
+                        <td>리더</td>
+                    </tr>`)
             }
-        });
+        }
 
         /* 조직도를 읽어오는 함수 | zTree data attributes, refer to the API documentation (treeNode data details) */
         function readOrg() {
@@ -468,7 +425,7 @@
                         emp = '<ul>'
 
                         $.each(data, function (idx, ob) {
-                            emp += '<li class="employeeInfo" empname="' + ob.employee_name + '" empcode="' + ob.employee_code + '" empposition="' + ob.position_type + '" organization="' + ob.organization + '"count="0">' + ob.employee_name + '</li>';
+                            emp += '<li class="employeeInfo" empname="' + ob.employee_name + '"empid="' + ob.employee_id + '" empcode="' + ob.employee_code + '" count="0">' + ob.employee_name + '</li>';
                         });
                         emp += '</ul>'
 

@@ -4,12 +4,9 @@ import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -124,9 +121,9 @@ public class AdminRestController {
 		docform.setDocument_form_writer_code(admin.getEmployee_code());
 		docform.setDocument_form_writer_name(admin.getEmployee_name());
 		log.debug("가져온 폼 내용 : {}", docform);
-		
+
 		int result = service.addDocumentForm(docform);
-		
+
 		return result;
 	}
 

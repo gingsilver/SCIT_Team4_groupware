@@ -11,9 +11,9 @@ public class ProjectMember {
     String pj_member_code;
     String pj_code;
     String employee_code;
-    String pj_member_id;
-    String pj_member_name;
-    String pj_member_department;
-    String pj_member_position;
+    String position_type;
     int pj_part_step;
+    String employee_id;
+    String employee_name;
+    String organization;
 }
