@@ -110,6 +110,9 @@ div.onthlyButton{
 #totalworktime{
 	float: right;
 }
+#adjustTime{
+	color : blue;
+}
 </style>
     <script>
         window.onload = function(){
@@ -179,14 +182,14 @@ div.onthlyButton{
 									<tr>
 										<th>출근 시간</th>
 										<th>퇴근 시간</th>
-										<th>초과 근무 시간</th>
 										<th>총 근무 시간</th>
+										<th>정정 신청</th>
 									</tr>
 									<tr th:each="tl:${tlist}" class="list">
 										<td th:text="${tl.time_sheet_start}" id="startTime"></td>
 										<td th:text="${tl.time_sheet_end}" id="endTime"></td>
-										<td th:text="${tl.time_sheet_overtime}"></td>
 										<td id="oneDayWorktime"></td>
+										<td th:text="${tl.time_sheet_adjust}" id="adjustTime"></td>
 									</tr>
 								</table>				
 							</div>

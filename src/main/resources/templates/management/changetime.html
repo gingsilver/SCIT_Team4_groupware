@@ -96,12 +96,21 @@ input:focus, textarea:focus {
 input, textarea{
 	border-style: none;
 }  	
-  </style>
-  <script>
-              
-           
-            
-        </script>     
+</style>
+
+<!-- 제이쿼리, 에이젝스 -->
+<script th:src="@{/assets/js/jquery-3.6.0.js}"></script>
+
+<script>
+	$(document).ready(function(){
+		$('#sendButton').on('click', function(){
+			alert("출퇴근시간 정정 신청이 완료되었습니다.");
+			
+			$('#afterChange').submit();
+		});
+		
+	});
+</script>     
 
 
   <!-- =======================================================
@@ -135,46 +144,44 @@ input, textarea{
 			<div class="card" id="card">
 				<div class="card-body">
 					<h3 class="title">출· 퇴근 기록 정정 신청</h3>
-					<table class="changform">
-						
-						<tr>
-							<th>신청 날짜</th>
-							<td><input type="date" name="today" min="2021-05-31" max="2022-12-12"></td>
-						</tr>
-						<tr>
-							<th>변경 항목</th>
-							<td>
-								<input id="female" type="radio" name="gender" value="female" checked="checked">
-                        		<label for="female">출근 시간</label>
-                        		<input id="male" type="radio" name="gender" value="male">
-                        		<label for="male">퇴근 시간</label>
-							</td>
-						</tr>
-						<tr>
-							<th>시간</th>
-							<td><input type="time" value="09:00" id="start1" ></td>
-						</tr>
-						<tr>
-							<th>사유</th>
-							<td><textarea id="opinion" rows="5" cols="30"></textarea></td>
-						</tr>
-					</table>
-					<div class="buttonbox">
-						<button type="submit" id="sendButton"><i class="bi bi-send" aria-hidden="true"> 신 청</i></button>&nbsp;
-						<button type="reset" id="resetButton"><i class="bi bi-x-lg" aria-hidden="true"> 리 셋</i></button>&nbsp;
+						<form id="afterChange" action="afterChange" method="post" enctype="multipart/form-data">
+							<table class="changform">
+								<tr>
+									<th>신청 날짜</th>
+									<td><input type="date" name="today" min="2021-05-31" max="2022-12-12"></td>
+								</tr>
+								<tr>
+									<th>변경 항목</th>
+									<td>
+										<input id="female" type="radio" name="gender" value="female" checked="checked">
+		                        		<label for="female">출근 시간</label>
+		                        		<input id="male" type="radio" name="gender" value="male">
+		                        		<label for="male">퇴근 시간</label>
+									</td>
+								</tr>
+								<tr>
+									<th>시간</th>
+									<td><input type="time" value="09:00" id="start1" ></td>
+								</tr>
+								<tr>
+									<th>사유</th>
+									<td><textarea id="opinion" rows="5" cols="30"></textarea></td>
+								</tr>
+							</table>
+							<div class="buttonbox">
+								<button type="button" id="sendButton"><i class="bi bi-send" aria-hidden="true"> 신 청</i></button>&nbsp;
+								<button type="reset" id="resetButton"><i class="bi bi-x-lg" aria-hidden="true"> 리 셋</i></button>&nbsp;
+							</div>
+						</form>
 					</div>
 				</div>
-			</div>
-			
+					
 
 
 
 
 			<div class="container-fluid"></div>
 		</section>
-		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
@@ -206,15 +213,6 @@ input, textarea{
   <!-- Template Main JS File -->
   <script th:src="@{/assets/js/main.js}"></script>
   
-  <!-- 제이쿼리, 에이젝스 -->
-  <script th:src="@{/assets/js/jquery-3.6.0.js}"></script>
-  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
-
-  <script>
-	$(document).ready(function() {
-		$('#dataTable').DataTable();
-	});
-  </script>
 </body>
 
 </html>

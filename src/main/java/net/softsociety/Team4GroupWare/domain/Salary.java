@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class Salary {
 	String company_code;
 	String employee_code;
-	String saraly_code;
+	String salary_code;
 	int salary_retirement;
 	int salary_management;
 	int	saraly_regular_bonus;

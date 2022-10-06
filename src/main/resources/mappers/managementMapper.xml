@@ -26,7 +26,6 @@
 			, time_sheet_code
 			, time_sheet_start
 			, time_sheet_end
-			, time_sheet_overtime 
 		from team4_time_sheet
 		where employee_code = #{employee_code}
 		and time_sheet_code = #{time_sheet_code}
@@ -45,15 +44,96 @@
 		</select>
 		<!-- 개인의 한 달간 출퇴근 기록 불러오기 -->
 		<select id="selectTimesheetOneMonth" parameterType="String" resultType="TimeSheet">
-		select *
-		from team4_time_sheet
-		where employee_code = #{employee_code}
+			select 
+				company_code
+				, employee_code
+				, time_sheet_code
+				, time_sheet_start
+				, time_sheet_end
+				, time_sheet_adjust
+			from team4_time_sheet
+			where employee_code = #{employee_code}
 		</select>
 		<!-- 개인의 연차 사용 정보 불러오기 -->
 		<select id="getVacationdays" parameterType="String" resultType="Vacation">
-		select *
-		from team4_vacation
-		where employee_code = #{employee_code}
-		</select>		
+			select *
+			from team4_vacation
+			where employee_code = #{employee_code}
+		</select>	
+		<!-- 차감된 연차 갱신하기 -->
+		<update id="updateMinusVacation" parameterType="map">
+			UPDATE 
+			team4_vacation
+			SET	vacation_annual_minus = #{vacation_annual_minus}
+			where employee_code = #{employee_code}	
+		</update>	
+		<!-- 휴무 신청서 등록 -->
+		<insert id="insertConfirmedVacation" parameterType="ConfirmedVacation">
+		INSERT INTO 
+			team4_confirmed_vacation
+			(
+				company_code
+				, employee_code
+				, confirmed_vacation_code
+				, confirmed_vacation_date
+				, confirmed_vacation_days
+				, confirmed_vacation_type
+				, confirmed_vacation_reason
+			)
+			values
+			(
+				#{company_code}
+				, #{employee_code}
+				, 'CV'||LPAD(team4_confirmed_vacation_seq.nextval, 4, 0)
+				, #{confirmed_vacation_date}
+				, #{confirmed_vacation_days}
+				, #{confirmed_vacation_type}
+				, #{confirmed_vacation_reason}
+			)
+		</insert>
+		<!-- 출퇴근 관리 - 출근시간 입력 -->
+		<insert id="insertStartTime" parameterType="TimeSheet">
+		INSERT INTO 
+			team4_time_sheet
+			(
+				company_code
+				, employee_code
+				, time_sheet_code
+				, time_sheet_start
+			)
+			values
+			(
+				#{company_code}
+				, #{employee_code}
+				, 'TS'||LPAD(team4_time_sheet_seq.nextval, 4, 0)
+				, sysdate
+			)
+		</insert>
+		
+		<update id="insertEndTime" parameterType="String">
+			update
+				team4_time_sheet
+			set
+				time_sheet_end = sysdate
+			where
+				time_sheet_code = #{time_sheet_code}	
+		</update>
+		
+		<!-- 차감된 연차 갱신하기 -->
+		<update id="adjustTimeRecord" parameterType="string">
+			UPDATE 
+			team4_time_sheet
+			SET	time_sheet_adjust = '신청중'
+			where time_sheet_code = #{time_sheet_code}	
+		</update>
+		<!-- Time Sheet code 찾아오기 -->
+		<select id="findTimeSheetCode" parameterType="String" resultType="String">
+			select 
+				time_sheet_code
+			from 
+				team4_time_sheet
+			where 
+				employee_code = #{employee_code} and time_sheet_start like sysdate
+		</select>
 		   
 </mapper>

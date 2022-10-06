@@ -31,10 +31,7 @@
   <link th:href="@{/assets/css/style.css}" rel="stylesheet">
   <link th:href="@{/assets/css/style3.css}" rel="stylesheet">
   
-  <!-- data table -->
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
-  
-  <style>
+<style>
 hr#hr1 {
   		margin : 0;
   		padding : 0;
@@ -133,51 +130,66 @@ input, textarea{
 	border-radius: 5rem;
 }
   	
-  </style>
-<script th:inline="javascript">
-  	/*<![CDATA[*/ /*]]>*/
-        window.onload = function(){
-        	calc.onclick = function(){
-        	    let endDate = document.getElementById("dayoffend").value;
-        	    let startDate = document.getElementById("dayOffstart").value;
-        		
-        	    console.log(endDate);
-        	    console.log(startDate);
-        	    
-        	    if(endDate < startDate){
-        	    	alert('올바른 날짜를 지정해주세요.');
-        	    }else{
-        	    	
-        	    	var arr1 = endDate.split('-');
-        	    	var arr2 = startDate.split('-');
-        	    	
-            	    console.log(arr1[2]);
-            	    console.log(arr2[2]);
-            	    
+</style>
 
-                	let sum1 = Number(arr1[2]) - Number(arr2[2]);
-	                console.log(sum1);
-   		            document.getElementById("result").innerHTML = sum1;
+<!-- 제이쿼리, 에이젝스 -->
+<script th:src="@{/assets/js/jquery-3.6.0.js}"></script>
 
+<script>
+$(document).ready(function(){
+
+       	$('#calc').on('click', function(){
+       	    let endDate = document.getElementById("dayoffend").value;
+       	    let startDate = document.getElementById("dayOffstart").value;
+       		
+       	    console.log(endDate);
+       	    console.log(startDate);
+       	    
+       	    if(endDate < startDate){
+       	    	alert('올바른 날짜를 지정해주세요.');
+       	    }else{
+       	    	
+       	    	var arr1 = endDate.split('-');
+       	    	var arr2 = startDate.split('-');
+       	    	
+           	    console.log(arr1[2]);
+           	    console.log(arr2[2]);
+           	    
+               	let sum1 = Number(arr1[2]) - Number(arr2[2]) + 1;
+	            document.getElementById("confirmed_vacation_days").innerHTML = sum1;
    		            
-   		            checkButton.onclick = function (){
-		
-		                const a = /*[[${vacation.vacation_annual_all}]]*/;
-		                const b = /*[[${vacation.vacation_annual_minus}]]*/;
-		            	
-		                let sum2 = Number(a) - Number(b) - sum1;
-		                
-		                document.getElementById("target1").innerHTML = a;
-		                document.getElementById("target2").innerHTML = b;
-		                document.getElementById("target3").innerHTML = sum2;
-		            }
-        	    }
+	            $('#checkButton').on('click', function(){    
+		        		$.ajax({
+		        			url: 'vacation',
+		        			type: 'post',
+		        			dataType: 'json', 
+		        			success: function(data){
+		        				
+		        				let a = data.vacation_annual_all;
+		        				let b = data.vacation_annual_minus;
+		        				
+		        				let sum2 = Number(a) - Number(b) - sum1;
+		        				
+		        				console.log(data);
+		        				$('#target1').text(a);
+		        				$('#target2').text(b);
+		        				$('#target3').text(sum2);
 
-        	    
+
+		        			},
+		        			error: function(){
+		        				alert('데이터가 없습니다.');
+		        			}
+		        		});
+		                
+	                });
+	            }
+       		    
         		
-        	}
-        	function validation(){
-        		let opinion = document.getElementById('opinion'); 
+        	});
+       	
+        	sendButton.onclick = function(){
+        		let opinion = document.getElementById('confirmed_vacation_reason'); 
         		        		
         		if(opinion.value.length==0 ){
         			alert("사유는 필수 기재사항입니다.");
@@ -185,12 +197,13 @@ input, textarea{
         		}
         		
         		confirm("연차를 신청하겠습니까?");
-        		
+        			form.submit;
+        			return true;
         		}   	
         	
   		
-  	}
-        /*]]>*/
+});	
+
     </script>
   <!-- =======================================================
   * Template Name: NiceAdmin - v2.3.1
@@ -226,12 +239,12 @@ input, textarea{
 					<div class="card" id="card">
 						<div class="card-body">
 							<h3 class="title">휴무 신청서</h3>
-							<form id="write" action="write" method="post" onsubmit="return validation();" enctype="multipart/form-data">
+							<form id="dayoff" action="dayoff" method="post" enctype="multipart/form-data">
 							<table class="changform">
 								<tr>
 									<th>구분</th>
 									<td>
-										<select id="dayOffType" name="location">
+										<select id="confirmed_vacation_type" name="confirmed_vacation_type">
                                 			<option value="연차" selected="selected">연차</option>
                             			    <option value="병가">병가</option>
                             			    <option value="군소집 훈련">군소집 훈련</option>
@@ -242,24 +255,22 @@ input, textarea{
 								</tr>
 								<tr>
 									<th>휴가 기간</th>
-									<td><input type="date" name="today" min="2021-05-31" max="2022-12-12" id="dayOffstart">
-										 ~ <input type="date" name="today" min="2021-05-31" max="2022-12-12" id="dayoffend">
+									<td><input type="date" min="2021-05-31" max="2022-12-12" id="dayOffstart" name="confirmed_vacation_date">
+										 ~ <input type="date" min="2021-05-31" max="2022-12-12" id="dayoffend" name="confirmed_vacation_Enddate">
 										 <input type="button" id="calc" value="계산">
-										 
 									</td>
 								</tr>
 								<tr>
 									<th>일수</th>
-									<td>총 <span id="result"></span> 일 (C)</td>
+									<td>총 <span id="confirmed_vacation_days" name="confirmed_vacation_days"></span> 일 (C)</td>
 								</tr>								
 								<tr>
 									<th>사유</th>
-									<td><textarea id="opinion" rows="5" cols="50"></textarea></td>
+									<td><textarea id="confirmed_vacation_reason" name="confirmed_vacation_reason" rows="5" cols="50"></textarea></td>
 								</tr>
 							</table>
-							</form>
 							<div class="buttonbox">
-								<button type="submit" id="checkButton"><i class="bi bi-check-lg"> 확 인</i></button>&nbsp;
+								<button type="button" id="checkButton"><i class="bi bi-check-lg"> 확 인</i></button>&nbsp;
 								<button type="reset" id="resetButton"><i class="bi bi-x-lg" aria-hidden="true"> 리 셋</i></button>&nbsp;
 							</div>
 							<table class="changform">
@@ -286,15 +297,13 @@ input, textarea{
 								<button type="submit" id="sendButton"><i class="bi bi-check2-all"> 신 청</i></button>&nbsp;
 								<button type="reset" id="resetButton"><i class="bi bi-x-lg" aria-hidden="true"> 리 셋</i></button>&nbsp;
 							</div>
-						</div>
+						</form>	
+					</div>
     			</div>
     		</div>
     	</div>
  
     </section>
-		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
@@ -325,16 +334,7 @@ input, textarea{
 
   <!-- Template Main JS File -->
   <script th:src="@{/assets/js/main.js}"></script>
-  
-  <!-- 제이쿼리, 에이젝스 -->
-  <script th:src="@{/assets/js/jquery-3.6.0.js}"></script>
-  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
 
-  <script>
-	$(document).ready(function() {
-		$('#dataTable').DataTable();
-	});
-  </script>
 </body>
 
 </html>

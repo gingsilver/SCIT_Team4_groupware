@@ -40,10 +40,39 @@
 <link th:href="@{/assets/css/style.css}" rel="stylesheet">
 <link th:href="@{/assets/css/style3.css}" rel="stylesheet">
 
-<!-- data table -->
-<link rel="stylesheet" type="text/css"
-	href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+<!-- 제이쿼리, 에이젝스 -->
+<script th:src="@{/assets/js/jquery-3.6.0.js}"></script>
 
+<script>
+	$(document).ready(function(){
+		readSalary();
+	});
+	
+	function readSalary() {
+		$.ajax({
+			url: 'salary',
+			type: 'post',
+			dataType: 'json', 
+			success: function(data){
+				
+				console.log(data);
+				$('#salary_basic').text(data.salary_basic); 
+				$('#salary_management').text(data.salary_management);
+				$('#salary_fixed_overtime').text(data.salary_fixed_overtime);
+				$('#salary_holiday').text(data.salary_holiday);
+				$('#saraly_regular_bonus').text(data.saraly_regular_bonus);
+				$('#salary_meal').text(data.salary_meal);
+				$('#salary_date').text(data.salary_date);
+				$('#salary_retirement').text(data.salary_retirement);
+			},
+			error: function(){
+				alert('데이터가 없습니다.');
+			}
+		});
+	}
+	
+
+</script>
 <style>
 hr#hr1 {
 	margin: 0;
@@ -107,7 +136,6 @@ table.employeeInfo td{
 	width : 31%;
 }
 </style>
-
 <!-- =======================================================
   * Template Name: NiceAdmin - v2.3.1
   * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
@@ -165,7 +193,7 @@ table.employeeInfo td{
 							<div class="employ-contract-top">
 							제 1조 (근로계약기간)</div>
 							<div class="employ-contract-bottom">
-							근로계약기간은 <span class="atmark" th:text="${employee.hiredate}"></span>부터 기간의 정함이 없는 근로계약을 체결하기로 한다. "A"는 근로의 대가로 제 2조에서 정한 연봉을 지급한다.
+							근로계약기간은 <span class="atmark" th:text="${employee.hiredate}" ></span>부터 기간의 정함이 없는 근로계약을 체결하기로 한다. "A"는 근로의 대가로 제 2조에서 정한 연봉을 지급한다.
 							</div>
 							
 							<div class="employ-contract-top">
@@ -173,27 +201,27 @@ table.employeeInfo td{
 							<div class="employ-contract-bottom">
 							"갑"은 "을"의 근로에 대한 대가로 본 연봉계약 기간 동안 다음과 같은 금액을 지불한다.
 							<div class="yourpayment">
-							기본급 : <span class="atmark" th:text="${salary.salary_basic}"></span><br>
-							퇴직금 : <span class="atmark" th:text="${salary.salary_retirement}"></span><br>
-							직책수당 : <span class="atmark" th:text="${salary.salary_management}"></span><br>
+							기본급 : <span class="atmark" id="salary_basic"></span><br>
+							퇴직금 : <span class="atmark" id="salary_retirement"></span><br>
+							직책수당 : <span class="atmark" id="salary_management"></span><br>
 							정기상여금 : 기본급의 200%를 연 3회(2월, 7월, 10월) 지급한다.<br>
-							초과근무수당 : <span class="atmark" th:text="${salary.salary_fixed_overtime}"></span><br>
-							식대 : <span class="atmark" th:text="${salary.salary_meal}"></span><br>
+							초과근무수당 : <span class="atmark" id="salary_fixed_overtime"></span><br>
+							식대 : <span class="atmark" id="salary_meal"></span><br>
 							</div>
 							</div>
 							
 							<div class="employ-contract-top">
 							제 3조(임금지급일)</div>
 							<div class="employ-contract-bottom">
-							매월 1일부터 기산하여 당원 말일 마감하여 익월 <span class="atmark" th:text="${salary.salary_date}"></span>일 지급한다.
+							매월 1일부터 기산하여 당원 말일 마감하여 익월 <span class="atmark" id="salary_date"></span>일 지급한다.
 							</div>
 							
 							<div class="employ-contract-top">
 							제 4조 (근로시간 및 휴게)</div>
 							<div class="employ-contract-bottom">
 							① 근로시간은 1일 8시간, 주 40시간으로 한다. 다만, 파견근무의 경우 파견근무지의 규정에 따른다.<br>
-							② 시업시간은 <span class="atmark">[[${startTime}]]</span>시,
-							 종업시간은 <span class="atmark" >[[${endTime}]]</span>시로 한다.<br>
+							② 시업시간은 <span class="atmark">09:00</span>시,
+							 종업시간은 <span class="atmark" >18:00</span>시로 한다.<br>
 							③ 휴게시간은 근로시간 내의 1시간으로 한다.<br>
 							④ 제 3항의 당사자 "A"와 "B"의 합의에 따라 법정한도 내에서 연장근로 할 수 있다.<br>
 							</div>
@@ -272,11 +300,6 @@ table.employeeInfo td{
 				</div>
 			</div>
 		</section>
-		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-		<script
-			src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-		<script
-			src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 	</main>
 	<!-- End #main -->
 
@@ -313,17 +336,7 @@ table.employeeInfo td{
 
 	<!-- Template Main JS File -->
 	<script th:src="@{/assets/js/main.js}"></script>
-
-	<!-- 제이쿼리, 에이젝스 -->
-	<script th:src="@{/assets/js/jquery-3.6.0.js}"></script>
-	<script type="text/javascript" charset="utf8"
-		src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
-
-	<script>
-	$(document).ready(function() {
-		$('#dataTable').DataTable();
-	});
-  </script>
+	
 </body>
 
 </html>
