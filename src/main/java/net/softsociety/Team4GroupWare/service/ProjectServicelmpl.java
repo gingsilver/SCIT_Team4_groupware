@@ -1,6 +1,7 @@
 package net.softsociety.Team4GroupWare.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -15,7 +16,6 @@ import net.softsociety.Team4GroupWare.domain.Employee;
 import net.softsociety.Team4GroupWare.domain.Organization;
 import net.softsociety.Team4GroupWare.domain.Project;
 import net.softsociety.Team4GroupWare.domain.ProjectMember;
-import net.softsociety.Team4GroupWare.domain.ProjectPart;
 
 @Transactional
 @Service
@@ -26,18 +26,33 @@ public class ProjectServicelmpl implements ProjectService {
     private ProjectDAO projectDAO;
 
     @Override
-    public int insertProject(Project pj, ProjectMember pj_member, ProjectPart pj_part) {
+    @Transactional
+    public int insertProject(Project pj, List<ProjectMember> members) {
         int result = projectDAO.insertPj(pj);
-        projectDAO.insertPj_member(pj_member);
-        projectDAO.insertPj_part(pj_part);
+
+        projectDAO.insertPj_member(members);
+
         return result;
     }
 
     @Override
-    public ArrayList<Project> projectList(String employee_id) {
-        ArrayList<Project> projectList = projectDAO.selectProjectList(employee_id);
+    public List<Project> projectList(String employee_id) {
+        return projectDAO.selectProjectList(employee_id);
+    }
 
-        return projectList;
+    @Override
+    public Project projectFind(String pj_code) {
+        return projectDAO.findProject(pj_code);
+    }
+
+    @Override
+    public Employee getEmployeeById(String employee_code) {
+        return projectDAO.getEmployeeById(employee_code);
+    }
+
+    @Override
+    public List<ProjectMember> selectPj_member(String pj_code) {
+        return projectDAO.selectPj_member(pj_code);
     }
 
     @Override

@@ -11,24 +11,26 @@
     <!-- Favicons -->
     <link th:href="@{/assets/img/favicon.png}" rel="icon">
     <link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous"></script>
 
     <!-- Google Fonts -->
     <link th:href="@{https://fonts.gstatic.com}" rel="preconnect">
     <link
         th:href="@{https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i}"
         rel="stylesheet">
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <!-- Vendor CSS Files -->
-    <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
     <link th:href="@{/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
     <link th:href="@{/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
     <link th:href="@{/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
     <link th:href="@{/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
     <link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
-
 
 
     <!-- Template Main CSS File -->
@@ -39,12 +41,11 @@
 
     <!-- Vendor JS Files -->
     <script th:src="@{/assets/vendor/apexcharts/apexcharts.min.js}"></script>
-    <script th:src="@{/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
     <script th:src="@{/assets/vendor/chart.js/chart.min.js}"></script>
     <script th:src="@{/assets/vendor/echarts/echarts.min.js}"></script>
     <script th:src="@{/assets/vendor/quill/quill.min.js}"></script>
     <script th:src="@{/assets/vendor/simple-datatables/simple-datatables.js}"></script>
-    <script th:src="@{/assets/vendor/tinymce/tinymce.min.js}"></script>
+    <script th:src="@{/assets/vendor/tinymce/tinymcve.min.js}"></script>
     <script th:src="@{/assets/vendor/php-email-form/validate.js}"></script>
 
     <!-- Template Main JS File -->
@@ -54,10 +55,10 @@
 
 <body>
 
-	<!-- ======= Header ======= -->
-	<header th:replace="/indexcommon/header :: header"></header><!-- End Header -->
-	<!-- ======= Sidebar ======= -->
-	<aside th:replace="/indexcommon/aside :: aside"></aside><!-- End Sidebar-->
+    <!-- ======= Header ======= -->
+    <header th:replace="/indexcommon/header :: header"></header><!-- End Header -->
+    <!-- ======= Sidebar ======= -->
+    <aside th:replace="/indexcommon/aside :: aside"></aside><!-- End Sidebar-->
 
     <main id="main" class="main">
         <div class="pagetitle">
@@ -73,19 +74,7 @@
         <div class="col-xxl-4 col-md-6">
             <div class="card info-card sales-card">
 
-                <div class="filter">
-                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
 
-                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                        <li class="dropdown-header text-start">
-                            <h6>Filter</h6>
-                        </li>
-
-                        <li><a class="dropdown-item" href="#">Today</a></li>
-                        <li><a class="dropdown-item" href="#">This Month</a></li>
-                        <li><a class="dropdown-item" href="#">This Year</a></li>
-                    </ul>
-                </div>
 
                 <div class="card-body">
                     <h5 class="card-title">프로젝트 진행도 <span>| A4project</span></h5>
@@ -95,10 +84,8 @@
                             <i class="bi bi-cart"></i>
                         </div>
                         <div class="ps-3">
-                            <h6>145</h6>
-                            <span class="text-success small pt-1 fw-bold">12%</span> <span
-                                class="text-muted small pt-2 ps-1">increase</span>
-
+                            <h6>1번 프로젝트</h6>
+                            <span class="text-success small pt-1 fw-bold">0%</span>
                         </div>
                     </div>
                 </div>
@@ -107,12 +94,10 @@
         </div><!-- End Sales Card -->
 
 
-
         <!-- 프로젝트 리스트 -->
         <!-- Recent Sales -->
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
-
 
 
                 <div class="card-body">
@@ -125,26 +110,22 @@
                                 <th scope="col">프로젝트명</th>
                                 <th scope="col">마감날짜</th>
                                 <th scope="col">진행상황</th>
-                                <th scope="col">상세확인</th>
+                                <th scope="col">기타</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope="row"><a href="#">#1</a></th>
-                                <td>A4project</td>
-                                <td><a href="#" class="text-primary">2022/06/17</a></td>
-                                <td>진행중</td>
-                                <td><input type="button" value=""></td>
 
-                            </tr>
-                            <tr th:each="project : ${projectList}">
-                                <th scope="row"><a href="#">#2</a></th>
-                                <td th:text="${project.">프로젝트 1</td>
-                                <td><a href="#" class="text-primary">2022/09/08</a></td>
-                                <td>마감</td>
+                            <tr th:each="project,index : ${projectList}">
+                                <th scope="row"><a href="#" th:text="${index.count}"></a></th>
+                                <td th:text="${project.pj_name}">프로젝트 1</td>
+                                <td th:text="${project.enddate}"><a href="#" class="text-primary">2022/09/08</a></td>
+                                <!--1 진행 2 보류 3 완료-->
+                                <td th:if="${project.pj_state == 1}">진행중</td>
+                                <td th:if="${project.pj_state == 2}">보류</td>
+                                <td th:if="${project.pj_state == 3}">완료</td>
                                 <td>
                                     <!-- Accordion without outline borders -->
-                                    <div class="accordion accordion-flush" id="accordionFlushExample">
+                                    <!-- <div class="accordion accordion-flush" id="accordionFlushExample">
                                         <div class="accordion-item">
                                             <h2 class="accordion-header" id="flush-headingOne">
                                                 <button class="accordion-button collapsed" type="button"
@@ -156,17 +137,33 @@
                                             <div id="flush-collapseOne" class="accordion-collapse collapse"
                                                 aria-labelledby="flush-headingOne"
                                                 data-bs-parent="#accordionFlushExample">
-                                                <div class="accordion-body">
-                                                    상세확인 완료
-                                                </div>
+                                                <div class="accordion-body"> -->
+                                    <button type="button" id="modalShowBtn" class="btn btn-primary"
+                                        data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                        th:data-pjcode="${project.pj_code}"
+                                        th:data-employeecode="${project.employee_code}"
+                                        th:data-companyname="${project.company_name}"
+                                        th:data-companycode="${project.company_code}"
+                                        th:data-pjname="${project.pj_name}"
+                                        th:data-pjleadername="${project.pj_leader_name}"
+                                        th:data-pjcontent="${project.pj_content}" th:data-pjstate="${project.pj_state}"
+                                        th:data-pjpercent="${project.pj_percent}"
+                                        th:data-startdate="${project.startdate}" th:data-enddate="${project.enddate}">
+                                        상세보기
+                                    </button>
+                                    <button type="button" id="update" class="btn btn-primary"
+                                        th:if="${employee_code} == ${project.employee_code}"
+                                        th:onclick="'location.href=\''+ @{/project/update(pj_code=${project.pj_code})} + '\''">
+                                        관리
+                                    </button>
+
+                                    <!-- </div>
                                             </div>
                                         </div>
-                                    </div><!-- End Accordion without outline borders -->
+                                    </div>
+                                    End Accordion without outline borders -->
                                 </td>
                             </tr>
-
-
-
                         </tbody>
                     </table>
 
@@ -176,25 +173,108 @@
         </div><!-- End Recent Sales -->
 
 
-
-        <!-- 
-        프로젝트 진행도(여러개일경우 1,2,3 버튼으로)  // 해야할 파트 간략히 1,2,3
-
+        <!--
+    프로젝트 진행도(여러개일경우 1,2,3 버튼으로)  // 해야할 파트 간략히 1,2,3
 
 
-        현재 프로젝트 리스트 
-        ---------------------
-        #1 프로젝트1  각종정보   +버튼으로 펼치고 접기
-            나 
-            - 담당 파트1 +버튼으로 펼치고 접기 진행중/완료 확인 취소버튼
-            - 담당 파트2 +버튼으로 펼치고 접기 진행중/완료 확인 취소버튼
-        #1 프로젝트 +펼치면
-        내용 
 
-        
-        프로젝트 생성 버튼 
-    -->
+    현재 프로젝트 리스트
+    ---------------------
+    #1 프로젝트1  각종정보   +버튼으로 펼치고 접기
+        나
+        - 담당 파트1 +버튼으로 펼치고 접기 진행중/완료 확인 취소버튼
+        - 담당 파트2 +버튼으로 펼치고 접기 진행중/완료 확인 취소버튼
+    #1 프로젝트 +펼치면
+    내용
+
+
+    프로젝트 생성 버튼
+-->
     </main><!-- End #main -->
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">상세정보</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-floating mb-3">
+                                <input type="text" readonly class="data form-control-plaintext" id="pjcode">
+                                <label for="pjcode">프로젝트 코드</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" readonly class="data form-control-plaintext" id="pjleadername">
+                                <label for="pjleadername">리더명</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" readonly class="data form-control-plaintext" id="companyname">
+                                <label for="companyname">회사명</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" readonly class="data form-control-plaintext" id="pjname">
+                                <label for="pjname">프로젝트명</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" readonly class="data form-control-plaintext" id="pjstate">
+                                <label for="pjstate">프로젝트 상태</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" readonly class="data form-control-plaintext" id="pjpercent">
+                                <label for="pjpercent">프로젝트 진행률</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" readonly class="data form-control-plaintext" id="startdate">
+                                <label for="startdate">시작일</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" readonly class="data form-control-plaintext" id="enddate">
+                                <label for="enddate">마감일</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <textarea rows="5" cols="50" type="text" readonly class="data form-control-plaintext"
+                                    id="pjcontent"></textarea>
+                                <label for="pjcontent">프로젝트내용</label>
+                            </div>
+                        </div>
+
+                    </div><!-- End Page Title -->
+                </div>
+
+
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).on('click', '#modalShowBtn', function () {
+            let data = $(this).data();
+
+            var array = ["", "진행중", "보류", "완료"]
+            for (key in data) {
+                let id = document.getElementById(key);
+                if (id != null) {
+                    let datum = data[key];
+                    if (key === "pjstate") {
+                        datum = array[datum];
+                    }
+                    if (key === "pjpercent") {
+                        datum = datum + "%";
+                    }
+                    id.value = datum;
+                }
+            }
+        })
+
+    </script>
 
 </body>
 

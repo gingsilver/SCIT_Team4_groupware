@@ -19,7 +19,8 @@ repositories {
 }
 
 dependencies {
-	   implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation group: 'com.oracle.ojdbc', name: 'orai18n', version: '19.3.0.0'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	   implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	   implementation 'org.springframework.boot:spring-boot-starter-web'
 	   implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
@@ -33,7 +34,7 @@ dependencies {
 	   implementation 'com.oracle.database.security:osdt_cert'
 	   implementation 'com.oracle.database.security:oraclepki'
 	   implementation 'com.oracle.database.security:osdt_core'
-	   
+	   implementation group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-java8time', version: '3.0.1.RELEASE'
 	   /* 메일 서버 관련 */
 	   implementation 'org.springframework.boot:spring-boot-starter-mail'
 	   implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
@@ -47,6 +48,16 @@ dependencies {
 
 	   /* 다중업로드 */
 	   implementation 'commons-io:commons-io:2.6'
+	/* 웹소켓 */
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.webjars:sockjs-client:1.1.2'
+    implementation 'org.webjars:stomp-websocket:2.3.3-1'
+
+    implementation 'org.springframework.boot:spring-boot-starter-freemarker'
+    implementation 'org.webjars.bower:vue:2.5.16'
+    implementation 'org.webjars.bower:axios:0.17.1'
+    implementation 'com.google.code.gson:gson:2.8.0'
+			   
 }
 
 tasks.named('test') {
