@@ -16,6 +16,7 @@ import net.softsociety.Team4GroupWare.domain.Employee;
 import net.softsociety.Team4GroupWare.domain.Organization;
 import net.softsociety.Team4GroupWare.domain.Project;
 import net.softsociety.Team4GroupWare.domain.ProjectMember;
+import net.softsociety.Team4GroupWare.domain.ProjectPart;
 
 @Transactional
 @Service
@@ -31,6 +32,13 @@ public class ProjectServicelmpl implements ProjectService {
         int result = projectDAO.insertPj(pj);
 
         projectDAO.insertPj_member(members);
+
+        return result;
+    }
+
+    @Override
+    public int insertPart(ProjectPart projectPart) {
+        int result = projectDAO.insertPart(projectPart);
 
         return result;
     }
@@ -53,6 +61,11 @@ public class ProjectServicelmpl implements ProjectService {
     @Override
     public List<ProjectMember> selectPj_member(String pj_code) {
         return projectDAO.selectPj_member(pj_code);
+    }
+
+    @Override
+    public List<ProjectPart> selectPj_part(String pj_code) {
+        return projectDAO.selectPj_part(pj_code);
     }
 
     @Override

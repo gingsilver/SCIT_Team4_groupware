@@ -18,11 +18,10 @@ public interface ProjectDAO {
     // 프로젝트 저장
     public int insertPj(Project pj);
 
+    public int insertPart(ProjectPart projectPart);
+
     // 프로젝트 멤버 저장
     public int insertPj_member(List<ProjectMember> members);
-
-    // 프로젝트 파트 저장
-    public int insertPj_part(ProjectPart pj_part);
 
     // 프로젝트 리스트 불러오기
     public List<Project> selectProjectList(String employee_id);
@@ -48,5 +47,7 @@ public interface ProjectDAO {
     public ArrayList<Organization> findByParentId(String parent_id);
 
     public int addOrganization(Organization org);
+
+    public List<ProjectPart> selectPj_part(String pj_code);
 
 }
