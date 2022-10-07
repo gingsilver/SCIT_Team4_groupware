@@ -21,6 +21,7 @@ import net.softsociety.Team4GroupWare.domain.Company;
 import net.softsociety.Team4GroupWare.domain.Employee;
 import net.softsociety.Team4GroupWare.domain.Project;
 import net.softsociety.Team4GroupWare.domain.ProjectMember;
+import net.softsociety.Team4GroupWare.domain.ProjectPart;
 import net.softsociety.Team4GroupWare.service.AdminService;
 import net.softsociety.Team4GroupWare.service.EmployeeService;
 import net.softsociety.Team4GroupWare.service.ProjectService;
@@ -56,6 +57,7 @@ public class ProjectController {
     @GetMapping("update")
     public String update(Model model, @AuthenticationPrincipal UserDetails user, String pj_code) {
 
+        List<ProjectPart> projectPart = pj_service.selectPj_part(pj_code);
         Project projectFind = pj_service.projectFind(pj_code);
         List<ProjectMember> selectPj_member = pj_service.selectPj_member(pj_code);
         for (ProjectMember m : selectPj_member) {
@@ -65,10 +67,12 @@ public class ProjectController {
             m.setPosition_type(employee.getPosition_type());
             m.setOrganization(employee.getOrganization());
         }
+        System.out.println(projectPart + "테스트");
         System.out.println(selectPj_member);
         System.out.println(projectFind);
         model.addAttribute("projectFind", projectFind);
         model.addAttribute("selectPj_member", selectPj_member);
+        model.addAttribute("projectPart", projectPart);
         return "projectView/update";
     }
 
@@ -127,40 +131,6 @@ public class ProjectController {
         model.addAttribute("emp", emp);
         return "redirect:/projectView/main";
     }
-    // 작성된 프로젝트 수정 (리더만 수정가능)
-
-    // 프로젝트 메인페이지 나의 프로젝트 리스트 출력
-
-    // @GetMapping("/create/member")
-    // public String settingOrg(@AuthenticationPrincipal UserDetails user, Model
-    // model) {
-    // // 회사코드, 관리자 내용 가져오기
-    // Employee admin = service.readAdmin(user.getUsername());
-    // Company company = service.readCompany(admin.getCompany_code());
-    // JSONArray json = service.readOrg(company);
-
-    // model.addAttribute("admin", admin);
-    // model.addAttribute("company", company);
-    // model.addAttribute("json", json);
-
-    // return "projectView/main";
-    // }
-    // 프로젝트 내용 읽기
-
-    // 프로젝트 메인페이지 프로젝트 리스트내의
-    // 프로젝트 메인페이지 파트 출력
-
-    /*
-     * 프로젝트 진행도 출력
-     */
-    /*
-     * 나의 파트 진행도 출력
-     * ex)나의 프로젝트 1,2,3,4중에
-     * 1번 프로젝트의 파트 전체개수를 받고
-     * 전체 갯수중에 파트 완성한 갯수만 받아서 완성갯수/전체갯수
-     * step 으로 step전체갯수
-     * step 갯수 된만큼 처리
-     */
 
     // 프로젝트 작성페이지 조직도 출력
     @AllArgsConstructor

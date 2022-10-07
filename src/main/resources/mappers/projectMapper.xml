@@ -107,43 +107,30 @@
                , #{pj_content})
     </insert>
 
+    <insert id="insertPart" parameterType="ProjectPart">
+        insert into team4_projectpart
+        (PJ_PART_CODE,PJ_CODE,EMPLOYEE_ID,PJ_PART_CONTENT, EMPLOYEE_NAME)
+        values 
+        (TEAM4_PROJECTPART_SEQ.nextval, #{pj_code}, #{employee_id}, #{pj_part_content}, #{employee_name})
+        
+    </insert>
 
-    <!-- 프로젝트 멤버 저장 -->
     <insert id="insertPj_member" parameterType="java.util.List">
         INSERT INTO team4_projectMember(
         pj_member_code,
         pj_code,
         employee_code,
-        pj_member_position,
+        pj_member_position
         )
         SELECT team4_projectMember_seq.nextval,team4_project_seq.currval, m.*
         FROM (
         <foreach collection="list" item="members" separator="UNION ALL ">
             SELECT #{members.employee_code} AS employee_code, #{members.position_type} AS pj_member_position FROM DUAL
         </foreach>
-        )
+        ) m
     </insert>
 
 
-    <!-- 프로젝트 파트 저장 -->
-    <insert id="insertPj_part" parameterType="ProjectPart">
-        insert into team4_projectPart(pj_code,
-                                      pj_part_code,
-                                      pj_member_code,
-                                      pj_part_member_id,
-                                      pj_part_name,
-                                      pj_part_content,
-                                      pj_part_savedate,
-                                      pj_part_completion,)
-        values ( 'PRO' || LPAD(team4_project_seq.currval, 4, 0)
-               , 'PAR' || LPAD(team4_projectPart_seq.nextval, 4, 0)
-               , 'MEM' || LPAD(team4_projectMember_seq.currval, 4, 0)
-               , #{pj_part_member_id}
-               , #{pj_part_name}
-               , #{pj_part_content}
-               , #{pj_part_savedate}
-               , #{pj_part_completion})
-    </insert>
     <!-- 프로젝트 불러오기 -->
     <select id="findProject" parameterType="String" resultType="Project">
         select *
@@ -165,6 +152,7 @@
         where pm.EMPLOYEE_CODE = (select EMPLOYEE_CODE from team4_EMPLOYEE where EMPLOYEE_ID=#{employee_id})
     </select>
 
+
     <!-- 프로젝트 멤버 불러오기-->
     <select id="selectPj_member" parameterType="String" resultType="ProjectMember">
         select *
@@ -177,14 +165,12 @@
         from team4_employee
         where employee_code = #{employee_code}
     </select>
-    <!-- 프로젝트 파트 불러오기 DB수정필요 해당프로젝트의 해당멤버만의 프로젝트 -->
+
     <select id="selectPj_part" parameterType="String" resultType="ProjectPart">
         select *
-        from team4_projectPart
-        where pj_code = #{pj_code}
-          and pj_part_member_id = #{pj_part_member_id}
+        from team4_projectpart
+        where PJ_CODE = #{pj_code}
     </select>
-
     <!-- 프로젝트 수정 리더만 가능-->
     <update id="updatePj" parameterType="project">
         update

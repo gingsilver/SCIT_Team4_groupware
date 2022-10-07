@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.Team4GroupWare.domain.Company;
 import net.softsociety.Team4GroupWare.domain.Employee;
+import net.softsociety.Team4GroupWare.domain.ProjectPart;
 import net.softsociety.Team4GroupWare.service.AdminService;
 import net.softsociety.Team4GroupWare.service.EmployeeService;
 import net.softsociety.Team4GroupWare.service.ProjectService;
@@ -62,6 +63,21 @@ public class ProjectRestController {
         return empList;
     }
 
+    @PostMapping("addPart")
+    public int addPart(@AuthenticationPrincipal UserDetails user, String pj_code, String employee_id,
+            String pj_part_content, String employee_name, ProjectPart projectPart) {
+
+        projectPart.setPj_code(pj_code);
+        projectPart.setEmployee_id(employee_id);
+        projectPart.setPj_part_content(pj_part_content);
+        projectPart.setEmployee_name(employee_name);
+
+        System.out.println(projectPart);
+        System.out.println(pj_code + "코드" + employee_id + "아이디" + pj_part_content + "내용");
+        int result = pj_service.insertPart(projectPart);
+
+        return result;
+    }
     // 조직도를 통해
     // 프로젝트 멤버 추가
     // @PostMapping("addMember")

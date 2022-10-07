@@ -102,6 +102,7 @@
                             </tr>
                         </thead>
                         <tbody>
+
                             <tr th:each="pj_member : ${selectPj_member}">
                                 <td th:text="${pj_member.employee_id}"></td>
                                 <td th:text="${pj_member.employee_name}"></td>
@@ -110,39 +111,33 @@
                                 <td>
                                     <button type="button" id="modalShowBtn" class="btn btn-primary"
                                         data-bs-toggle="modal" data-bs-target="#PartModal"
-                                        th:data-memberid="${pj_member.employee_id}">
+                                        th:data-memberid="${pj_member.employee_id}"
+                                        th:data-pjcode="${pj_member.pj_code}"
+                                        th:data-membername="${pj_member.employee_name}">
                                         파트추가
                                     </button>
-
                                 </td>
+
+
                             </tr>
                         </tbody>
                     </table>
                     <h5 class="card-title">업무 상황</h5>
                     <table class="table table-borderless">
                         <thead>
-                            <tr>
-                                <th scope="col">파트</th>
+                            <tr id="partList">
+                                <th scope="col">파트내용</th>
                                 <th scope="col">해당 파트 담당자</th>
                                 <th scope="col">진행상황</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>DB작성</td>
-                                <td>고사원</td>
+                            <tr th:each="pj_part : ${projectPart}">
+                                <td th:text="${pj_part.pj_part_content}"></td>
+                                <td th:text="${pj_part.employee_name}"></td>
                                 <td>진행중</td>
                             </tr>
-                            <tr>
-                                <td>백엔드 작업</td>
-                                <td>고사원</td>
-                                <td>진행중</td>
-                            </tr>
-                            <tr>
-                                <td>프론트엔드 작업</td>
-                                <td>고사원</td>
-                                <td>진행중</td>
-                            </tr>
+
                         </tbody>
                     </table>
 
@@ -171,23 +166,30 @@
 -->
 
 
-        <div class="modal fade" id="PartModal" tabindex="-1" aria-labelledby="PartModalLabel" aria-hidden="true">
+        <div class="modal fade" id="PartModal" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="PartModalLabel">파트 추가</h1>
+                        <h1 class="modal-title">파트 추가</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="card border-dark mb-3">
-                            <div class="card-header text-center">
-                                <b id="test" style="color : black">업무 입력</b>
-                            </div>
-                            <div class="col-sm-12">
+
+                        <div class="card-header text-center">
+                            <b id="test" style="color : black">업무 입력</b>
+                        </div>
+
+                        <!-- <div class="col-sm-12">
                                 <textarea name="pj_part_content" id="pj_part_content" class="form-control"
                                     style="height: 100px" required></textarea>
-                            </div>
-
+                            </div> -->
+                        <hr>
+                        <textarea id="PartVal" class="form-control" rows="8"></textarea>
+                        <hr>
+                        <div hidden>
+                            <input type="text" readonly class="data form-control-plaintext" id="memberid">
+                            <input type="text" readonly class="data form-control-plaintext" id="pjcode">
+                            <input type="text" readonly class="data form-control-plaintext" id="membername">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -200,6 +202,27 @@
         </div>
 
     </main><!-- End #main -->
+
+
+
+    <script type="text/javascript">
+        $(document).on('click', '#modalShowBtn', function () {
+            let data = $(this).data();
+            for (key in data) {
+                let id = document.getElementById(key);
+                if (id != null) {
+                    let datum = data[key];
+                    id.value = datum;
+                }
+            }
+
+        })
+
+    </script>
+
+
+
+
 
     <!-- ======= Footer ======= -->
     <footer id="footer" class="footer">
@@ -234,26 +257,28 @@
     <!-- 제이쿼리, 에이젝스 -->
     <script th:src="@{/assets/js/jquery-3.6.0.js}"></script>
 
+
     <SCRIPT LANGUAGE="JavaScript">
 
+
         $(document).ready(function () {
-
-
             $('#addPart').on('click', function () {
                 alert('파트추가완료');
-                let addPart = $('#addPart').val();
 
+                let addPart = $('#PartVal').val();
+                let memberid = $('#memberid').val();
+                let pjcode = $('#pjcode').val();
+                let membername = $('#membername').val();
                 if (addPart == null) {
                     return false;
                 }
                 $.ajax({
                     url: 'addPart',
                     type: 'post',
-                    data: { pj_part_content: addPart, pj_code: pj_code },
+                    data: { pj_part_content: addPart, employee_id: memberid, pj_code: pjcode, employee_name: membername },
                     success: function (data) {
                         if (data == 1) {
                             console.log('저장 성공');
-                            showOp();
                         } else {
                             console.log('저장 실패');
                         }
@@ -262,11 +287,19 @@
                         console.log(e.responseText);
                     }
                 });
+                // $('#partList').after(`<tr>
+                //         <td>DB작업</td>
+                //         <td>김사원</td>
+                //         <td>진행중</td>
+                //     </tr>`)
+
             });
 
         });
 
     </SCRIPT>
+
+
 </body>
 
 </html>

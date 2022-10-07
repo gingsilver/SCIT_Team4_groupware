@@ -10,11 +10,14 @@ import net.softsociety.Team4GroupWare.domain.Employee;
 import net.softsociety.Team4GroupWare.domain.Organization;
 import net.softsociety.Team4GroupWare.domain.Project;
 import net.softsociety.Team4GroupWare.domain.ProjectMember;
+import net.softsociety.Team4GroupWare.domain.ProjectPart;
 
 public interface ProjectService {
 
     // 프로젝트 생성(프로젝트내용, 멤버, 파트)
     public int insertProject(Project pj, List<ProjectMember> members);
+
+    public int insertPart(ProjectPart projectPart);
 
     public List<Project> projectList(String username);
 
@@ -42,6 +45,8 @@ public interface ProjectService {
     public int addOrganization(Organization org);
 
     public Employee getEmployeeById(String employee_code);
+
+    public List<ProjectPart> selectPj_part(String pj_code);
 
     // 프로젝트 리스트 출력
 
