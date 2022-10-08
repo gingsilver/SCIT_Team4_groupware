@@ -55,7 +55,156 @@
   <!-- ======= Header ======= -->
   <header th:replace="/indexcommon/header :: header"></header><!-- End Header -->
   <!-- ======= Sidebar ======= -->
-  <aside th:replace="/indexcommon/aside :: aside"></aside><!-- End Sidebar-->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+      <li class="text-center">
+      	<span th:if="${employee.employee_photo} == null"><img th:src="@{/image/default_photo.png}"></span>
+        <span th:if="${employee.employee_photo} != null"><img th:src="@{/assets/upload/photo/} + ${employee.employee_photo}" alt="Profile" class="rounded-circle" width="180px"></span>
+      </li>
+      
+      <li class="text-center">
+      	<h4 th:text="${employee.employee_name}"></h4>
+		<h6 th:text="${employee.organization}"></h6>
+      </li>
+    	<hr>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/index}">
+          <i class="bi bi-grid"></i>
+          <span>HOME</span>
+        </a>
+      </li><!-- End homepage Nav -->
+      
+      <li class="nav-heading">Pages</li>
+      
+      <li class="nav-item">
+        <a class="nav-link collapsed" th:href="@{/employee/mypage}">
+          <i class="bi bi-person"></i>
+          <span>마이페이지</span>
+        </a>
+      </li><!-- End 마이페이지 Page Nav -->
+      
+      <!-- start 근태관리 nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#working-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-calendar-week"></i><span>근태관리</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="working-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a th:href="@{/management/attendance}">
+              <i class="bi bi-clock"></i><span>출 · 퇴근 기록</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/management/timerecord}">
+              <i class="bi bi-clock"></i><span>출 · 퇴근 전체보기</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/management/dayoff}">
+              <i class="bi bi-heart-fill"></i><span>휴무 신청</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/management/salary}">
+              <i class="bi bi-coin"></i><span>급여 정산서</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/management/contract}">
+              <i class="bi bi-file-earmark-spreadsheet"></i><span>근로 계약서</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- 근태관리 End Components Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-envelope"></i><span>메일함</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a th:href="@{/mailbox/write}">
+              <i class="bi bi-pencil-square"></i><span>메일 쓰기</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/mailbox/readAll}">
+              <i class="bi bi-envelope-open"></i><span>전체 메일함</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/mailbox/sentMailbox}">
+              <i class="bi bi-arrow-right-circle"></i><span>보낸 메일함</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Components Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-journal-text"></i><span>프로젝트</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+	    <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+	    	<li>
+	    		<a th:href="@{/project/create}">
+	    			<i class="bi bi-circle"></i><span>프로젝트 생성</span>
+	    		</a>
+	    	</li>
+			<li>
+	            <a th:href="@{/project/main}">
+					<i class="bi bi-circle"></i><span>프로젝트 메인페이지</span>
+	            </a>
+			</li>
+		</ul>
+	 </li><!-- End Forms Nav -->
+	 
+	  <!-- start 전자결재 nav -->
+	   <li class="nav-item">
+        <a class="nav-link collapsed" th:href="@{/draft/main}">
+          <i class="bi bi-journal-text"></i>
+          <span>전자결재</span>
+        </a>
+       </li><!-- End 전자결재 nav -->
+       
+       <li class="nav-item">
+        
+      </li><!-- End Blank Page Nav -->
+       
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-layout-text-window-reverse"></i><span>게시판</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a class="nav-link collapsed" th:href="@{/board/companynotice}">
+	          <i class="bi bi-exclamation-triangle-fill"></i><span>전사공지</span>
+	        </a>
+          </li>
+          <li>
+            <a class="nav-link collapsed" th:href="@{/board/programboard}">
+	          <i class="bi bi-dropbox"></i><span>사내소프트웨어</span>
+	        </a>
+          </li>
+          <li>
+            <a class="nav-link collapsed" th:href="@{/freeboard/list}">
+	          <i class="bi bi-card-list"></i><span>자유게시판</span>
+	        </a>
+          </li>
+        </ul>
+      </li><!-- End 게시판 Nav -->
+
+	<hr>
+
+	<li class="nav-item" sec:authorize="isAuthenticated()">
+        <a class="nav-link collapsed" th:href="@{/logout}">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>로그아웃</span>
+        </a>
+      </li><!-- End Logout Page Nav -->
+    </ul>
+
+  </aside><!-- End Sidebar-->
 
   <main id="main" class="main">
 
@@ -71,6 +220,7 @@
 
     <section class="section dashboard">
     
+    <input type="hidden" th:value="${loginCode}" id="loginCode">
     <div class="container-fluid">
 			<div class="bg-white shadow rounded-lg d-block d-sm-flex">
 				<div class="profile-tab-nav border-right">
@@ -83,27 +233,27 @@
 							<h5><b>HOME</b></h5>
 						</a>
 						<div class="text-center"><h5 class="mt-3 m-b-6"><b>결재함</b></h5></div><hr id="hr1">
-						<a class="nav-link" id="account-tab" data-toggle="pill" href="#requestDraft" role="tab" aria-controls="requestDraft" aria-selected="false">
+						<a class="nav-link" id="request-tab" data-toggle="pill" href="#requestDraft" role="tab" aria-controls="requestDraft" aria-selected="false">
 							<i class="fa fa-home text-center mr-1"></i> 
 							결재 요청함
 						</a>
-						<a class="nav-link" id="logo-tab" data-toggle="pill" href="#companylogo" role="tab" aria-controls="logo" aria-selected="false">
+						<a class="nav-link" id="wating-tab" data-toggle="pill" href="#watingDraft" role="tab" aria-controls="watingDraft" aria-selected="false">
 							<i class="fa fa-key text-center mr-1"></i> 
 							결재 대기함
 						</a>
-						<a class="nav-link" id="logo-tab" data-toggle="pill" href="#companylogo" role="tab" aria-controls="logo" aria-selected="false">
+						<a class="nav-link" id="progress-tab" data-toggle="pill" href="#progressDraft" role="tab" aria-controls="progressDraft" aria-selected="false">
 							<i class="fa fa-key text-center mr-1"></i> 
 							결재 진행함
 						</a>
-						<a class="nav-link" id="logo-tab" data-toggle="pill" href="#companylogo" role="tab" aria-controls="logo" aria-selected="false">
+						<a class="nav-link" id="complete-tab" data-toggle="pill" href="#completeDraft" role="tab" aria-controls="completeDraft" aria-selected="false">
 							<i class="fa fa-key text-center mr-1"></i> 
 							결재 완료함
 						</a>
-						<a class="nav-link" id="logo-tab" data-toggle="pill" href="#companylogo" role="tab" aria-controls="logo" aria-selected="false">
+						<a class="nav-link" id="reject-tab" data-toggle="pill" href="#rejectDraft" role="tab" aria-controls="rejectDraft" aria-selected="false">
 							<i class="fa fa-key text-center mr-1"></i> 
 							결재 반려함
 						</a>
-						<a class="nav-link" id="logo-tab" data-toggle="pill" href="#companylogo" role="tab" aria-controls="logo" aria-selected="false">
+						<a class="nav-link" id="reference-tab" data-toggle="pill" href="#referenceDraft" role="tab" aria-controls="referenceDraft" aria-selected="false">
 							<i class="fa fa-key text-center mr-1"></i> 
 							결재 참조함
 						</a>
@@ -118,10 +268,50 @@
 				
 				<div class="tab-content p-4 p-md-5" id="v-pills-tabContent">
 					<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-						<h5>● HOME ●</h5>
+						<h3>● HOME ●</h3>
+						<hr>
+						<h5><b>[ 기안 작성 팁 ]</b></h5>
+						
+						<b>1) 작성 전 준비사항</b>
+						<p>기안 문서를 작성하기에 앞서 먼저 기안서를 작성하는 목적을 파악하는 것이 중요하다.<br>
+						즉, 기안문을 작성하는 목적과 작성이유, 기대효과, 결재권자의 의도 및 지시내용을 숙지하고 이에 따른 관련규정 및 참고문헌을 찾아 정보를 수집한 후 이를 이용하여 기안 목적에 맞는 초안을 작성해야 한다.<br>
+						수집 · 정리한 정보는 기안의 목적에 맞도록 초안을 작성하고 논리의 일관성을 유지할 수 있도록 검토한다.</p>
+						
+						<b>2) 작성 시 구성요령</b>
+						<p>기안자는 기안문의 주요내용을 분명히 하여 문장을 구성하고 간결 · 명료하고 이해하기 쉽게 본안을 작성한 후 잘못된 부분이나 불필요한 부분 및 중요사항의 누락이 없는지 등을 꼼꼼히 확인하고 검토해야 한다.<br>
+						기안문은 육하원칙에 의하여 정확하게 작성하되 이해하기 쉽고, 간결하고, 명확하게 작성해야 한다.</p>
+						
+						
+						
+						<b>3) 작성 후 체크사항</b>
+						<p>기안 문서를 받아보는 사람의 입장에서 전달하고자 하는 내용이 쉽게 이해되는지 검토하고 누락된 사항이나 다른 부분은 없는지, 불필요한 사항이 포함되지 않았는지 검토한다.</p>
+					
+						<hr>
+						
+						<h5><b>[ 기안서 작성 시 주의사항 ]</b></h5>
+						<b>1) 정확성</b>
+						<p>① 육하원칙에 의하여 작성한다.<br>
+						② 애매한 표현이나 과장된 표현을 피한다.</p>
+						
+						<b>2) 신속성</b>
+						<p>① 문장은 짧게 끊어서 명료하게 쓴다.<br>
+						② 가급적 먼저 결론을 쓰고 그 다음에 이유 또는 설명을 쓴다.</p>
+						
+						<b>3) 용이성</b>
+						<p>① 읽기 쉽고 알기 쉬운 말을 쓴다.<br>
+						② 한자의 전용이나 어려운 전문용어는 가급적 피한다. 한자 또는 전문용어를 쓸 필요가 있을 때에는 괄호를 사용하여 한자를 쓰거나 용어의 해설을 붙인다.<br>
+						③ 받는 사람의 이해력과 독해력을 고려하여 쓴다.<br>
+						④ 처리하기 쉽도록 핵심사항만을 요약한다.</p>
+						
+						<b>4) 경제성</b>
+						<p>① 반복적인 업무는 표준기안문을 활용한다.<br>
+						② 용지의 규격 · 지질을 표준화한다.<br>
+						③ 서식을 통일한다.<br>
+						④ 문자를 부호화하여 활용한다.</p>
 					</div>
 				
-					<div class="tab-pane fade show" id="requestDraft" role="tabpanel" aria-labelledby="requestDraft-tab">
+					<!-- start 결재 요청함 -->
+					<div class="tab-pane fade show requestDraft" id="requestDraft" role="tabpanel" aria-labelledby="requestDraft-tab">
 						<h5>● 결재 요청함</h5>
 						<table id="datatable" class="table datatable">
 							<thead>
@@ -132,83 +322,89 @@
 									<th>작성일</th>
 								</tr>
 							</thead>
-							<tbody>
-								<tr th:each="draft : ${draft}">
-									<td th:text="${draft.draft_code}"></td>
-									<td><a th:text="${draft.draft_title}" th:href="@{/draft/read(draft_code=${draft.draft_code})}"></a></td>
-									<td th:text="${draft.employee_name}"></td>
-									<td th:text="${draft.draft_inputdate}"></td>
-								</tr>
-							</tbody>
+							<tbody id="requestData"><tr><td colspan="4" class="text-center" id="notRequestData"></td></tr></tbody>
 						</table>
-						
-						<hr>
-							      	
-						<h5>● 진행 상황</h5>
-							<table class="table">
-								<thead>
-									<tr>
-										<th>결재 순서</th>
-										<th>결재자</th>
-										<th>결재 상태</th>
-										<th>결재 시간</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>2</td>
-										<td>김지은</td>
-										<td>결재중</td>
-										<td>2022.09.25 20:51:43</td>
-									</tr>
-									<tr>
-										<td>1</td>
-										<td>고경섭</td>
-										<td>기안</td>
-										<td>2022.09.25 11:25:39</td>
-									</tr>
-								</tbody>
-							</table>
-					</div>
+					</div><!-- end 결재 요청함 -->
 					
-					<!-- 회사 로고 변경 page start -->
-					<div class="tab-pane fade" id="companylogo" role="tabpanel" aria-labelledby="logo-tab">
+					<!-- start 결재 대기함 -->
+					<div class="tab-pane fade show watingDraft" id="watingDraft" role="tabpanel" aria-labelledby="watingDraft-tab">
+						<h5>● 결재 대기함</h5>
+						<table id="datatable" class="table datatable">
+							<thead>
+								<tr>
+									<th>결재 번호</th>
+									<th>제목</th>
+									<th>결재자</th>
+									<th>작성일</th>
+								</tr>
+							</thead>
+							<tbody id="watingData"><tr><td colspan="4" class="text-center" id="notWatingData"></td></tr></tbody>
+						</table>
+					</div><!-- end 결재 대기함 -->
 					
-						<h3 class="mb-4">회사 로고 변경</h3>
-						
-						<form method="post" id="updateLogoForm" enctype="multipart/form-data">
-							<div class="row">
-								<div class="col-lg-12">
-									<div class="form-group">
-										<input class="form-control form-control-user" type="file" size="30"
-											   name="upload" id="product_image" onchange="setThumbnail(event);">
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-lg-6 text-center">
-									<div class="form-group">
-									  	<label class="mb-3">기존 회사 로고</label>
-									  	<div class="img-circle2 text-center mb-3">
-										  	<img th:src="@{/image/catIcon.png}" alt="기본 로고">
-										</div>
-									</div>
-								</div>
-								<div class="col-lg-6 text-center">
-									<div class="form-group">
-									  	<label id="label-bold" class="mb-3">변경 회사 로고</label>
-									  	<div class="img-circle2 text-center mb-3">
-											<div id="image_container"></div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="text-center">
-								<button class="btn btn-primary" id="updateLogo">Update</button>&nbsp;
-								<button class="btn btn-dark">Cancel</button>
-							</div>
-						</form>
-					</div>
+					<!-- start 결재 진행함 -->
+					<div class="tab-pane fade show progressDraft" id="progressDraft" role="tabpanel" aria-labelledby="progressDraft-tab">
+						<h5>● 결재 진행함</h5>
+						<table id="datatable" class="table datatable">
+							<thead>
+								<tr>
+									<th>결재 번호</th>
+									<th>제목</th>
+									<th>결재자</th>
+									<th>작성일</th>
+								</tr>
+							</thead>
+							<tbody id="progressData"><tr><td colspan="4" class="text-center" id="notProgressData"></td></tr></tbody>
+						</table>
+					</div><!-- end 결재 진행함 -->
+					
+					<!-- start 결재 완료함 -->
+					<div class="tab-pane fade show completeDraft" id="completeDraft" role="tabpanel" aria-labelledby="completeDraft-tab">
+						<h5>● 결재 완료함</h5>
+						<table id="datatable" class="table datatable">
+							<thead>
+								<tr>
+									<th>결재 번호</th>
+									<th>제목</th>
+									<th>결재자</th>
+									<th>작성일</th>
+								</tr>
+							</thead>
+							<tbody id="completeData"><tr><td colspan="4" class="text-center" id="notCompleteData"></td></tr></tbody>
+						</table>
+					</div><!-- end 결재 완료함 -->
+					
+					<!-- start 결재 반려함 -->
+					<div class="tab-pane fade show rejectDraft" id="rejectDraft" role="tabpanel" aria-labelledby="rejectDraft-tab">
+						<h5>● 결재 반려함</h5>
+						<table id="datatable" class="table datatable">
+							<thead>
+								<tr>
+									<th>결재 번호</th>
+									<th>제목</th>
+									<th>결재자</th>
+									<th>작성일</th>
+								</tr>
+							</thead>
+							<tbody id="rejectData"><tr><td colspan="4" class="text-center" id="notRejectData"></td></tr></tbody>
+						</table>
+					</div><!-- end 결재 반려함 -->
+					
+					<!-- start 결재 참조함 -->
+					<div class="tab-pane fade show referenceDraft" id="referenceDraft" role="tabpanel" aria-labelledby="referenceDraft-tab">
+						<h5>● 결재 참조함</h5>
+						<table id="datatable" class="table datatable">
+							<thead>
+								<tr>
+									<th>결재 번호</th>
+									<th>제목</th>
+									<th>결재자</th>
+									<th>작성일</th>
+								</tr>
+							</thead>
+							<tbody id="referenceData"><tr><td colspan="4" class="text-center" id="notReferenceData"></td></tr></tbody>
+						</table>
+					</div><!-- end 결재 참조함 -->
 					
 					<!-- 양식함 page start -->
 					<div class="tab-pane fade" id="admindoc" role="tabpanel" aria-labelledby="admindoc-tab">
@@ -275,8 +471,210 @@
   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
 
   <script>
-	$(document).ready(function() {
+  
+  	let approver_code = $('#loginCode').val();
+  	
+  	$(document).ready(function() {
 		$('#dataTable').DataTable();
+		
+		$('#request-tab').on('click', function(){
+			$.ajax({
+				url: 'selectAllDraft',
+				type: 'post',
+				data : {approver_code : approver_code, process_enabled : '0'},
+				dataType : 'json',
+				success: function (data) {
+					if(data == null || data == '' || data == []){
+						let s;
+						
+						s = '<img class="my-5" src="../assets/img/no-results.png" alt="no-results" width="400px">';
+						s += '<h3 class="my-5"><b>요청중인 결재가 없습니다.</b></h3>';
+						
+						$('#notRequestData').html(s);
+					} else {
+						let s;
+						$.each(data, function(idx, ob){
+							s = '<tr>';
+							s += '<td>' + ob.draft_code + '</td>';
+							s += '<td><a href="read?draft_code='+ob.draft_code+'">' + ob.draft_title + '</a></td>';
+							s += '<td>' + ob.employee_name + '</td>';
+							s += '<td>' + ob.draft_writedate + '</td>';
+							s += '</tr>';
+						});
+						
+						$('#requestData').html(s);
+					}
+				},
+				error: function (e) {
+					console.log(e.responseText);
+				}
+			});
+		});
+		
+		$('#wating-tab').on('click', function(){
+			$.ajax({
+				url: 'waitingDraft',
+				type: 'post',
+				data : {approver_code : approver_code, process_enabled : '3'},
+				dataType : 'json',
+				success: function (data) {
+					if(data == null || data == '' || data == []){
+						let s;
+						
+						s = '<img class="my-5" src="../assets/img/no-results.png" alt="no-results" width="400px">';
+						s += '<h3 class="my-5"><b>대기중인 결재가 없습니다.</b></h3>';
+						
+						$('#notWatingData').html(s);
+					} else {
+						let s;
+						$.each(data, function(idx, ob){
+							s = '<tr>';
+							s += '<td>' + ob.draft_code + '</td>';
+							s += '<td><a href="read?draft_code='+ob.draft_code+'">' + ob.draft_title + '</a></td>';
+							s += '<td>' + ob.employee_name + '</td>';
+							s += '<td>' + ob.draft_writedate + '</td>';
+							s += '</tr>';
+						});
+						$('#watingData').html(s);
+					}
+				},
+				error: function (e) {
+					console.log(e.responseText);
+				}
+			});
+		});
+		
+		$('#progress-tab').on('click', function(){
+			$.ajax({
+				url: 'progressDraft',
+				type: 'post',
+				data : {approver_code : approver_code, process_enabled : '4'},
+				dataType : 'json',
+				success: function (data) {
+					if(data == null || data == '' || data == []){
+						let s;
+						
+						s = '<img class="my-5" src="../assets/img/no-results.png" alt="no-results" width="400px">';
+						s += '<h3 class="my-5"><b>진행중인 결재가 없습니다.</b></h3>';
+						
+						$('#notProgressData').html(s);
+					} else {
+						let s;
+						$.each(data, function(idx, ob){
+							s = '<tr>';
+							s += '<td>' + ob.draft_code + '</td>';
+							s += '<td><a href="read?draft_code='+ob.draft_code+'">' + ob.draft_title + '</a></td>';
+							s += '<td>' + ob.employee_name + '</td>';
+							s += '<td>' + ob.draft_writedate + '</td>';
+							s += '</tr>';
+						});
+						$('#progressData').html(s);
+					}
+				},
+				error: function (e) {
+					console.log(e.responseText);
+				}
+			});
+		});
+		
+		$('#complete-tab').on('click', function(){
+			$.ajax({
+				url: 'completeDraft',
+				type: 'post',
+				data : {approver_code : approver_code, process_enabled : '1', process_type : '결재'},
+				dataType : 'json',
+				success: function (data) {
+					if(data == null || data == '' || data == []){
+						let s;
+						
+						s = '<img class="my-5" src="../assets/img/no-results.png" alt="no-results" width="400px">';
+						s += '<h3 class="my-5"><b>완료된 결재가 없습니다.</b></h3>';
+						
+						$('#notCompleteData').html(s);
+					} else {
+						let s;
+						$.each(data, function(idx, ob){
+							s = '<tr>';
+							s += '<td>' + ob.draft_code + '</td>';
+							s += '<td><a href="read?draft_code='+ob.draft_code+'">' + ob.draft_title + '</a></td>';
+							s += '<td>' + ob.employee_name + '</td>';
+							s += '<td>' + ob.draft_writedate + '</td>';
+							s += '</tr>';
+						});
+						$('#completeData').html(s);
+					}
+				},
+				error: function (e) {
+					console.log(e.responseText);
+				}
+			});
+		});
+		
+		$('#reject-tab').on('click', function(){
+			$.ajax({
+				url: 'rejectDraft',
+				type: 'post',
+				data : {approver_code : approver_code, process_enabled : '2'},
+				dataType : 'json',
+				success: function (data) {
+					if(data == null || data == '' || data == []){
+						let s;
+						
+						s = '<img class="my-5" src="../assets/img/no-results.png" alt="no-results" width="400px">';
+						s += '<h3 class="my-5"><b>반려된 결재가 없습니다.</b></h3>';
+						
+						$('#notRejectData').html(s);
+					} else {
+						let s;
+						$.each(data, function(idx, ob){
+							s = '<tr>';
+							s += '<td>' + ob.draft_code + '</td>';
+							s += '<td><a href="read?draft_code='+ob.draft_code+'">' + ob.draft_title + '</a></td>';
+							s += '<td>' + ob.employee_name + '</td>';
+							s += '<td>' + ob.draft_writedate + '</td>';
+							s += '</tr>';
+						});
+						$('#rejectData').html(s);
+					}
+				},
+				error: function (e) {
+					console.log(e.responseText);
+				}
+			});
+		});
+		
+		$('#reference-tab').on('click', function(){
+			$.ajax({
+				url: 'referenceDraft',
+				type: 'post',
+				data : {approver_code : approver_code, process_type : '참조'},
+				dataType : 'json',
+				success: function (data) {
+					if(data == null || data == '' || data == []){
+						let s;
+						
+						s = '<img class="my-5" src="../assets/img/no-results.png" alt="no-results" width="400px">';
+						s += '<h3 class="my-5"><b>참조된 결재가 없습니다.</b></h3>';
+						
+						$('#notReferenceData').html(s);
+					} else {
+						let s;
+						$.each(data, function(idx, ob){
+							s = '<tr>';
+							s += '<td>' + ob.draft_code + '</td>';
+							s += '<td><a href="read?draft_code='+ob.draft_code+'">' + ob.draft_title + '</a></td>';
+							s += '<td>' + ob.employee_name + '</td>';
+							s += '<td>' + ob.draft_writedate + '</td>';
+							s += '</tr>';
+						});
+						$('#referenceData').html(s);
+					}
+				},
+				error: function (e) {
+					console.log(e.responseText);
+				}
+			});
+		});
 	});
   </script>
 </body>

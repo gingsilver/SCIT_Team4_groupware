@@ -20,4 +20,6 @@ public class Draft {
 	String process_type;
 	String draft_saved;
 	String process_enabled;
+	String draft_writedate;
+	String document_form_code;
 }

@@ -8,6 +8,7 @@ import net.softsociety.Team4GroupWare.domain.AttachedFile;
 import net.softsociety.Team4GroupWare.domain.DocumentForm;
 import net.softsociety.Team4GroupWare.domain.Draft;
 import net.softsociety.Team4GroupWare.domain.DraftApprover;
+import net.softsociety.Team4GroupWare.domain.DraftBox;
 import net.softsociety.Team4GroupWare.domain.DraftOpnion;
 import net.softsociety.Team4GroupWare.domain.Employee;
 
@@ -92,10 +93,10 @@ public interface DraftDAO {
 
 	/**
 	 * select : 모든 기안 가져오기
-	 * @param selectDF
+	 * @param draftbox
 	 * @return
 	 */
-	public ArrayList<Draft> selectAllDraft(Draft selectDF);
+	public ArrayList<DraftBox> selectAllDraft(DraftBox draftbox);
 
 	/**
 	 * insert : 모든 결재자 추가하기
@@ -118,4 +119,60 @@ public interface DraftDAO {
 	 */
 	public ArrayList<DraftApprover> selectAllDraftApprover(String draft_code);
 
+	/**
+	 * select : 기안 내 모든 첨부파일 가져오기
+	 * @param draft_code
+	 * @return
+	 */
+	public ArrayList<AttachedFile> selectAllAttachedFile(String document_code);
+
+	/**
+	 * select : 지정 전결자 가져오기
+	 * @param document_form_code
+	 * @return
+	 */
+	public String findAppByCode(String document_form_code);
+
+	/**
+	 * select : 결재 대기중인 기안 가져오기
+	 * @param draftbox
+	 * @return
+	 */
+	public ArrayList<DraftBox> findWaitingDraft(DraftBox draftbox);
+
+	/**
+	 * select : 결재 진행중인 기안 가져오기
+	 * @param draftbox
+	 * @return
+	 */
+	public ArrayList<DraftBox> findProgressDraft(DraftBox draftbox);
+
+	/**
+	 * select : 결재 완료된 기안 가져오기
+	 * @param draftbox
+	 * @return
+	 */
+	public ArrayList<DraftBox> findCompleteDraft(DraftBox draftbox);
+	
+	/**
+	 * select : 결재 완료된 기안 가져오기
+	 * @param draftbox
+	 * @return
+	 */
+	public ArrayList<DraftBox> findCompleteDraft2(DraftBox draftbox);
+
+	/**
+	 * select : 결재 반려된 기안 가져오기
+	 * @param draftbox
+	 * @return
+	 */
+	public ArrayList<DraftBox> findRejectDraft(DraftBox draftbox);
+
+	/**
+	 * select : 결재 참조된 기안 가져오기
+	 * @param draftbox
+	 * @return
+	 */
+	public ArrayList<DraftBox> findReferenceDraft(DraftBox draftbox);
+	
 }

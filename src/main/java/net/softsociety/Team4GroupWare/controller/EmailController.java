@@ -152,7 +152,6 @@ public class EmailController {
 
 	
 	/*------------------------------ 메일 쓰기 ------------------------------*/
-	
 	//작성된 메일 내용 받아오기
 	@PostMapping("write")
 	public String sendMail(Email email
@@ -164,26 +163,23 @@ public class EmailController {
 
 		//회사코드, 로그인 한 사람 내용 가져오기
 		Employee employee = employservice.getEmployeeById(user.getUsername());
-
+		
+		email.setEmail_sender(employee.getEmployee_email());
+		email.setCompany_code(employee.getCompany_code()); 
+		
+		
 		log.debug("Employee 받은 내용: {}", employee);
+		log.debug("email 받은 내용: {}", email);
+		log.debug("mail_process 받은 내용: {}", mail_process);
+		
+		int emailresult = emailservice.insertMailTotal(email);
 		
 		file.setCompany_code(employee.getCompany_code());
 		file.setEmployee_code(employee.getEmployee_code());
 		file.setEmployee_id(employee.getEmployee_id());
 		file.setEmployee_name(employee.getEmployee_name());
 		log.debug("file : {}", file);
-		
-		email.setEmail_sender(employee.getEmployee_email());
-		email.setCompany_code(employee.getCompany_code()); 
 
-		/*---------------------이메일 정보를 메일함에 보내기----------------------------*/
-		
-		int return_email_code = emailservice.sendMailWithFiles(email, upload, mail_process); //성공1, 실패0으로 넘어옴
-		String new_email_code = email.getEmail_code();
-
-		log.debug("컨트롤러에서 값이 잘 넘어오나 확인 {}", email.getEmail_code());
-
-		
 		/*---------------------첨부파일 정보 입력--------------------------*/
 		
 		if (upload != null && !upload.isEmpty() && upload.getSize()!=0) {
@@ -214,89 +210,28 @@ public class EmailController {
 				log.debug(e.getMessage());
 			}
 		}
-			
-			
-			
-			
-
-		
-		
-	
-		/*-------------------수신인, 참조인 저장하기----------------------------*/
-
-		if(return_email_code == 1) {
-
-			mail_process.setEmail_code(new_email_code);
-			mail_process.setCompany_code(employee.getCompany_code()); 
-
-
-			//맵으로 메일 번호랑 수신인 배열 바라바라 하기
-			String[] ReceiverArr = mail_process.getEmail_receiver();
-
-			for(int i=0; i<ReceiverArr.length; i++) {
-				@SuppressWarnings("rawtypes")				
-				String Receiver = ReceiverArr[i];
-				String email_code = mail_process.getEmail_code();
-				String company_code = mail_process.getCompany_code();
-
-				emailservice.insertReceiver(email_code, company_code, Receiver);
-			}	
-
-			//맵으로 메일 번호랑 참조인 배열 바라바라 하기
-			String[] CcReceiverArr = mail_process.getEmail_cc_receiver();
-
-			for(int i=0; i<CcReceiverArr.length; i++) {
-				@SuppressWarnings("rawtypes")				
-				String ccReceiver = CcReceiverArr[i];
-				String email_code = mail_process.getEmail_code();
-				String company_code = mail_process.getCompany_code();
-
-				emailservice.insertCCreceiver(email_code, company_code, ccReceiver);
-			}			
-
-
-		}else {
-			//실패시, 임시저장
-			emailservice.sendMaildraft(email);
-			return "mailbox/fail";
-		}
 		//성공시, 완료페이지 
-		return "mailbox/success";
-
-
+		return "redirect:/mailbox/sentMailbox";
 	}
 
 	
 	/*------------------------------ 보낸 메일함 ------------------------------*/
-
 	@GetMapping("sentMailbox")
 	public String sentMailbox(Model model
 						, @RequestParam(name = "page", defaultValue="1")int page
 						, @AuthenticationPrincipal UserDetails user
 						) {
-		
-		
 		Employee employee = adminservice.readAdmin(user.getUsername());
-		
 		String email_sender = employee.getEmployee_email();
 		
-		
-		log.debug("페이지당 글 수 : {}, 페이지 이동 링크 수 : {}, 현재 페이지 : {}, 로그인 한 회원 아이디 : {}"
-				, countPerPage, pagePerGroup, page, email_sender);
-		
-		net.softsociety.Team4GroupWare.util.PageNavigator navi = emailservice.getPageNavigator(
-				pagePerGroup, countPerPage, page, email_sender);
-		
 		ArrayList<Mailinfo> mailinfo = emailservice.selectSentmail(email_sender); 
-
 		
 		//모델에 담아서 html로 보내주기
-		model.addAttribute("navi", navi);
 		model.addAttribute("mailinfo", mailinfo);
+		model.addAttribute("employee", employee);
 		
 		return "mailbox/sentMailbox";
 	}
-	
 	
 	@GetMapping("email-read")
 	public String readSentMail() {
@@ -310,23 +245,23 @@ public class EmailController {
 		, Model model
 		, @AuthenticationPrincipal UserDetails user
 			) {
-		
 		log.debug("VIEW에서 넘어온 메일 번호 : {}", email_code);
 		
+		Employee employee = adminservice.readAdmin(user.getUsername());
 		Mailinfo mailinfo = emailservice.selectOne(email_code);
 		AttachedFile attachedfile = emailservice.MailAttachedfile(email_code);
 		Employee employee_receiver= employservice.getEmployeeById(user.getUsername());
-		Employee employee_sender  = employservice.getEmployeeByEmail(mailinfo.getEmail_sender());
+	    Employee employee_sender  = employservice.getEmployeeByEmail(mailinfo.getEmail_sender());
+
 		
 		log.debug("DB에서 넘어온 메일 정보 : {} ", mailinfo);
 		log.debug("DB에서 넘어온 첨부파일 정보 : {} ", attachedfile);
 	
+		model.addAttribute("employee", employee);
 		model.addAttribute("mailinfo", mailinfo);
-		model.addAttribute("attachedfile", attachedfile);		
+		model.addAttribute("attachedfile", attachedfile);
 		model.addAttribute("employee_sender", employee_sender);
-		model.addAttribute("employee_receiver", employee_receiver);
-		
-		
+	    model.addAttribute("employee_receiver", employee_receiver);
 		
 		//결과를 모델에 담아서 HTML에서 출력
 		return "/mailbox/sentMailboxOne";
@@ -338,51 +273,44 @@ public class EmailController {
 	public String readAll(Model model
 			,@AuthenticationPrincipal UserDetails user
 			) {
-		
-		//여기서 알아야할정보 '나'가 누군지
-		//Company_code("COM0007"); 로그인 정보 받아와서 넣기 현재는 임시 정보
-		//email_sender는 로그인 정보에서 가져와야함, 여기서는 모르니까 임의로 넣고 진행(pp2000pooh@naver.com)
-		//DB에서 글을 읽어서
 		Employee employee = adminservice.readAdmin(user.getUsername());
 		String email_receiver = employee.getEmployee_email();
-		
-		/* String email_receiver = "popo@naver.com"; 
-		String email_cc_receiver = "yunhye.kay.hong@gmail.com";
-		String email_sender = "example3@gmail.com"; */
-		
 		
 		ArrayList<Mailinfo> mailinfo = emailservice.readAllmail(email_receiver); 
 
 		System.out.println(mailinfo);
 		//모델에 담아서 html로 보내주기
 		model.addAttribute("mailinfo", mailinfo);
+		model.addAttribute("employee", employee);
 		
 		return "mailbox/readAll";
 	}
 	
-	/*------------------------------ 전체 메일함 - 메일 1개 읽기 ------------------------------*/
+	/*------------------------------ 전체 메일함 - 메일 읽기 ------------------------------*/
 	@GetMapping("readOne")
 	public String read(
 		String email_code
 		, Model model
 		, @AuthenticationPrincipal UserDetails user) {
+log.debug("VIEW에서 넘어온 메일 번호 : {}", email_code);
 		
-		log.debug("VIEW에서 넘어온 메일 번호 : {}", email_code);
-		
+		Employee employee = adminservice.readAdmin(user.getUsername());
 		Mailinfo mailinfo = emailservice.selectOne(email_code);
 		AttachedFile attachedfile = emailservice.MailAttachedfile(email_code);
 		Employee employee_receiver= employservice.getEmployeeById(user.getUsername());
-		Employee employee_sender  = employservice.getEmployeeByEmail(mailinfo.getEmail_sender());
+	    Employee employee_sender  = employservice.getEmployeeByEmail(mailinfo.getEmail_sender());
+
 		
 		log.debug("DB에서 넘어온 메일 정보 : {} ", mailinfo);
 		log.debug("DB에서 넘어온 첨부파일 정보 : {} ", attachedfile);
 	
+		model.addAttribute("employee", employee);
 		model.addAttribute("mailinfo", mailinfo);
-		model.addAttribute("attachedfile", attachedfile);		
+		model.addAttribute("attachedfile", attachedfile);
 		model.addAttribute("employee_sender", employee_sender);
-		model.addAttribute("employee_receiver", employee_receiver);
+	    model.addAttribute("employee_receiver", employee_receiver);
 		
-		return "/mailbox/readOne";
+		return "mailbox/readOne";
 	}
 	
 	/*------------------------------ 전체 메일함 - 메일 1개 읽기  첨부파일 다운로드------------------------------*/

@@ -49,6 +49,8 @@ public class ProjectController {
         String employee_code = employee.getEmployee_code();
         List<Project> projectList = pj_service.projectList(user.getUsername());
         projectList.forEach(Project::setDate);
+        
+        model.addAttribute("employee", employee);
         model.addAttribute("employee_code", employee_code);
         model.addAttribute("projectList", projectList);
         return "projectView/main";
@@ -56,7 +58,7 @@ public class ProjectController {
 
     @GetMapping("update")
     public String update(Model model, @AuthenticationPrincipal UserDetails user, String pj_code) {
-
+    	Employee employee2 = em_service.getEmployeeById(user.getUsername());
         List<ProjectPart> projectPart = pj_service.selectPj_part(pj_code);
         Project projectFind = pj_service.projectFind(pj_code);
         List<ProjectMember> selectPj_member = pj_service.selectPj_member(pj_code);
@@ -70,6 +72,8 @@ public class ProjectController {
         System.out.println(projectPart + "테스트");
         System.out.println(selectPj_member);
         System.out.println(projectFind);
+        
+        model.addAttribute("employee", employee2);
         model.addAttribute("projectFind", projectFind);
         model.addAttribute("selectPj_member", selectPj_member);
         model.addAttribute("projectPart", projectPart);
@@ -115,7 +119,8 @@ public class ProjectController {
                 empList.remove(i);
             }
         }
-
+        
+        model.addAttribute("employee", admin);
         model.addAttribute("admin", admin);
         model.addAttribute("company", company);
         model.addAttribute("json", json);

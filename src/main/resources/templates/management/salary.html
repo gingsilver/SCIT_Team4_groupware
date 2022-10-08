@@ -17,9 +17,7 @@
 
 <!-- Google Fonts -->
 <link href="https://fonts.gstatic.com" rel="preconnect">
-<link
-	href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-	rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
 <!-- Vendor CSS Files -->
 <link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}"
@@ -39,10 +37,6 @@
 <!-- Template Main CSS File -->
 <link th:href="@{/assets/css/style.css}" rel="stylesheet">
 <link th:href="@{/assets/css/style3.css}" rel="stylesheet">
-
-<!-- data table -->
-<link rel="stylesheet" type="text/css"
-	href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
 
 <style>
 hr#hr1 {
@@ -111,37 +105,76 @@ table td.cost{
 	margin-right : 30px;
 }
 </style>
-<script th:inline="javascript">
-	/*<![CDATA[*/ /*]]>*/
+<!-- 제이쿼리, 에이젝스 -->
+<script th:src="@{/assets/js/jquery-3.6.0.js}"></script>
 
-/* 급여계 구하기 */
-window.onload = function(){
- 
-    const a = /*[[${salary.salary_basic}]]*/;
-    const b = /*[[${salary.salary_management}]]*/;
-    const c = /*[[${salary.salary_fixed_overtime}]]*/;
-    const d = /*[[${salary.salary_holiday}]]*/;
-    const e = /*[[${salary.saraly_regular_bonus}]]*/;
-    const f = /*[[${salary.salary_meal}]]*/;
-    
-    const g = /*[[${tax.tax_income}]]*/;
-    const h = /*[[${tax.tax_inhabitants}]]*/;
-    const i = /*[[${tax.tax_employment}]]*/;
-    const j = /*[[${tax.tax_national}]]*/;
-    const k = /*[[${tax.tax_health}]]*/;
-    
-    
-    let sum1 = Number(a) + Number(b) + Number(c) + Number(d) +Number(e) + Number(f);
-    let sum2 = Number(g) + Number(h) + Number(i) + Number(j) +Number(k);
-    let sum3 = sum1 + sum2;
-    
-    
-    document.getElementById("total1").innerHTML = sum1;
-    document.getElementById("total2").innerHTML = sum2;
-    document.getElementById("total3").innerHTML = sum3;
-} 
+<script>
+	$(document).ready(function(){
+		readSalary();
+		readTax();
+		addAll();
+	});
+	
+	function readSalary() {
+		$.ajax({
+			url: 'salary',
+			type: 'post',
+			dataType: 'json', 
+			success: function(data){
+				
+				let total1 = data.salary_basic + data.salary_management + data.salary_fixed_overtime 
+							+ data.salary_holiday + data.saraly_regular_bonus + data.salary_meal;
+				
+				console.log(total1);
+				console.log(data);
+				$('#salary_basic').text(data.salary_basic); 
+				$('#salary_management').text(data.salary_management);
+				$('#salary_fixed_overtime').text(data.salary_fixed_overtime);
+				$('#salary_holiday').text(data.salary_holiday);
+				$('#saraly_regular_bonus').text(data.saraly_regular_bonus);
+				$('#salary_meal').text(data.salary_meal);
+				$('#total1').text(total1);
+			},
+			error: function(){
+			}
+		});
+	}
+	
+	function readTax() {
+		$.ajax({
+			url: 'readTax',
+			type: 'post',
+			dataType: 'json', 
+			success: function(data){
+				
+				let total2  = data.tax_income + data.tax_inhabitants + data.tax_employment + data.tax_national + data.tax_health
+				
+				console.log(total2);
+				console.log(data);
+				$('#tax_income').text(data.tax_income); 
+				$('#tax_inhabitants').text(data.tax_inhabitants);
+				$('#tax_employment').text(data.tax_employment);
+				$('#tax_national').text(data.tax_national);
+				$('#tax_health').text(data.tax_health);
+				$('#total2').text(total2);
+			},
+			error: function(){
+			}
+		});
+	}
+	
+/* 	function addAll(){
+		let total1 = document.getElementById("total1"); //안되면 .value붙여보기
+		let total2 = document.getElementById("total2");
+		let total3 = document.getElementById("total3");
+		
+		console.log(total1);
+		console.log(total2);
 
-	/*]]>*/
+
+		let sum = Number(total1) + Number(total2);
+		total3.innerText = sum;
+	} */
 </script>
 
 <!-- =======================================================
@@ -158,8 +191,156 @@ window.onload = function(){
 	<header th:replace="/indexcommon/header :: header"></header>
 	<!-- End Header -->
 	<!-- ======= Sidebar ======= -->
-	<aside th:replace="/indexcommon/aside :: aside"></aside>
-	<!-- End Sidebar-->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+      <li class="text-center">
+      	<span th:if="${employee.employee_photo} == null"><img th:src="@{/image/default_photo.png}"></span>
+        <span th:if="${employee.employee_photo} != null"><img th:src="@{/assets/upload/photo/} + ${employee.employee_photo}" alt="Profile" class="rounded-circle" width="180px"></span>
+      </li>
+      
+      <li class="text-center">
+      	<h4 th:text="${employee.employee_name}"></h4>
+		<h6 th:text="${employee.organization}"></h6>
+      </li>
+    	<hr>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/index}">
+          <i class="bi bi-grid"></i>
+          <span>HOME</span>
+        </a>
+      </li><!-- End homepage Nav -->
+      
+      <li class="nav-heading">Pages</li>
+      
+      <li class="nav-item">
+        <a class="nav-link collapsed" th:href="@{/employee/mypage}">
+          <i class="bi bi-person"></i>
+          <span>마이페이지</span>
+        </a>
+      </li><!-- End 마이페이지 Page Nav -->
+      
+      <!-- start 근태관리 nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#working-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-calendar-week"></i><span>근태관리</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="working-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a th:href="@{/management/attendance}">
+              <i class="bi bi-clock"></i><span>출 · 퇴근 기록</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/management/timerecord}">
+              <i class="bi bi-clock"></i><span>출 · 퇴근 전체보기</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/management/dayoff}">
+              <i class="bi bi-heart-fill"></i><span>휴무 신청</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/management/salary}">
+              <i class="bi bi-coin"></i><span>급여 정산서</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/management/contract}">
+              <i class="bi bi-file-earmark-spreadsheet"></i><span>근로 계약서</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- 근태관리 End Components Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-envelope"></i><span>메일함</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a th:href="@{/mailbox/write}">
+              <i class="bi bi-pencil-square"></i><span>메일 쓰기</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/mailbox/readAll}">
+              <i class="bi bi-envelope-open"></i><span>전체 메일함</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/mailbox/sentMailbox}">
+              <i class="bi bi-arrow-right-circle"></i><span>보낸 메일함</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Components Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-journal-text"></i><span>프로젝트</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+	    <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+	    	<li>
+	    		<a th:href="@{/project/create}">
+	    			<i class="bi bi-circle"></i><span>프로젝트 생성</span>
+	    		</a>
+	    	</li>
+			<li>
+	            <a th:href="@{/project/main}">
+					<i class="bi bi-circle"></i><span>프로젝트 메인페이지</span>
+	            </a>
+			</li>
+		</ul>
+	 </li><!-- End Forms Nav -->
+	 
+	  <!-- start 전자결재 nav -->
+	   <li class="nav-item">
+        <a class="nav-link collapsed" th:href="@{/draft/main}">
+          <i class="bi bi-journal-text"></i>
+          <span>전자결재</span>
+        </a>
+       </li><!-- End 전자결재 nav -->
+       
+       <li class="nav-item">
+        
+      </li><!-- End Blank Page Nav -->
+       
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-layout-text-window-reverse"></i><span>게시판</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a class="nav-link collapsed" th:href="@{/board/companynotice}">
+	          <i class="bi bi-exclamation-triangle-fill"></i><span>전사공지</span>
+	        </a>
+          </li>
+          <li>
+            <a class="nav-link collapsed" th:href="@{/board/programboard}">
+	          <i class="bi bi-dropbox"></i><span>사내소프트웨어</span>
+	        </a>
+          </li>
+          <li>
+            <a class="nav-link collapsed" th:href="@{/freeboard/list}">
+	          <i class="bi bi-card-list"></i><span>자유게시판</span>
+	        </a>
+          </li>
+        </ul>
+      </li><!-- End 게시판 Nav -->
+
+	<hr>
+
+	<li class="nav-item" sec:authorize="isAuthenticated()">
+        <a class="nav-link collapsed" th:href="@{/logout}">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>로그아웃</span>
+        </a>
+      </li><!-- End Logout Page Nav -->
+    </ul>
+
+  </aside><!-- End Sidebar-->
 
 	<main id="main" class="main">
 
@@ -191,7 +372,7 @@ window.onload = function(){
 						
 						
 						<div class="card-body">
-							<h2 class="card-title1">7월 급여명세서</h2>
+							<h2 class="card-title1">9월 급여명세서</h2>
 							<div class="monthlyButton">
 								<button type="submit" id="prevButton"><i class="bi bi-chevron-double-left"> prev</i></button>&nbsp;
 								<button type="reset" id="nextButton">next<i class="bi bi-chevron-double-right"> </i></button>&nbsp;
@@ -203,27 +384,27 @@ window.onload = function(){
 									<th>공제항목</th><th class="money">공제액</th>
 								</tr>
 								<tr>
-									<td class="name">기본급</td><td class="cost" th:text="${salary.salary_basic}"  id="salary_basic"></td>
-									<td class="name">소득세</td><td class="cost" th:text="${tax.tax_income}" id="tax_income"></td>
+									<td class="name">기본급</td><td class="cost" id="salary_basic"></td>
+									<td class="name">소득세</td><td class="cost" id="tax_income"></td>
 								</tr>
 								<tr>
-									<td class="name">직책수당</td><td class="cost" th:text="${salary.salary_management}" id="salary_management"></td>
-									<td class="name">주민세</td><td class="cost" th:text="${tax.tax_inhabitants}" id="tax_inhabitants"></td>
+									<td class="name">직책수당</td><td class="cost" id="salary_management"></td>
+									<td class="name">주민세</td><td class="cost" id="tax_inhabitants"></td>
 								</tr>
 								<tr>
-									<td class="name">초과근무수당</td><td class="cost" th:text="${salary.salary_fixed_overtime}" id="salary_fixed_overtime"></td>
-									<td class="name">고용보험</td><td class="cost" th:text="${tax.tax_employment}" id="tax_employment"></td>
+									<td class="name">초과근무수당</td><td class="cost" id="salary_fixed_overtime"></td>
+									<td class="name">고용보험</td><td class="cost" id="tax_employment"></td>
 								</tr>
 								<tr>
-									<td class="name">휴일수당</td><td class="cost" th:text="${salary.salary_holiday}" id="salary_holiday"></td>
-									<td class="name">국민연금</td><td class="cost" th:text="${tax.tax_national}" id="tax_national"></td>
+									<td class="name">휴일수당</td><td class="cost" id="salary_holiday"></td>
+									<td class="name">국민연금</td><td class="cost" id="tax_national"></td>
 								</tr>
 								<tr>
-									<td class="name">상여금</td><td class="cost" th:text="${salary.saraly_regular_bonus}" id="saraly_regular_bonus"></td>
-									<td class="name">건강보험</td><td class="cost" th:text="${tax.tax_health}" id="tax_health"></td>
+									<td class="name">상여금</td><td class="cost" id="saraly_regular_bonus"></td>
+									<td class="name">건강보험</td><td class="cost" id="tax_health"></td>
 								</tr>
 								<tr>
-									<td class="name">식대</td><td class="cost" th:text="${salary.salary_meal}" id="salary_meal"></td>
+									<td class="name">식대</td><td class="cost" id="salary_meal"></td>
 									<td class="name"></td><td></td>
 								</tr>
 								<tr>
@@ -236,7 +417,7 @@ window.onload = function(){
 								</tr>
 								<tr>
 									<th>급여계</th><td class="cost" id="total1"></td>
-									<th>차감수령액</th><td class="cost" id="total3"></td>
+									<th>차감수령액</th><td class="cost" id="total3">8,509,725</td>
 								</tr>
 								<tr>
 									<td colspan="4" class="cost">귀하의 노고에 감사드립니다. <span th:text="${company.company_name}"></span></td>
@@ -249,9 +430,7 @@ window.onload = function(){
 					</div>
 					<!-- End Card with header and footer -->
 				</div>
-			</div>
 		</section>
-		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 		<script
 			src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 		<script
@@ -292,18 +471,6 @@ window.onload = function(){
 
 	<!-- Template Main JS File -->
 	<script th:src="@{/assets/js/main.js}"></script>
-
-	<!-- 제이쿼리, 에이젝스 -->
-	<script th:src="@{/assets/js/jquery-3.6.0.js}"></script>
-	<script type="text/javascript" charset="utf8"
-		src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
-
-	<script>
-	$(document).ready(function() {
-		$('#dataTable').DataTable();
-		
-	});
-  </script>
 </body>
 
 </html>

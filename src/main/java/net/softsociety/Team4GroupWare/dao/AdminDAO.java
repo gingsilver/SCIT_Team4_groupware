@@ -28,7 +28,7 @@ public interface AdminDAO {
 	public int checkEmail(String employee_email);
 
 	/**
-	 * select : 관리작 관리하고 있는 회사 코드 찾기
+	 * select : 관리자가 관리하고 있는 회사 코드 찾기
 	 * @param username
 	 * @return
 	 */
@@ -131,12 +131,12 @@ public interface AdminDAO {
 	 * @return
 	 */
 	public ArrayList<DocumentForm> readDocumentForm(DocumentForm doc);
-
+	
 	/**
 	 * select : 양식함 글 읽기
 	 * @param document_form_code
 	 * @return
 	 */
 	public DocumentForm findDocByCode(String document_form_code);
-	
+
 }

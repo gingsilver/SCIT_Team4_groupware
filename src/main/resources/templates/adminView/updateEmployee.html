@@ -63,16 +63,7 @@
 
     <section class="section dashboard">
       	<table id="dataTable" class="table display">
-	      		 <colgroup>
-	      		 	<col width="100px"/>
-			        <col width="100px"/>
-			        <col width="100px"/>
-			        <col width="100px"/>
-			        <col width="80px"/>
-			        <col width="80px"/>
-			        <col width="80px"/>
-			        <col width="80px"/>
-			    </colgroup>
+	      		 
 			    <thead>
 		      		<tr>
 		      			<th>사원 번호</th>
@@ -92,7 +83,7 @@
 			      		<td th:text="${list.employee_name}"></td>
 			      		<td th:text="${list.employee_email}"></td>
 			      		<td>
-				      		<select id="position">
+				      		<select id="position" class="form-select text-center">
 				      			<option value="사원">사원</option>
 				      			<option value="주임">주임</option>
 				      			<option value="대리">대리</option>
@@ -106,8 +97,9 @@
 				      		</select>
 			      		</td>
 			      		<td>
-			      			<select id="role">
-			      				<option th:text="${list.role_name}"></option>
+			      			<select id="role" class="form-select text-center">
+			      				<option value="ROLE_USER">일반 사원</option>
+			      				<option value="ROLE_ADMIN">관리자 사원</option>
 			      			</select>
 			      		</td>
 			      		<td>

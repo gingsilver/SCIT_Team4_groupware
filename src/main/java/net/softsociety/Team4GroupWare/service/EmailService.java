@@ -91,5 +91,19 @@ public interface EmailService {
 	 */
 	public AttachedFile MailAttachedfile(String email_code);
 
+	/**
+	 * insert : 메일 저장
+	 * @param email
+	 * @return
+	 */
+	public int insertMailTotal(Email email);
+
+	/**
+	 * insert : 메일 프로세스 저장
+	 * @param mail_process
+	 * @return
+	 */
+	public int insertMailProcess(MailProcess mail_process);
+
 	
 }

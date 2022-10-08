@@ -29,38 +29,11 @@
 
   <!-- Template Main CSS File -->
   <link th:href="@{/assets/css/style.css}" rel="stylesheet">
-<!--   <link th:href="@{/assets/css/mailbox.css}" rel="stylesheet"> -->
+  <!--   <link th:href="@{/assets/css/mailbox.css}" rel="stylesheet"> -->
   
-    <!-- zTree -->
+  <!-- zTree -->
   <link rel="stylesheet" th:href="@{/zTree/zTreeStyle.css}" />
   
-<script>
-function validation(){
-	let receiver = document.getElementById('email_receiver');
-	let title = document.getElementById('email_title'); 
-	let content = document.getElementById('email_content'); 
-	
-	if(receiver.value.length==0 ){
-		alert("받는 사람은 필수 입력사항입니다.");
-		return false;		
-	}
-	
-	if(title.value.length==0 ){
-		alert("제목은 필수 입력사항입니다.");
-		return false;		
-	}
-	
-	if(content.value.length==0 ){
-		alert("내용을 입력해주세요.");
-		return false;		
-	}
-	
-	alert("메일발송이 완료되었습니다.");
-	
-	}
-	
-	
-</script>
   <!-- =======================================================
   * Template Name: NiceAdmin - v2.3.1
   * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
@@ -83,13 +56,10 @@ textarea:hover{
 }
 input[type=button]{
 	width : 100px;
-	
 }
-
 #email_title, #email_receiver, #email_cc_receiver{
 	width : 900px;
 }
-
 .sendAndReset{
 	margin : 0 auto;
 	text-align: center;
@@ -128,7 +98,156 @@ div.attechedFile{
   <!-- ======= Header ======= -->
   <header th:replace="/indexcommon/header :: header"></header><!-- End Header -->
   <!-- ======= Sidebar ======= -->
-  <aside th:replace="/indexcommon/aside :: aside"></aside><!-- End Sidebar-->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+      <li class="text-center">
+      	<span th:if="${employee.employee_photo} == null"><img th:src="@{/image/default_photo.png}"></span>
+        <span th:if="${employee.employee_photo} != null"><img th:src="@{/assets/upload/photo/} + ${employee.employee_photo}" alt="Profile" class="rounded-circle" width="180px"></span>
+      </li>
+      
+      <li class="text-center">
+      	<h4 th:text="${employee.employee_name}"></h4>
+		<h6 th:text="${employee.organization}"></h6>
+      </li>
+    	<hr>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/index}">
+          <i class="bi bi-grid"></i>
+          <span>HOME</span>
+        </a>
+      </li><!-- End homepage Nav -->
+      
+      <li class="nav-heading">Pages</li>
+      
+      <li class="nav-item">
+        <a class="nav-link collapsed" th:href="@{/employee/mypage}">
+          <i class="bi bi-person"></i>
+          <span>마이페이지</span>
+        </a>
+      </li><!-- End 마이페이지 Page Nav -->
+      
+      <!-- start 근태관리 nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#working-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-calendar-week"></i><span>근태관리</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="working-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a th:href="@{/management/attendance}">
+              <i class="bi bi-clock"></i><span>출 · 퇴근 기록</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/management/timerecord}">
+              <i class="bi bi-clock"></i><span>출 · 퇴근 전체보기</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/management/dayoff}">
+              <i class="bi bi-heart-fill"></i><span>휴무 신청</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/management/salary}">
+              <i class="bi bi-coin"></i><span>급여 정산서</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/management/contract}">
+              <i class="bi bi-file-earmark-spreadsheet"></i><span>근로 계약서</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- 근태관리 End Components Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-envelope"></i><span>메일함</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a th:href="@{/mailbox/write}">
+              <i class="bi bi-pencil-square"></i><span>메일 쓰기</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/mailbox/readAll}">
+              <i class="bi bi-envelope-open"></i><span>전체 메일함</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/mailbox/sentMailbox}">
+              <i class="bi bi-arrow-right-circle"></i><span>보낸 메일함</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Components Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-journal-text"></i><span>프로젝트</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+	    <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+	    	<li>
+	    		<a th:href="@{/project/create}">
+	    			<i class="bi bi-circle"></i><span>프로젝트 생성</span>
+	    		</a>
+	    	</li>
+			<li>
+	            <a th:href="@{/project/main}">
+					<i class="bi bi-circle"></i><span>프로젝트 메인페이지</span>
+	            </a>
+			</li>
+		</ul>
+	 </li><!-- End Forms Nav -->
+	 
+	  <!-- start 전자결재 nav -->
+	   <li class="nav-item">
+        <a class="nav-link collapsed" th:href="@{/draft/main}">
+          <i class="bi bi-journal-text"></i>
+          <span>전자결재</span>
+        </a>
+       </li><!-- End 전자결재 nav -->
+       
+       <li class="nav-item">
+        
+      </li><!-- End Blank Page Nav -->
+       
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-layout-text-window-reverse"></i><span>게시판</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a class="nav-link collapsed" th:href="@{/board/companynotice}">
+	          <i class="bi bi-exclamation-triangle-fill"></i><span>전사공지</span>
+	        </a>
+          </li>
+          <li>
+            <a class="nav-link collapsed" th:href="@{/board/programboard}">
+	          <i class="bi bi-dropbox"></i><span>사내소프트웨어</span>
+	        </a>
+          </li>
+          <li>
+            <a class="nav-link collapsed" th:href="@{/freeboard/list}">
+	          <i class="bi bi-card-list"></i><span>자유게시판</span>
+	        </a>
+          </li>
+        </ul>
+      </li><!-- End 게시판 Nav -->
+
+	<hr>
+
+	<li class="nav-item" sec:authorize="isAuthenticated()">
+        <a class="nav-link collapsed" th:href="@{/logout}">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>로그아웃</span>
+        </a>
+      </li><!-- End Logout Page Nav -->
+    </ul>
+
+  </aside><!-- End Sidebar-->
 
   <main id="main" class="main">
 
@@ -144,67 +263,69 @@ div.attechedFile{
 
     <section class="section dashboard">      
         <div class="container">
-        			<div class="card">
+        	<div class="card">
 				<div class="card-body" style="height : 850px; ">
-
-     <form id="write" th:action="write" method="post" onsubmit="return validation();" enctype="multipart/form-data">
-        <table>
-            <tr id="box" class="form-group">
-                <td>
-                    <input type="text" class="form-control" id="email_receiver" name="email_receiver" placeholder="To:">
-                </td>
-				<td>
-					<button type="button" class="btn btn-primary" id="selectApproval"
-							data-bs-toggle="modal" data-bs-target="#approvalModal"><i class="bi bi-person-plus-fill">&nbsp;주소록</i></button>&nbsp;
-				</td>
-            </tr>
-            <tr id="box2" class="form-group">        
-                <td>
-                    <input type="text" class="form-control" name="email_cc_receiver" id="email_cc_receiver" placeholder="CC:">
-                </td>
-					<td>
-					<button type="button" class="btn btn-primary" id="selectApproval"
-							data-bs-toggle="modal" data-bs-target="#approvalModal"><i class="bi bi-person-plus-fill">&nbsp;주소록</i></button>&nbsp;
-				</td>
-            </tr>
-            <tr class="form-group">
-                <td>
-                    <input type="text" class="form-control" id="email_title" name="email_title" placeholder="Title : ">
-                </td>
-            </tr>
-            <tr class="form-group">
-                <td>
-                	
-                    <textarea class="form-control" id="email_content" name="email_content" placeholder="Enter text.." rows="20" cols="50"> </textarea>
-		
-                </td>
-            </tr>
-            <div class="attechedFile">
-            
-            <tr class="form-group" >
-            	<td><h5 class="mb-4"><i class="bi bi-paperclip"></i>첨부파일</h5></td>
-            </tr>            	
-            <tr>
-            <td>
-                <form action="#" class="d-flex flex-column align-items-center justify-content-center">
-               <div class="fallback w-100">
-               <input type="file"  name="upload" class="file-input" data-default-file="" multiple/>
-            </td>
-            </tr>
-            </div>
-			<tr>
-				<th colspan="2" class="sendAndReset">
-				<button type="submit" id="sendButton"><i class="bi bi-send" aria-hidden="true"> 발 송</i></button>&nbsp;
-				<button type="reset" id="resetButton"><i class="bi bi-x-lg" aria-hidden="true"> 리 셋</i></button>&nbsp;
-				</th>
-			</tr>
-        </table>                
-    </form>
-      </div>
- </div>
-    </div> 
+				     <form id="write" th:action="@{/mailbox/write}" method="post" enctype="multipart/form-data">
+				        <table>
+				            <tr id="box" class="form-group">
+				                <td>
+				                    <input type="text" class="form-control" id="email_receiver" name="email_receiver" placeholder="To:">
+				                </td>
+								<td>
+									<button type="button" class="btn btn-primary" id="selectApproval"
+											data-bs-toggle="modal" data-bs-target="#approvalModal"><i class="bi bi-person-plus-fill">&nbsp;주소록</i></button>&nbsp;
+								</td>
+				            </tr>
+				            
+				            <tr id="box2" class="form-group">        
+				                <td>
+				                    <input type="text" class="form-control" name="email_cc_receiver" id="email_cc_receiver" placeholder="CC:">
+				                </td>
+									<td>
+									<button type="button" class="btn btn-primary" id="selectApproval"
+											data-bs-toggle="modal" data-bs-target="#approvalModal"><i class="bi bi-person-plus-fill">&nbsp;주소록</i></button>&nbsp;
+								</td>
+				            </tr>
+				            
+				            <tr class="form-group">
+				                <td>
+				                    <input type="text" class="form-control" id="email_title" name="email_title" placeholder="Title : ">
+				                </td>
+				            </tr>
+				            
+				            <tr class="form-group">
+				                <td>
+				                    <textarea class="form-control" id="email_content" name="email_content" placeholder="Enter text.." rows="20" cols="50"> </textarea>
+				                </td>
+				            </tr>
+							<tr>
+								<th colspan="2" class="sendAndReset">
+								<button type="submit" id="sendButton"><i class="bi bi-send" aria-hidden="true"> 발 송</i></button>&nbsp;
+								<button type="reset" id="resetButton"><i class="bi bi-x-lg" aria-hidden="true"> 리 셋</i></button>&nbsp;
+								</th>
+							</tr>
+				        </table>
+				    </form>
+				    <form class="attechedFile">
+				        <table >
+				            <tr>
+				            	<td><h5 class="mb-4"><i class="bi bi-paperclip"></i>첨부파일</h5></td>
+				            </tr>            	
+				            <tr>
+					            <td>
+						           <div class="fallback w-100">
+						           <input type="file"  name="upload" class="file-input" data-default-file="" multiple/>
+						           </div>
+					            </td>
+				            </tr>
+				        </table>
+				    </form>
+     			 </div>
+ 			</div>
+    	</div> 
+    	
         <!-- 주소록 선택 modal start -->
-			<div class="modal fade" id="approvalModal" tabindex="-1" >
+		<div class="modal fade" id="approvalModal" tabindex="-1" >
 				<div class="modal-dialog modal-xl">
 					<div class="modal-content">
 						<div class="modal-header">
@@ -253,6 +374,7 @@ div.attechedFile{
 												<th>#</th>
 												<th>이름</th>
 												<th>이메일</th>
+												<th>수신형태</th>
 											</tr>
 											</thead>
 											<tbody>
@@ -269,9 +391,7 @@ div.attechedFile{
 		                  </div>
 		                </div>
 		              </div><!-- End Extra Large Modal-->
-    
-    
-    
+		            </div>
     </section>
 
   </main><!-- End #main -->
@@ -304,7 +424,6 @@ div.attechedFile{
 
   <!-- Template Main JS File -->
   <script th:src="@{/assets/js/main.js}"></script>
-
   
   <!-- 제이쿼리, 에이젝스 -->
   <script th:src="@{/assets/js/jquery-3.6.0.js}"></script>
@@ -312,10 +431,13 @@ div.attechedFile{
   <!-- zTree js : 조직도 라이브러리 입니다. -->
   <script type="text/javascript" th:src="@{/zTree/jquery.ztree.core.min.js}"></script>
 
-  <SCRIPT LANGUAGE="JavaScript">
+  <SCRIPT>
   $(document).ready(function(){
 	  /* 페이지가 시작되자마자 조직도 출력 */
 	  readOrg();
+	  
+	  /*메일 보내기 전 확인*/
+	  $('#write').on('submit', validation);
 	  
 	  /* 조직원 사원 목록 클릭시 이벤트 */
 	  $('.employeeInfo').on('click', addEmpl);
@@ -323,42 +445,42 @@ div.attechedFile{
 	  /* 결재선 추가 버튼 : 결재자 정보 결재 페이지에 넘기기 */
 	  $('#addApprovalButton').on('click', addApproval);
 	  
-
-
-	  
-	  
-	  
-  });  
+  });
   
-  
-  /* To부분에 자동으로 이메일 입력 */
-  function addReceiver()  {
-		alert("받는 이가 추가되었습니다.");
-
-	  
-	  let email_receiver = document.getElementById('email_receiver');
-	  
-	  email_receiver.innerHTML="hongvely0829@gmail.com";
-	  
-	  
-	  
-	 
-  }  
-  
-  
-  /* CC부분에 자동으로 이메일 입력 */
-  function addCCReceiver()  {
-	  
-	  
-	  
-	  
-
-  }  
-  
+  function validation(){
+	  	let receiver = document.getElementById('email_receiver');
+	  	let title = document.getElementById('email_title'); 
+	  	let content = document.getElementById('email_content'); 
+	  	
+	  	if(receiver.value.length==0 ){
+	  		alert("받는 사람은 필수 입력사항입니다.");
+	  		return false;		
+	  	}
+	  	
+	  	if(title.value.length==0 ){
+	  		alert("제목은 필수 입력사항입니다.");
+	  		return false;		
+	  	}
+	  	
+	  	if(content.value.length==0 ){
+	  		alert("내용을 입력해주세요.");
+	  		return false;		
+	  	}
+	  	
+	  	alert("메일발송이 완료되었습니다.");
+	  	
+	}
   
   /* 결재선 테이블 번호 추가를 위한 전역 num 변수 */
-  let num = 0;
+  	let num = 0;
   /* 사원 목록 클릭 이벤트*/
+	let employee_name;
+	let employee_code;
+	let employee_email;
+	let select;
+	var receiverArr = [];
+	var ccArr = [];
+	
   function addEmpl() {
 	  let count = $(this).attr('count');
 	  let employee_name = $(this).attr('empname');
@@ -379,22 +501,13 @@ div.attechedFile{
 		  insertTr += "<td>"+ num +"</td>";
 		  insertTr += "<td employee_name="+ employee_name +" employee_code=" + employee_code + ">" + employee_name + "</td>";
 		  insertTr += "<td employee_email="+ employee_email +" employee_code=" + employee_code + ">" + employee_email + "</td>";
-
-		  insertTr += "<td><span id="+ type +"></span></td>";
+		  insertTr += '<td><select class="form-select selectedType">';
+		  insertTr += '<option>수신 형태 선택</option>';
+		  insertTr += '<option value="수신">수신</option>';
+		  insertTr += '<option value="참조">참조</option></select></td>';
 		  insertTr += "</tr>";
 		  
 		  $('#memDiv > tbody:last').append(insertTr);
-		  
-		  $('#selectedType'+num).on('change', addApr);
-		  
-		  
-		  /* To부분에 자동으로 이메일 입력 */
-		  $('#addApprovalButton').on('click', addReceiver);
-		  
-		  
-		  /* CC부분에 자동으로 이메일 입력 */
-		  $('#addApprovalButton').on('click', addCCReceiver);
-		  
 		  
 	  } else {
 	      $(this).mouseenter().css('background-color', 'white');
@@ -404,10 +517,26 @@ div.attechedFile{
 		  $('#memDiv > tbody > tr:last').remove();
 	  }
 	  
-	  function addApr(){
-		  let selType = $(this).val();
-		  $('#type'+num).html(selType + '자');
-	  }
+	  $('.selectedType').on('change', function (){
+		  select = $(this).children("option:selected").text();
+		  
+		  if(select == "수신"){
+			  receiverArr.push(employee_email);
+		  } else{
+			  ccArr.push(employee_email);
+		  }
+	  });
+	  
+  }
+  
+  function addApproval() {
+	  console.log(receiverArr.toString());
+	  console.log(ccArr.toString());
+	  
+	  $('#email_receiver').val(receiverArr.toString());
+	  $('#email_cc_receiver').val(ccArr.toString());
+	  
+	  $('#approvalModal').modal('hide');
   }
   
   

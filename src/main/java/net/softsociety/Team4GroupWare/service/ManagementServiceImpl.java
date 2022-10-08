@@ -2,6 +2,7 @@ package net.softsociety.Team4GroupWare.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.Team4GroupWare.dao.EmailDAO;
 import net.softsociety.Team4GroupWare.dao.ManagementDAO;
+import net.softsociety.Team4GroupWare.domain.ConfirmedVacation;
 import net.softsociety.Team4GroupWare.domain.Salary;
 import net.softsociety.Team4GroupWare.domain.Tax;
 import net.softsociety.Team4GroupWare.domain.TimeSheet;
@@ -68,5 +70,47 @@ public class ManagementServiceImpl implements ManagementService {
 	public Vacation getVacationdays(String employee_code) {
 		Vacation vacation = managementDAO.getVacationdays(employee_code);
 		return vacation;
+	}
+
+	@Override
+	public int updateMinusVacation(int vacation_annual_minus, String employee_code) {
+        Map<String, Object> map = new HashMap<>();
+		
+        map.put("employee_code", employee_code);
+		map.put("vacation_annual_minus", vacation_annual_minus);
+		
+		int result = managementDAO.updateMinusVacation(map);
+		return result;
+	}
+
+	@Override
+	public int insertConfirmedVacation(ConfirmedVacation confirmedvacation) {
+		int result = managementDAO.insertConfirmedVacation(confirmedvacation);
+		return result;
+	}
+
+	@Override
+	public int insertStartTime(TimeSheet timesheet) {
+		int result = managementDAO.insertStartTime(timesheet);
+		return result;
+	}
+
+	@Override
+	public int insertEndTime(String resultTimeSheetCode) {
+		
+		int result = managementDAO.insertEndTime(resultTimeSheetCode);
+		return result;
+	}
+
+	@Override
+	public int adjustTimeRecord(String time_sheet_code) {
+		int result = managementDAO.adjustTimeRecord(time_sheet_code);
+		return result;
+	}
+
+	@Override
+	public String findTimeSheetCode(String employee_code) {
+		String result = managementDAO.findTimeSheetCode(employee_code);
+		return result;
 	}
 }

@@ -31,19 +31,22 @@ public class HomeController {
 	
 	//로그인 시 권한에 따라 다른 페이지 나오게 하기
 	@RequestMapping("/default")
-	public String defaultAfterLogin(HttpServletRequest request) {
+	public String defaultAfterLogin(@AuthenticationPrincipal UserDetails user, HttpServletRequest request, Model model) {
+		
 		if(request.isUserInRole("ROLE_ADMIN")) {
 			return "redirect:/admin";
 		}
+		
 		
 		return "redirect:/index";
 	}
 	
 	//사원 메인화면 출력
 	@GetMapping({"index"})
-	public String index(@AuthenticationPrincipal UserDetails user) {
-		
+	public String index(@AuthenticationPrincipal UserDetails user, Model model) {
+		Employee employee = adminservice.readAdmin(user.getUsername());
 		log.debug("{}", user);
+		model.addAttribute("employee", employee);
 		
 		return "index";
 	}
