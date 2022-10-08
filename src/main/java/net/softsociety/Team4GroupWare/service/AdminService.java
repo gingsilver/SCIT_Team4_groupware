@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
 
+import net.softsociety.Team4GroupWare.domain.AdminBoard;
 import net.softsociety.Team4GroupWare.domain.AttachedFile;
 import net.softsociety.Team4GroupWare.domain.Company;
 import net.softsociety.Team4GroupWare.domain.DocumentForm;
@@ -29,14 +30,6 @@ public interface AdminService {
 	public int checkEmail(String employee_email);
 
 	/**
-	 * select : 관리작 관리하고 있는 회사 코드 찾기
-	 * 
-	 * @param username
-	 * @return
-	 */
-	public Employee readAdmin(String username);
-
-	/**
 	 * insert : 사원 추가
 	 * 
 	 * @param employee
@@ -44,6 +37,14 @@ public interface AdminService {
 	 */
 	public int addEmployee(Employee employee);
 
+	/**
+	 * select : 관리자가 관리하고 있는 회사 코드 찾기
+	 * 
+	 * @param username
+	 * @return
+	 */
+	public Employee readAdmin(String username);
+	
 	/**
 	 * select : 전체 사원 불러오기
 	 * 
@@ -142,7 +143,7 @@ public interface AdminService {
 	 * @return
 	 */
 	public ArrayList<DocumentForm> readDocumentForm(DocumentForm doc);
-
+	
 	/**
 	 * select : 양식함 글 읽기
 	 * @param document_form_code

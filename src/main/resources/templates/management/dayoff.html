@@ -31,10 +31,7 @@
   <link th:href="@{/assets/css/style.css}" rel="stylesheet">
   <link th:href="@{/assets/css/style3.css}" rel="stylesheet">
   
-  <!-- data table -->
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
-  
-  <style>
+<style>
 hr#hr1 {
   		margin : 0;
   		padding : 0;
@@ -133,51 +130,66 @@ input, textarea{
 	border-radius: 5rem;
 }
   	
-  </style>
-<script th:inline="javascript">
-  	/*<![CDATA[*/ /*]]>*/
-        window.onload = function(){
-        	calc.onclick = function(){
-        	    let endDate = document.getElementById("dayoffend").value;
-        	    let startDate = document.getElementById("dayOffstart").value;
-        		
-        	    console.log(endDate);
-        	    console.log(startDate);
-        	    
-        	    if(endDate < startDate){
-        	    	alert('올바른 날짜를 지정해주세요.');
-        	    }else{
-        	    	
-        	    	var arr1 = endDate.split('-');
-        	    	var arr2 = startDate.split('-');
-        	    	
-            	    console.log(arr1[2]);
-            	    console.log(arr2[2]);
-            	    
+</style>
 
-                	let sum1 = Number(arr1[2]) - Number(arr2[2]);
-	                console.log(sum1);
-   		            document.getElementById("result").innerHTML = sum1;
+<!-- 제이쿼리, 에이젝스 -->
+<script th:src="@{/assets/js/jquery-3.6.0.js}"></script>
 
+<script>
+$(document).ready(function(){
+
+       	$('#calc').on('click', function(){
+       	    let endDate = document.getElementById("dayoffend").value;
+       	    let startDate = document.getElementById("dayOffstart").value;
+       		
+       	    console.log(endDate);
+       	    console.log(startDate);
+       	    
+       	    if(endDate < startDate){
+       	    	alert('올바른 날짜를 지정해주세요.');
+       	    }else{
+       	    	
+       	    	var arr1 = endDate.split('-');
+       	    	var arr2 = startDate.split('-');
+       	    	
+           	    console.log(arr1[2]);
+           	    console.log(arr2[2]);
+           	    
+               	let sum1 = Number(arr1[2]) - Number(arr2[2]) + 1;
+	            document.getElementById("confirmed_vacation_days").innerHTML = sum1;
    		            
-   		            checkButton.onclick = function (){
-		
-		                const a = /*[[${vacation.vacation_annual_all}]]*/;
-		                const b = /*[[${vacation.vacation_annual_minus}]]*/;
-		            	
-		                let sum2 = Number(a) - Number(b) - sum1;
-		                
-		                document.getElementById("target1").innerHTML = a;
-		                document.getElementById("target2").innerHTML = b;
-		                document.getElementById("target3").innerHTML = sum2;
-		            }
-        	    }
+	            $('#checkButton').on('click', function(){    
+		        		$.ajax({
+		        			url: 'vacation',
+		        			type: 'post',
+		        			dataType: 'json', 
+		        			success: function(data){
+		        				
+		        				let a = data.vacation_annual_all;
+		        				let b = data.vacation_annual_minus;
+		        				
+		        				let sum2 = Number(a) - Number(b) - sum1;
+		        				
+		        				console.log(data);
+		        				$('#target1').text(a);
+		        				$('#target2').text(b);
+		        				$('#target3').text(sum2);
 
-        	    
+
+		        			},
+		        			error: function(){
+		        				alert('데이터가 없습니다.');
+		        			}
+		        		});
+		                
+	                });
+	            }
+       		    
         		
-        	}
-        	function validation(){
-        		let opinion = document.getElementById('opinion'); 
+        	});
+       	
+        	sendButton.onclick = function(){
+        		let opinion = document.getElementById('confirmed_vacation_reason'); 
         		        		
         		if(opinion.value.length==0 ){
         			alert("사유는 필수 기재사항입니다.");
@@ -185,12 +197,13 @@ input, textarea{
         		}
         		
         		confirm("연차를 신청하겠습니까?");
-        		
+        			form.submit;
+        			return true;
         		}   	
         	
   		
-  	}
-        /*]]>*/
+});	
+
     </script>
   <!-- =======================================================
   * Template Name: NiceAdmin - v2.3.1
@@ -205,7 +218,156 @@ input, textarea{
   <!-- ======= Header ======= -->
   <header th:replace="/indexcommon/header :: header"></header><!-- End Header -->
   <!-- ======= Sidebar ======= -->
-  <aside th:replace="/indexcommon/aside :: aside"></aside><!-- End Sidebar-->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+      <li class="text-center">
+      	<span th:if="${employee.employee_photo} == null"><img th:src="@{/image/default_photo.png}"></span>
+        <span th:if="${employee.employee_photo} != null"><img th:src="@{/assets/upload/photo/} + ${employee.employee_photo}" alt="Profile" class="rounded-circle" width="180px"></span>
+      </li>
+      
+      <li class="text-center">
+      	<h4 th:text="${employee.employee_name}"></h4>
+		<h6 th:text="${employee.organization}"></h6>
+      </li>
+    	<hr>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/index}">
+          <i class="bi bi-grid"></i>
+          <span>HOME</span>
+        </a>
+      </li><!-- End homepage Nav -->
+      
+      <li class="nav-heading">Pages</li>
+      
+      <li class="nav-item">
+        <a class="nav-link collapsed" th:href="@{/employee/mypage}">
+          <i class="bi bi-person"></i>
+          <span>마이페이지</span>
+        </a>
+      </li><!-- End 마이페이지 Page Nav -->
+      
+      <!-- start 근태관리 nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#working-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-calendar-week"></i><span>근태관리</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="working-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a th:href="@{/management/attendance}">
+              <i class="bi bi-clock"></i><span>출 · 퇴근 기록</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/management/timerecord}">
+              <i class="bi bi-clock"></i><span>출 · 퇴근 전체보기</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/management/dayoff}">
+              <i class="bi bi-heart-fill"></i><span>휴무 신청</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/management/salary}">
+              <i class="bi bi-coin"></i><span>급여 정산서</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/management/contract}">
+              <i class="bi bi-file-earmark-spreadsheet"></i><span>근로 계약서</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- 근태관리 End Components Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-envelope"></i><span>메일함</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a th:href="@{/mailbox/write}">
+              <i class="bi bi-pencil-square"></i><span>메일 쓰기</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/mailbox/readAll}">
+              <i class="bi bi-envelope-open"></i><span>전체 메일함</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/mailbox/sentMailbox}">
+              <i class="bi bi-arrow-right-circle"></i><span>보낸 메일함</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Components Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-journal-text"></i><span>프로젝트</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+	    <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+	    	<li>
+	    		<a th:href="@{/project/create}">
+	    			<i class="bi bi-circle"></i><span>프로젝트 생성</span>
+	    		</a>
+	    	</li>
+			<li>
+	            <a th:href="@{/project/main}">
+					<i class="bi bi-circle"></i><span>프로젝트 메인페이지</span>
+	            </a>
+			</li>
+		</ul>
+	 </li><!-- End Forms Nav -->
+	 
+	  <!-- start 전자결재 nav -->
+	   <li class="nav-item">
+        <a class="nav-link collapsed" th:href="@{/draft/main}">
+          <i class="bi bi-journal-text"></i>
+          <span>전자결재</span>
+        </a>
+       </li><!-- End 전자결재 nav -->
+       
+       <li class="nav-item">
+        
+      </li><!-- End Blank Page Nav -->
+       
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-layout-text-window-reverse"></i><span>게시판</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a class="nav-link collapsed" th:href="@{/board/companynotice}">
+	          <i class="bi bi-exclamation-triangle-fill"></i><span>전사공지</span>
+	        </a>
+          </li>
+          <li>
+            <a class="nav-link collapsed" th:href="@{/board/programboard}">
+	          <i class="bi bi-dropbox"></i><span>사내소프트웨어</span>
+	        </a>
+          </li>
+          <li>
+            <a class="nav-link collapsed" th:href="@{/freeboard/list}">
+	          <i class="bi bi-card-list"></i><span>자유게시판</span>
+	        </a>
+          </li>
+        </ul>
+      </li><!-- End 게시판 Nav -->
+
+	<hr>
+
+	<li class="nav-item" sec:authorize="isAuthenticated()">
+        <a class="nav-link collapsed" th:href="@{/logout}">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>로그아웃</span>
+        </a>
+      </li><!-- End Logout Page Nav -->
+    </ul>
+
+  </aside><!-- End Sidebar-->
 
   <main id="main" class="main">
 
@@ -226,12 +388,12 @@ input, textarea{
 					<div class="card" id="card">
 						<div class="card-body">
 							<h3 class="title">휴무 신청서</h3>
-							<form id="write" action="write" method="post" onsubmit="return validation();" enctype="multipart/form-data">
+							<form id="dayoff" action="dayoff" method="post" enctype="multipart/form-data">
 							<table class="changform">
 								<tr>
 									<th>구분</th>
 									<td>
-										<select id="dayOffType" name="location">
+										<select id="confirmed_vacation_type" name="confirmed_vacation_type">
                                 			<option value="연차" selected="selected">연차</option>
                             			    <option value="병가">병가</option>
                             			    <option value="군소집 훈련">군소집 훈련</option>
@@ -242,24 +404,22 @@ input, textarea{
 								</tr>
 								<tr>
 									<th>휴가 기간</th>
-									<td><input type="date" name="today" min="2021-05-31" max="2022-12-12" id="dayOffstart">
-										 ~ <input type="date" name="today" min="2021-05-31" max="2022-12-12" id="dayoffend">
+									<td><input type="date" min="2021-05-31" max="2022-12-12" id="dayOffstart" name="confirmed_vacation_date">
+										 ~ <input type="date" min="2021-05-31" max="2022-12-12" id="dayoffend" name="confirmed_vacation_Enddate">
 										 <input type="button" id="calc" value="계산">
-										 
 									</td>
 								</tr>
 								<tr>
 									<th>일수</th>
-									<td>총 <span id="result"></span> 일 (C)</td>
+									<td>총 <span id="confirmed_vacation_days" name="confirmed_vacation_days"></span> 일 (C)</td>
 								</tr>								
 								<tr>
 									<th>사유</th>
-									<td><textarea id="opinion" rows="5" cols="50"></textarea></td>
+									<td><textarea id="confirmed_vacation_reason" name="confirmed_vacation_reason" rows="5" cols="50"></textarea></td>
 								</tr>
 							</table>
-							</form>
 							<div class="buttonbox">
-								<button type="submit" id="checkButton"><i class="bi bi-check-lg"> 확 인</i></button>&nbsp;
+								<button type="button" id="checkButton"><i class="bi bi-check-lg"> 확 인</i></button>&nbsp;
 								<button type="reset" id="resetButton"><i class="bi bi-x-lg" aria-hidden="true"> 리 셋</i></button>&nbsp;
 							</div>
 							<table class="changform">
@@ -286,15 +446,13 @@ input, textarea{
 								<button type="submit" id="sendButton"><i class="bi bi-check2-all"> 신 청</i></button>&nbsp;
 								<button type="reset" id="resetButton"><i class="bi bi-x-lg" aria-hidden="true"> 리 셋</i></button>&nbsp;
 							</div>
-						</div>
+						</form>	
+					</div>
     			</div>
     		</div>
     	</div>
  
     </section>
-		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
@@ -325,16 +483,7 @@ input, textarea{
 
   <!-- Template Main JS File -->
   <script th:src="@{/assets/js/main.js}"></script>
-  
-  <!-- 제이쿼리, 에이젝스 -->
-  <script th:src="@{/assets/js/jquery-3.6.0.js}"></script>
-  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
 
-  <script>
-	$(document).ready(function() {
-		$('#dataTable').DataTable();
-	});
-  </script>
 </body>
 
 </html>

@@ -49,6 +49,7 @@ public class ScheduleController {
 		
 		String company_code = employee.getCompany_code();
 		model.addAttribute("company_code", company_code);
+		model.addAttribute("employee", employee);
 		
 		return "schedule/schedule_list";
 	}

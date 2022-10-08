@@ -64,6 +64,7 @@ public class FreeBoardController {
 
 		ArrayList<FreeBoard> boardlist = service.list(navi, type, searchWord, company_code);
 
+		model.addAttribute("employee", employee);
 		model.addAttribute("navi", navi);
 		log.debug("navi : {}", navi);
 		model.addAttribute("boardlist", boardlist);
@@ -76,13 +77,16 @@ public class FreeBoardController {
 
 	// 글쓰기폼으로 이동
 	@GetMapping("write")
-	public String write() {
+	public String write(@AuthenticationPrincipal UserDetails user,Model model) {
+		Employee employee = service.findEmployee(user.getUsername());
+		
+		model.addAttribute("employee", employee);
 		return "/freeboard/writeForm";
 	}
 
 	// 글쓰기 처리
 	@PostMapping("write")
-	public String write(FreeBoard board, @AuthenticationPrincipal UserDetails user) {
+	public String write(FreeBoard board, @AuthenticationPrincipal UserDetails user,Model model) {
 
 		log.debug("저장할 글정보 : {}", board);
 
@@ -94,6 +98,8 @@ public class FreeBoardController {
 
 		board.setCompany_code(company_code);
 
+		model.addAttribute("employee", employee);
+		
 		int result = service.write(board);
 		return "redirect:/freeboard/list";
 	}
@@ -104,8 +110,10 @@ public class FreeBoardController {
 	 * @param boardnum 읽을 글번호
 	 */
 	@GetMapping("read")
-	public String read(Model model, @RequestParam(name = "free_code", defaultValue = "fr0") String free_code) {
+	public String read(Model model, @RequestParam(name = "free_code", defaultValue = "fr0") String free_code, @AuthenticationPrincipal UserDetails user) {
 
+		Employee employee = service.findEmployee(user.getUsername());
+		
 		FreeBoard board = service.read(free_code);
 		if (board == null) {
 			return "redirect:/freeboard/list"; // 글이 없으면 목록으로
@@ -117,6 +125,7 @@ public class FreeBoardController {
 		// 결과를 모델에 담아서 HTML에서 출력
 		model.addAttribute("board", board);
 		model.addAttribute("replylist", replylist);
+		model.addAttribute("employee", employee);
 
 		return "/freeboard/read";
 	}
@@ -138,7 +147,7 @@ public class FreeBoardController {
 		// 글 삭제
 		int result = service.delete(board);
 
-		return "redirect:list";
+		return "redirect:/list";
 	}
 
 	// 글 수정화면으로

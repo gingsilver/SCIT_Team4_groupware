@@ -54,6 +54,14 @@
 	textarea {
     	resize: none;
   	}
+  	
+  	div.editable {
+	    width: auto;
+	    height: 500px;
+	    border: 1px solid #dcdcdc;
+	    overflow-y: auto;
+	    border-radius: 10px;
+	}
 	</style>
 
 </head>
@@ -63,7 +71,156 @@
 	<!-- ======= Header ======= -->
 	<header th:replace="/indexcommon/header :: header"></header><!-- End Header -->
 	<!-- ======= Sidebar ======= -->
-	<aside th:replace="/indexcommon/aside :: aside"></aside><!-- End Sidebar-->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+      <li class="text-center">
+      	<span th:if="${employee.employee_photo} == null"><img th:src="@{/image/default_photo.png}"></span>
+        <span th:if="${employee.employee_photo} != null"><img th:src="@{/assets/upload/photo/} + ${employee.employee_photo}" alt="Profile" class="rounded-circle" width="180px"></span>
+      </li>
+      
+      <li class="text-center">
+      	<h4 th:text="${employee.employee_name}"></h4>
+		<h6 th:text="${employee.organization}"></h6>
+      </li>
+    	<hr>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/index}">
+          <i class="bi bi-grid"></i>
+          <span>HOME</span>
+        </a>
+      </li><!-- End homepage Nav -->
+      
+      <li class="nav-heading">Pages</li>
+      
+      <li class="nav-item">
+        <a class="nav-link collapsed" th:href="@{/employee/mypage}">
+          <i class="bi bi-person"></i>
+          <span>마이페이지</span>
+        </a>
+      </li><!-- End 마이페이지 Page Nav -->
+      
+      <!-- start 근태관리 nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#working-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-calendar-week"></i><span>근태관리</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="working-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a th:href="@{/management/attendance}">
+              <i class="bi bi-clock"></i><span>출 · 퇴근 기록</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/management/timerecord}">
+              <i class="bi bi-clock"></i><span>출 · 퇴근 전체보기</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/management/dayoff}">
+              <i class="bi bi-heart-fill"></i><span>휴무 신청</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/management/salary}">
+              <i class="bi bi-coin"></i><span>급여 정산서</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/management/contract}">
+              <i class="bi bi-file-earmark-spreadsheet"></i><span>근로 계약서</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- 근태관리 End Components Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-envelope"></i><span>메일함</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a th:href="@{/mailbox/write}">
+              <i class="bi bi-pencil-square"></i><span>메일 쓰기</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/mailbox/readAll}">
+              <i class="bi bi-envelope-open"></i><span>전체 메일함</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/mailbox/sentMailbox}">
+              <i class="bi bi-arrow-right-circle"></i><span>보낸 메일함</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Components Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-journal-text"></i><span>프로젝트</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+	    <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+	    	<li>
+	    		<a th:href="@{/project/create}">
+	    			<i class="bi bi-circle"></i><span>프로젝트 생성</span>
+	    		</a>
+	    	</li>
+			<li>
+	            <a th:href="@{/project/main}">
+					<i class="bi bi-circle"></i><span>프로젝트 메인페이지</span>
+	            </a>
+			</li>
+		</ul>
+	 </li><!-- End Forms Nav -->
+	 
+	  <!-- start 전자결재 nav -->
+	   <li class="nav-item">
+        <a class="nav-link collapsed" th:href="@{/draft/main}">
+          <i class="bi bi-journal-text"></i>
+          <span>전자결재</span>
+        </a>
+       </li><!-- End 전자결재 nav -->
+       
+       <li class="nav-item">
+        
+      </li><!-- End Blank Page Nav -->
+       
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-layout-text-window-reverse"></i><span>게시판</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a class="nav-link collapsed" th:href="@{/board/companynotice}">
+	          <i class="bi bi-exclamation-triangle-fill"></i><span>전사공지</span>
+	        </a>
+          </li>
+          <li>
+            <a class="nav-link collapsed" th:href="@{/board/programboard}">
+	          <i class="bi bi-dropbox"></i><span>사내소프트웨어</span>
+	        </a>
+          </li>
+          <li>
+            <a class="nav-link collapsed" th:href="@{/freeboard/list}">
+	          <i class="bi bi-card-list"></i><span>자유게시판</span>
+	        </a>
+          </li>
+        </ul>
+      </li><!-- End 게시판 Nav -->
+
+	<hr>
+
+	<li class="nav-item" sec:authorize="isAuthenticated()">
+        <a class="nav-link collapsed" th:href="@{/logout}">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>로그아웃</span>
+        </a>
+      </li><!-- End Logout Page Nav -->
+    </ul>
+
+  </aside><!-- End Sidebar-->
 
 	<main id="main" class="main">
 
@@ -79,8 +236,11 @@
 		</div><!-- End Page Title -->
 
 		<section class="section dashboard">
+			<input type="hidden" th:value="${draft_code}" id="code">
+			<input type="hidden" th:value="${draft.draft_contents}" id="contents">
+			<input type="hidden" th:value="${draft.document_form_code}" id="docCode">
 			<div class="card">
-				<div class="card-body" style="height : 1750px;">
+				<div class="card-body" style="height : auto;">
 					<!-- start 버튼 행 -->
 					<div class="row">
 						<div class="col-lg-12">
@@ -121,7 +281,7 @@
 						</div><!-- end 기안자 정보 -->
 						
 						<!-- start 전자결재 기안자 -->
-						<div class="col-lg-1">
+						<div class="col-lg-1 lastDiv">
 							<table class="table text-center" style="width : 120px;">
 								<tr>
 									<th th:text="|${draft.process_type}자|"></th>
@@ -131,48 +291,23 @@
 								</tr>
 							</table>
 						</div><!-- end 전자결재 기안자 -->
-						<div class="col-lg-3">
-							<table class="table text-center" style="width : 120px;" th:each="list : ${appList}">
-								<tr>
-									<th th:text="|${list.process_type}자|"></th>
-								</tr>
-								<tr style="height : 100px;">
-									<td th:text="${list.approver_name}"></td>
-								</tr>
-							</table>
+						<div class="col-lg-1">
+							<div th:if="${draft.document_form_code} != null">
+								<table class="table text-center" style="width : 120px;">
+									<tr>
+										<th>전결자</th>
+									</tr>
+									<tr style="height : 100px;">
+										<td><span id="finalApprover"></span></td>
+									</tr>
+								</table>
+							</div>
+							<div th:if="${draft.document_form_code} == null"></div>
 						</div>
-						<div class="col-lg-1" id="finalApprover"></div>
 					</div><!-- end 기안자 정보, 결재선, 기안 선택 -->
-
-					<!-- start 양식함 -->
-					<div class="row">
-						<hr>
-						<div class="col-lg-4">
-							<h5>● 기안 선택</h5>
-							<div class="input-group mb-3">
-								<span class="input-group-text">기안 종류</span>
-								<select class="form-select" id="document_form_type">
-									<option selected="selected">----------------------기안 종류 선택----------------------</option>
-									<optgroup label="지정양식함">
-										<option value="회계">회계</option>
-										<option value="인사">인사</option>
-										<option value="총무">총무</option>
-									</optgroup>
-									<optgroup label="자유양식함">
-										<option value="내양식">내 양식</option>
-									</optgroup>
-								</select>
-							</div>
-						</div>
-						<div class="col-lg-8">
-							<h5>● 양식함</h5>
-							<div style="background-color : rgb(225, 229, 255); font-weight: bold; overflow-x:hidden; width:auto; height:120px; border-radius: 10px;">
-								<div class="docList my-2"></div>
-							</div>
-
-						</div>
-					</div><!-- end 양식함 -->
-
+					
+					<hr>
+					
 					<!-- start 기안내용 -->
 					<div class="row">
 						<div class="col-lg-12">
@@ -188,33 +323,26 @@
 								</colgroup>
 								<tr>
 									<th>문서 번호</th>
-									<td></td>
+									<td th:text="${draft.draft_code}"></td>
 									<th>기안일</th>
-									<td><input type="date" class="form-control" id="draft_inputdate"></td>
+									<td th:text="${draft.draft_inputdate}"></td>
 								</tr>
 								<tr>
 									<th>문서 제목</th>
-									<td><input type="text" class="form-control" id="selectedDocName"></td>
+									<td th:text="${draft.draft_title}"></td>
 									<th>마감일</th>
-									<td><input type="date" class="form-control" id="draft_duedate"></td>
+									<td th:text="${draft.draft_duedate}"></td>
 								</tr>
 							</table>
 							<!-- 웹 에디터 시작 -->
-							<div class="quill-editor-full">
+							<div class="col-lg-12">
+								<div class="editable" contenteditable="true"></div>
 							</div>
 							<hr>
 							<!-- 파일 첨부 시작 -->
-							<h5>● 파일 첨부</h5>
+							<h5>● 첨부된 파일</h5>
 							<div class="card">
 								<div class="card-body">
-									<form id="attachedFilesForm">
-									<div class="input-group">
-										<input class="form-control form-control-user product_files" type="file" name="upload" multiple="multiple">
-										<div class="input-group-append">
-                                                <button class="btn btn-primary" type="button" id="attachedFilesButton">업로드</button>
-                                            </div>
-									</div>
-									</form>
 									<div id="attachedFilesList" style="overflow-x:hidden; width:auto; height:200px;"></div>
 								</div>
 							</div>
@@ -286,8 +414,18 @@
 
 	<SCRIPT LANGUAGE="JavaScript">
 	
+		let draft_code = $('#code').val();
+		
 		$(document).ready(function () {
 			readApprover();
+			showOp();
+			decode();
+			showAttFile();
+			finalApprover();
+			
+			$('.editable').each(function(){
+			    this.contentEditable = true;
+			});
 			
 			$('#addOpinion').on('click', function(){
 				let opinionVal = $('#opinionVal').val();
@@ -324,6 +462,31 @@
 			});
 		});
 		
+		function showAttFile() {
+			$.ajax({
+				url : 'readAttachedFile',
+				type : 'post',
+				data : {document_code : draft_code},
+				dataType : 'json',
+				success: function (data) {
+					if(data != null){
+						let s;
+						s = '<ul>';
+						$.each(data, function(idx, ob){
+							s += '<li>' + ob.attached_file_origin_name + '</li>';
+						});
+						s += '</ul>'
+						$('#attachedFilesList').html(s);
+					} else{
+						$('#attachedFilesList').text('<b>첨부된 파일이 없습니다.</b>');
+					}
+				},
+				error: function (e) {
+					console.log(e.responseText);
+				}
+			});
+		}
+		
 		function showOp() {
 			$.ajax({
 				url: 'readOpinion',
@@ -355,11 +518,20 @@
 			});	
 		}
 		
+		function decode() {
+			let contents = $('#contents').val();
+			let decode_contents = decodeURIComponent(contents);
+			let replaced_str = decode_contents.replace('<input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL">', '');
+			replaced_str = decode_contents.replace('<input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL" style="user-select: auto;">', '');
+			$('.editable').html(replaced_str);
+		}
+		
 		function readApprover() {
 			$.ajax({
 				url : 'selectApp',
 				type : 'post',
-				data : {draft_code : [[${draft.draft_code}]]},
+				data : {draft_code : draft_code},
+				dataType : 'json', 
 				success: function (data) {
 					let insertTr;
 					let myClass;
@@ -368,20 +540,40 @@
 						myClass = "col-lg-1 text-center";
 						insertTr = "<table class='table' style='width : 120px;'>";
 						insertTr += "<tr style='height : 40.5px;'>";
-						insertTr += "<th>" + index + item.select + '자' + "</th>";
+						insertTr += "<th>" + item.process_type + '자' + "</th>";
 						insertTr += "</tr>";
 						insertTr += "<tr style='height : 100px;'>";
-						insertTr += "<td>" + item.name + "</td>";
+						insertTr += "<td>" + item.approver_name + "</td>";
 						insertTr += "</tr>";
 						insertTr += "</table><p></p>";
 						let div = $("<div>" + insertTr + "</div>").addClass(myClass);
-						$("#finalApprover").before(div);
-					});
+						$(".lastDiv").after(div);
+					}); 
 				},
 				error: function (e) {
 					console.log(e.responseText);
 				}
 			});
+		}
+		
+		function finalApprover() {
+			let document_form_code = $('#docCode').val();
+			
+			console.log(document_form_code);
+			$.ajax({
+				url : 'selectFinal',
+				type : 'post',
+				data : {document_form_code : document_form_code},
+				dataType : 'text', 
+				success: function (data) {
+					console.log(data);
+					$('#finalApprover').text(data);
+				},
+				error: function (e) {
+					console.log(e.responseText);
+				}
+			});
+			
 		}
 	</SCRIPT>
 </body>

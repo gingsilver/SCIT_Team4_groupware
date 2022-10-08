@@ -15,9 +15,7 @@
 
 	<!-- Google Fonts -->
 	<link href="https://fonts.gstatic.com" rel="preconnect">
-	<link
-		href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-		rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
 	<!-- Vendor CSS Files -->
 	<link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
@@ -35,28 +33,27 @@
 	<link rel="stylesheet" th:href="@{/zTree/zTreeStyle.css}" />
 
 	<style>
-		th,
-		td {
+		th, td {
 			vertical-align: middle;
 		}
-
+		
 		.btn-primary {
-			background-color: #606EBF;
-			border-color: #606EBF;
-			color: white;
-			font-size: 16px;
-		}
-
-		.btn-danger {
-			background-color: #CC5749;
-			border-color: #CC5749;
-			color: white;
-			font-size: 16px;
-		}
-
-		textarea {
-			resize: none;
-		}
+		background-color : #606EBF;
+		border-color : #606EBF;
+		color:white;
+		font-size : 16px;
+	}
+	
+	.btn-danger {
+		background-color : #CC5749;
+		border-color : #CC5749;
+		color:white;
+		font-size : 16px;
+	}
+	
+	textarea {
+    	resize: none;
+  	}
 	</style>
 
 </head>
@@ -66,7 +63,156 @@
 	<!-- ======= Header ======= -->
 	<header th:replace="/indexcommon/header :: header"></header><!-- End Header -->
 	<!-- ======= Sidebar ======= -->
-	<aside th:replace="/indexcommon/aside :: aside"></aside><!-- End Sidebar-->
+  <aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+      <li class="text-center">
+      	<span th:if="${employee.employee_photo} == null"><img th:src="@{/image/default_photo.png}"></span>
+        <span th:if="${employee.employee_photo} != null"><img th:src="@{/assets/upload/photo/} + ${employee.employee_photo}" alt="Profile" class="rounded-circle" width="180px"></span>
+      </li>
+      
+      <li class="text-center">
+      	<h4 th:text="${employee.employee_name}"></h4>
+		<h6 th:text="${employee.organization}"></h6>
+      </li>
+    	<hr>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/index}">
+          <i class="bi bi-grid"></i>
+          <span>HOME</span>
+        </a>
+      </li><!-- End homepage Nav -->
+      
+      <li class="nav-heading">Pages</li>
+      
+      <li class="nav-item">
+        <a class="nav-link collapsed" th:href="@{/employee/mypage}">
+          <i class="bi bi-person"></i>
+          <span>마이페이지</span>
+        </a>
+      </li><!-- End 마이페이지 Page Nav -->
+      
+      <!-- start 근태관리 nav -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#working-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-calendar-week"></i><span>근태관리</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="working-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a th:href="@{/management/attendance}">
+              <i class="bi bi-clock"></i><span>출 · 퇴근 기록</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/management/timerecord}">
+              <i class="bi bi-clock"></i><span>출 · 퇴근 전체보기</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/management/dayoff}">
+              <i class="bi bi-heart-fill"></i><span>휴무 신청</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/management/salary}">
+              <i class="bi bi-coin"></i><span>급여 정산서</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/management/contract}">
+              <i class="bi bi-file-earmark-spreadsheet"></i><span>근로 계약서</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- 근태관리 End Components Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-envelope"></i><span>메일함</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a th:href="@{/mailbox/write}">
+              <i class="bi bi-pencil-square"></i><span>메일 쓰기</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/mailbox/readAll}">
+              <i class="bi bi-envelope-open"></i><span>전체 메일함</span>
+            </a>
+          </li>
+          <li>
+            <a th:href="@{/mailbox/sentMailbox}">
+              <i class="bi bi-arrow-right-circle"></i><span>보낸 메일함</span>
+            </a>
+          </li>
+        </ul>
+      </li><!-- End Components Nav -->
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-journal-text"></i><span>프로젝트</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+	    <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+	    	<li>
+	    		<a th:href="@{/project/create}">
+	    			<i class="bi bi-circle"></i><span>프로젝트 생성</span>
+	    		</a>
+	    	</li>
+			<li>
+	            <a th:href="@{/project/main}">
+					<i class="bi bi-circle"></i><span>프로젝트 메인페이지</span>
+	            </a>
+			</li>
+		</ul>
+	 </li><!-- End Forms Nav -->
+	 
+	  <!-- start 전자결재 nav -->
+	   <li class="nav-item">
+        <a class="nav-link collapsed" th:href="@{/draft/main}">
+          <i class="bi bi-journal-text"></i>
+          <span>전자결재</span>
+        </a>
+       </li><!-- End 전자결재 nav -->
+       
+       <li class="nav-item">
+        
+      </li><!-- End Blank Page Nav -->
+       
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-layout-text-window-reverse"></i><span>게시판</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+          <li>
+            <a class="nav-link collapsed" th:href="@{/board/companynotice}">
+	          <i class="bi bi-exclamation-triangle-fill"></i><span>전사공지</span>
+	        </a>
+          </li>
+          <li>
+            <a class="nav-link collapsed" th:href="@{/board/programboard}">
+	          <i class="bi bi-dropbox"></i><span>사내소프트웨어</span>
+	        </a>
+          </li>
+          <li>
+            <a class="nav-link collapsed" th:href="@{/freeboard/list}">
+	          <i class="bi bi-card-list"></i><span>자유게시판</span>
+	        </a>
+          </li>
+        </ul>
+      </li><!-- End 게시판 Nav -->
+
+	<hr>
+
+	<li class="nav-item" sec:authorize="isAuthenticated()">
+        <a class="nav-link collapsed" th:href="@{/logout}">
+          <i class="bi bi-box-arrow-in-right"></i>
+          <span>로그아웃</span>
+        </a>
+      </li><!-- End Logout Page Nav -->
+    </ul>
+
+  </aside><!-- End Sidebar-->
 
 	<main id="main" class="main">
 
@@ -88,8 +234,7 @@
 					<div class="row">
 						<div class="col-lg-12">
 							<input type="button" value="상신" class="btn btn-primary" id="addDraftButton">&nbsp;
-							<input type="button" value="의견 추가" class="btn btn-primary" data-bs-toggle="modal"
-								data-bs-target="#largeModal">&nbsp;
+							<input type="button" value="의견 추가" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#largeModal">&nbsp;
 							<input type="button" value="임시 저장" class="btn btn-primary" id="saveDraftButton">&nbsp;
 							<input type="button" value="작성 취소" class="btn btn-danger" id="returnDraftMain">
 						</div>
@@ -102,8 +247,7 @@
 						</div>
 						<div class="col-lg-8">
 							<h5>● 결재선&nbsp;
-								<input type="button" value="조직원검색" class="btn btn-primary" data-bs-toggle="modal"
-									data-bs-target="#approvalModal">
+								<input type="button" value="조직원검색" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#approvalModal">
 							</h5>
 						</div>
 					</div><!-- end 기안자 정보 행 -->
@@ -123,7 +267,7 @@
 								</tr>
 							</table>
 						</div><!-- end 기안자 정보 -->
-
+						
 						<!-- start 전자결재 기안자 -->
 						<div class="col-lg-1">
 							<table class="table text-center" style="width : 120px;">
@@ -146,8 +290,7 @@
 							<div class="input-group mb-3">
 								<span class="input-group-text">기안 종류</span>
 								<select class="form-select" id="document_form_type">
-									<option selected="selected">----------------------기안 종류 선택----------------------
-									</option>
+									<option selected="selected">----------------------기안 종류 선택----------------------</option>
 									<optgroup label="지정양식함">
 										<option value="회계">회계</option>
 										<option value="인사">인사</option>
@@ -161,8 +304,7 @@
 						</div>
 						<div class="col-lg-8">
 							<h5>● 양식함</h5>
-							<div
-								style="background-color : rgb(225, 229, 255); font-weight: bold; overflow-x:hidden; width:auto; height:120px; border-radius: 10px;">
+							<div style="background-color : rgb(225, 229, 255); font-weight: bold; overflow-x:hidden; width:auto; height:120px; border-radius: 10px;">
 								<div class="docList my-2"></div>
 							</div>
 
@@ -204,46 +346,43 @@
 							<div class="card">
 								<div class="card-body">
 									<form id="attachedFilesForm">
-										<div class="input-group">
-											<input class="form-control form-control-user product_files" type="file"
-												name="upload" multiple="multiple">
-											<div class="input-group-append">
-												<button class="btn btn-primary" type="button"
-													id="attachedFilesButton">업로드</button>
-											</div>
-										</div>
-									</form>
-									<div id="attachedFilesList" style="overflow-x:hidden; width:auto; height:200px;">
+									<div class="input-group">
+										<input class="form-control form-control-user product_files" type="file" name="upload" multiple="multiple">
+										<div class="input-group-append">
+                                                <button class="btn btn-primary" type="button" id="attachedFilesButton">업로드</button>
+                                            </div>
 									</div>
+									</form>
+									<div id="attachedFilesList" style="overflow-x:hidden; width:auto; height:200px;"></div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-
+			
 			<!-- start 의견 모달 -->
 			<div class="modal fade" id="largeModal" tabindex="-1">
-				<div class="modal-dialog modal-lg">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title">● 의견함</h5>
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-						</div>
-						<div class="modal-body">
-							<h5><b>● 의견 목록</b></h5>
-							<div id="opnionList"></div>
-							<hr>
-							<textarea id="opinionVal" class="form-control" rows="8"></textarea>
-							<hr>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-							<button type="button" class="btn btn-primary" id="addOpinion">의견 추가</button>
-						</div>
-					</div>
-				</div>
-			</div><!-- End 의견 모달-->
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">● 의견함</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    	<h5><b>● 의견 목록</b></h5>
+                    	<div id="opnionList"></div>
+                    	<hr>
+                    	<textarea id="opinionVal" class="form-control" rows="8"></textarea>
+                    	<hr>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                      <button type="button" class="btn btn-primary" id="addOpinion">의견 추가</button>
+                    </div>
+                  </div>
+                </div>
+              </div><!-- End 의견 모달-->
 
 			<!-- start 전자결재 결재자 modal -->
 			<div class="modal fade" id="approvalModal" tabindex="-1">
@@ -298,7 +437,7 @@
 												<tr>
 													<th>결재권한</th>
 													<th>결재자</th>
-													<th>결재타입</th>
+													<th>결재타입</th>											
 												</tr>
 											</thead>
 											<tbody id="selectedEmp">
@@ -356,13 +495,13 @@
 	<script type="text/javascript" th:src="@{/zTree/jquery.ztree.core.min.js}"></script>
 
 	<SCRIPT LANGUAGE="JavaScript">
-
+	
 		$(document).ready(function () {
 			/* 페이지가 시작되자마자 조직도 출력 */
 			readOrg();
 			addDraftCode();
-
-			$('#addDraftButton').on('click', function () {
+			
+			$('#addDraftButton').on('click', function(){
 				let employee_organization = $('#employee_organization').text();
 				let draft_title = $('#selectedDocName').val();
 				let contents = $('.quill-editor-full').html();
@@ -372,14 +511,13 @@
 				let process_type = $('#process_type').text();
 				let draft_saved = 0;
 				let process_enabled = 0;
-
-				console.log(appObj);
-
+				document_form_code = document_form_code;
+				
 				$.ajax({
-					url: 'realAddApp',
-					type: 'post',
+					url : 'realAddApp',
+					type : 'post',
 					success: function (data) {
-						if (data == 1) {
+						if(data == 1){
 							console.log('성공');
 						} else {
 							console.log('실패');
@@ -389,23 +527,22 @@
 						console.log(e.responseText);
 					}
 				});
-
+				
 				$.ajax({
 					url: 'addDraft',
 					type: 'post',
-					data: {
-						employee_organization: employee_organization
-						, draft_code: draft_code
-						, draft_title: draft_title
-						, draft_contents: draft_contents
-						, draft_inputdate: draft_inputdate
-						, draft_duedate: draft_duedate
-						, process_type: process_type
-						, draft_saved: draft_saved
-						, process_enabled: process_enabled
-					},
+					data : {employee_organization : employee_organization
+							, draft_code : draft_code
+							, draft_title : draft_title
+							, draft_contents : draft_contents
+							, draft_inputdate : draft_inputdate
+							, draft_duedate : draft_duedate
+							, process_type : process_type
+							, draft_saved : draft_saved
+							, process_enabled : process_enabled
+							, document_form_code : document_form_code},
 					success: function (data) {
-						if (data == 1) {
+						if(data == 1){
 							alert('성공적으로 상신했습니다.');
 							let url = '/team4/draft/main'
 							location.replace(url);
@@ -417,22 +554,22 @@
 						console.log(e.responseText);
 					}
 				});
-
+				
 			});
-
-			$('#addOpinion').on('click', function () {
+			
+			$('#addOpinion').on('click', function(){
 				let opinionVal = $('#opinionVal').val();
-
-				if (opinionVal == null) {
+				
+				if(opinionVal == null){
 					return false;
 				}
-
+				
 				$.ajax({
 					url: 'addOpinion',
 					type: 'post',
-					data: { opinion_contents: opinionVal, draft_code: draft_code },
+					data : {opinion_contents : opinionVal, draft_code : draft_code},
 					success: function (data) {
-						if (data == 1) {
+						if(data == 1){
 							console.log('저장 성공');
 							showOp();
 						} else {
@@ -444,74 +581,75 @@
 					}
 				});
 			});
-
-			$('#returnDraftMain').on('click', function () {
-				if (confirm('작성을 취소하시겠습니까?')) {
+			
+			$('#returnDraftMain').on('click', function(){
+				if(confirm('작성을 취소하시겠습니까?')){
 					let url = '/team4/draft/main'
 					location.replace(url);
 				} else {
 					alert('작성 페이지로 돌아갑니다.');
 				}
 			});
-
+						
 			/* 모달 속 결재자 추가를 누르면 실행 될 함수 => view단에 결재자 뿌리기 */
 			$('#addApprovalButton').on('click', readApp);
-
-			$('#attachedFilesButton').on('click', function () {
+			
+			$('#attachedFilesButton').on('click', function(){
 				var formData = new FormData();
-
+				
 				var inputFile = $("input[name='upload']");
-
+				
 				var files = inputFile[0].files;
-
+				
 				console.log(files);
-
-				for (var i = 0; i < files.length; i++) {
+				
+				for(var i = 0; i < files.length; i++){
 					formData.append("upload", files[i]);
 				}
-
+				
 				$.ajax({
 					url: 'uploadFile',
 					type: 'post',
-					data: formData,
-					processData: false,
-					contentType: false,
-					dataType: 'json',
+					data : formData,
+					processData : false,
+					contentType : false,
+					dataType : 'json',
 					success: function (data) {
 						console.log(data);
-
+						
 						let s;
 						s = '<ul>';
-						$.each(data, function (idx, ob) {
+						$.each(data, function(idx, ob){
 							s += '<li>' + ob.attached_file_origin_name + '</li>';
 						});
 						s += '</ul>';
-
-						$('#attachedFilesList').html(s);
+						
+						$('#attachedFilesList').html(s); 
 					},
 					error: function (e) {
 						console.log(e.responseText);
 					}
 				});
 			});
-
-			$('#document_form_type').on('change', function () {
+			let document_form_code;
+			$('#document_form_type').on('change', function() {
 				let document_form_type = $("#document_form_type option:selected").val();
-
+				
 				$.ajax({
 					url: 'selectDoc',
 					type: 'post',
-					data: { document_form_type: document_form_type },
-					dataType: 'json',
+					data : {document_form_type : document_form_type},
+					dataType : 'json',
 					success: function (data) {
 						console.log(data);
 						let s;
 						s = '<ul>';
-						$.each(data, function (idx, ob) {
-							s += '<li class="list" id=' + ob.document_form_code + ' onclick="javascript:showDoc(id)">' + ob.document_form_name + '</li>';
+						$.each(data, function(idx, ob){
+							document_form_code = ob.document_form_code;
+							s += '<li class="list" id=' + ob.document_form_code + ' onclick="javascript:showDoc(id)">' + ob.document_form_title + '</li>';
 						});
 						s += '</ul>';
-
+						
 						$('.docList').html(s);
 					},
 					error: function (e) {
@@ -520,21 +658,21 @@
 				});
 			});
 		});
-
+		
 		function showOp() {
 			$.ajax({
 				url: 'readOpinion',
 				type: 'post',
-				data: { draft_code: draft_code },
-				dataType: 'json',
+				data : {draft_code : draft_code},
+				dataType : 'json',
 				success: function (data) {
 					let s;
-
+					
 					s = '<table class="table text-center">';
 					s += '<tr>';
 					s += '<th>작성자</th><th>내용</th><th>작성일시</th>';
 					s += '</tr>';
-					$.each(data, function (idx, ob) {
+					$.each(data, function(idx, ob){
 						s += '<tr>';
 						s += '<td>' + ob.opinion_writer_name + '</td>';
 						s += '<td>' + ob.opinion_contents + '</td>';
@@ -542,46 +680,46 @@
 						s += '</tr>'
 					});
 					s += '</table>'
-
+					
 					$('#opnionList').html(s);
 				},
 				error: function (e) {
 					console.log(e.responseText);
 				}
-
-			});
+				
+			});	
 		}
-
+		
 		function showDoc(code) {
 			$.ajax({
 				url: 'showDoc',
 				type: 'post',
-				data: { document_form_code: code },
+				data : {document_form_code : code},
 				success: function (data) {
 					$('#selectedDocName').val(data.document_form_title);
-
+					
 					let contents = decodeURIComponent(data.document_form_contents);
 					let replaced_str = contents.replace('<input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL">', '');
 					replaced_str = contents.replace('<input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL" style="user-select: auto;">', '');
 					$('.quill-editor-full').html(replaced_str);
-
+					
 					let s;
-					if (data.final_approver_name != null) {
+					if(data.final_approver_name != null){
 						s = '<table class="table text-center" style="width : 120px;">';
 						s += '<tr><th>전결자</th></tr>';
 						s += '<tr style="height : 100px;">';
 						s += '<td>' + data.final_approver_name + '</td>';
 						s += '</tr></table>'
 					}
-
+					
 					$('#finalApprover').html(s);
 				},
 				error: function (e) {
 					console.log(e.responseText);
-				}
+				}				
 			})
 		}
-
+		
 		/* 다른곳에서 사용하기 위해 선언하는 기안 예비 번호 */
 		let draft_code;
 
@@ -600,8 +738,8 @@
 				}
 			});
 		}
-
-		/*---------------------------------------------------------------조직도 관련---------------------------------------------------------------------*/
+		
+/*---------------------------------------------------------------조직도 관련---------------------------------------------------------------------*/
 
 		/* 조직도를 읽어오는 함수 | zTree data attributes, refer to the API documentation (treeNode data details) */
 		function readOrg() {
@@ -696,7 +834,7 @@
 
 						//목록 출력 영역에 내용 삽입
 						$('#employeeList').html(emp);
-
+ 						
 					},
 					error: function (e) {
 						console.log(e.responseText);
@@ -711,16 +849,16 @@
 		let select;
 		var appObj = {};
 		var appObjArr = [];
-
+		
 		function addEmpl(id) {
-			let count = $('#' + id).attr('count');
-			employee_name = $('#' + id).attr('empname');
-			employee_code = $('#' + id).attr('empcode');
-
+			let count = $('#'+ id).attr('count');
+			employee_name = $('#'+ id).attr('empname');
+			employee_code = $('#'+ id).attr('empcode');
+			
 			if (count == 0) {
-				$('#' + id).mouseleave().css('background-color', '#EEF1FA');
-				$('#' + id).attr('count', '1');
-
+				$('#'+ id).mouseleave().css('background-color', '#EEF1FA');
+				$('#'+ id).attr('count', '1');
+				
 				let insert = '<tr id=' + employee_name + '>';
 				insert += '<td>' + num + '</td>';
 				insert += '<td>' + employee_name + '</td>';
@@ -729,39 +867,39 @@
 				insert += '<option value="결재">결재</option>';
 				insert += '<option value="참조">참조</option>';
 				insert += '<option value="전결">전결</option></select></td></tr>';
-
+				
 				$('#selectedEmp').append(insert);
 				num += 1;
-
+				
 			} else {
-				$('#' + id).mouseenter().css('background-color', 'white');
-				$('#' + id).attr('count', '0');
+				$('#'+ id).mouseenter().css('background-color', 'white');
+				$('#'+ id).attr('count', '0');
 				document.getElementById(employee_name).remove();
 				appObjArr.pop();
 				num -= 1;
 			}
-
+			
 			$('.selectedType').on('change', addArr);
 		}
-
+		
 		function addArr() {
 			select = $(this).children("option:selected").text();
 			console.log(employee_name);
 			console.log(employee_code);
 			console.log(select);
 			console.log(num);
-
+			
 			appObj.name = employee_name;
 			appObj.code = employee_code;
 			appObj.select = select;
 			appObj.num = num;
 			appObjArr.push(appObj);
 			appObj = {};
-
+			
 			$.ajax({
 				url: 'addApproverList',
 				type: 'post',
-				data: { approver_code: employee_code, approver_name: employee_name, process_type: select, process_turn_code: num },
+				data: { approver_code : employee_code, approver_name : employee_name, process_type : select, process_turn_code : num },
 				success: function (data) {
 					console.log(data);
 				},
@@ -769,18 +907,18 @@
 					console.log(e.responseText);
 				}
 			});
-
+			
 		}
-
-		function readApp() {
+		
+		function readApp(){
 			let insertTr;
 			let myClass;
-
-			$(appObjArr).each(function (index, item) {
+			
+			$(appObjArr).each(function(index, item){
 				myClass = "col-lg-1 text-center";
 				insertTr = "<table class='table' style='width : 120px;'>";
 				insertTr += "<tr style='height : 40.5px;'>";
-				insertTr += "<th>" + index + item.select + '자' + "</th>";
+				insertTr += "<th>" + item.select + '자' + "</th>";
 				insertTr += "</tr>";
 				insertTr += "<tr style='height : 100px;'>";
 				insertTr += "<td>" + item.name + "</td>";
@@ -789,7 +927,7 @@
 				let div = $("<div>" + insertTr + "</div>").addClass(myClass);
 				$("#finalApprover").before(div);
 			});
-
+			
 			$('#approvalModal').modal('hide');
 		}
 	</SCRIPT>

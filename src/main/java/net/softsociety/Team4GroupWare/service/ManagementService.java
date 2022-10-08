@@ -2,6 +2,7 @@ package net.softsociety.Team4GroupWare.service;
 
 import java.util.ArrayList;
 
+import net.softsociety.Team4GroupWare.domain.ConfirmedVacation;
 import net.softsociety.Team4GroupWare.domain.Salary;
 import net.softsociety.Team4GroupWare.domain.Tax;
 import net.softsociety.Team4GroupWare.domain.TimeSheet;
@@ -53,6 +54,52 @@ public interface ManagementService {
 	 * @return Vacation 개인의 연차정보
 	 */
 	public Vacation getVacationdays(String employee_code);
+
+
+	/**
+	 * 휴무 신청 후 남은 연차갯수 갱신
+	 * @param vacation_annual_minus 차감된 연차 갯수
+	 * @param string 
+	 */
+	public int updateMinusVacation(int vacation_annual_minus, String employee_code);
+
+	/**
+	 * 휴무 신청서 누적 데이터(히스토리)
+	 * @param confirmedvacation
+	 * @return 성공 여부(성공 1, 실패 0)
+	 */
+	public int insertConfirmedVacation(ConfirmedVacation confirmedvacation);
+
+	/**
+	 * 출근 시간 입력하기
+	 * @param timesheet(회사번호, 사원번호, 출퇴근기록 번호, 출근시간)
+	 * @return 성공 여부(성공 1, 실패 0)
+	 */
+	public int insertStartTime(TimeSheet timesheet);
+
+	/**
+	 * 퇴근 시간 입력하기
+	 * @param time_sheet_code
+	 * @return 성공 여부(성공 1, 실패 0)
+	 */
+	public int insertEndTime(String resultTimeSheetCode);
+
+	/**
+	 * 시간 정정 신청 여부
+	 * @param time_sheet_code
+	 * @return 성공 여부(성공 1, 실패 0)
+	 */
+	public int adjustTimeRecord(String time_sheet_code);
+
+	/**
+	 * Time_sheet_code 찾아오기
+	 * @param employee_code 사원번호
+	 * @return 성공 여부(성공 1, 실패 0)
+	 */
+	public String findTimeSheetCode(String employee_code);
+
+
+	
 
 
 }

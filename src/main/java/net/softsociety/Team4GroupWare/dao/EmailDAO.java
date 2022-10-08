@@ -44,8 +44,11 @@ public interface EmailDAO {
 	//메일 1개 불러오기 - 첨부파일
 	public AttachedFile MailAttachedfile(String email_code);
 
+	//메일저장
+	public int insertMailTotal(Email email);
 
-
+	//메일프로세스저장
+	public int insertMailProcess(MailProcess mail_process);
 
 
 }

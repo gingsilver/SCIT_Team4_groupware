@@ -13,6 +13,6 @@ public class TimeSheet {
 	String time_sheet_code;
 	String time_sheet_start;
 	String time_sheet_end;
-	String time_sheet_overtime;
+	String time_sheet_adjust;
 	
 }

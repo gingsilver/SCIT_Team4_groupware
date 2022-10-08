@@ -43,6 +43,9 @@
   <aside id="sidebar" class="sidebar">
 
     <ul class="sidebar-nav" id="sidebar-nav">
+      <li class="text-center">
+      	<img alt="회원사진" src="../assets/img/no-results.png" class="rounded-circle" width="200px;">
+      </li>
     
       <li class="nav-item">
         <a class="nav-link" th:href="@{/index}">
@@ -110,23 +113,8 @@
             </a>
           </li>
           <li>
-            <a th:href="@{/mailbox/realAll}">
-              <i class="bi bi-bookmark-star"></i><span>중요메일함</span>
-            </a>
-          </li>
-          <li>
-            <a th:href="@{/mailbox/realAll}">
-              <i class="bi bi-archive"></i><span>임시보관함</span>
-            </a>
-          </li>
-          <li>
             <a th:href="@{/mailbox/sentMailbox}">
               <i class="bi bi-arrow-right-circle"></i><span>보낸 메일함</span>
-            </a>
-          </li>
-          <li>
-            <a th:href="@{/mailbox/realAll}">
-              <i class="bi bi-trash3"></i><span>휴지통</span>
             </a>
           </li>
         </ul>
@@ -168,8 +156,18 @@
         </a>
         <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
+            <a class="nav-link collapsed" th:href="@{/board/companynotice}">
+	          <i class="bi bi-exclamation-triangle-fill"></i><span>전사공지</span>
+	        </a>
+          </li>
+          <li>
+            <a class="nav-link collapsed" th:href="@{/board/programboard}">
+	          <i class="bi bi-dropbox"></i><span>사내소프트웨어</span>
+	        </a>
+          </li>
+          <li>
             <a class="nav-link collapsed" th:href="@{/freeboard/list}">
-	          <i class="bi bi-file-earmark"></i><span>자유게시판</span>
+	          <i class="bi bi-card-list"></i><span>자유게시판</span>
 	        </a>
           </li>
         </ul>

@@ -38,8 +38,8 @@ public class EmailServiceImpl implements EmailService {
 
 	@Override
 	public int sendMailWithFiles(Email email, MultipartFile upload, MailProcess mail_process) throws Exception {
-
         int mail_return = emailDAO.sendToMailbox(email);
+        
         return mail_return;
 	}
 	
@@ -124,16 +124,19 @@ public class EmailServiceImpl implements EmailService {
 		return attachedfile;
 	}
 
+	@Override
+	public int insertMailTotal(Email email) {
+		int emailresult = emailDAO.insertMailTotal(email);
+		
+		return emailresult;
+	}
 
-
-
-
-
-
-
-
-
-
+	@Override
+	public int insertMailProcess(MailProcess mail_process) {
+		int processresult = emailDAO.insertMailProcess(mail_process);
+		
+		return processresult;
+	}
 
 
 }
