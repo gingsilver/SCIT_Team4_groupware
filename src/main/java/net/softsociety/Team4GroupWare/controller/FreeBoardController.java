@@ -138,7 +138,7 @@ public class FreeBoardController {
 		FreeBoard board = service.read(free_code);
 
 		if (board == null) {
-			return "redirect:list";
+			return "redirect:/freeboard/list";
 		}
 
 		// 로그인 아이디를 board객체에 저장
@@ -147,7 +147,7 @@ public class FreeBoardController {
 		// 글 삭제
 		int result = service.delete(board);
 
-		return "redirect:/list";
+		return "redirect:/freeboard/list";
 	}
 
 	// 글 수정화면으로
