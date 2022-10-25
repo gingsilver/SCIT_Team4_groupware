@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 public class AdminBoard {
 	String company_code;
 	String admin_board_code;
-	String admin_id;
 	String admin_board_type;
 	String admin_board_title;
 	String admin_board_contents;
 	String admin_board_inputdate;
 	String admin_board_updatedate;
 	String admin_board_hits;
+	String writer_code;
 }

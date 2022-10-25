@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import lombok.extern.slf4j.Slf4j;
+import net.softsociety.Team4GroupWare.domain.AdminBoard;
 import net.softsociety.Team4GroupWare.domain.AttachedFile;
 import net.softsociety.Team4GroupWare.domain.Company;
 import net.softsociety.Team4GroupWare.domain.DocumentForm;
@@ -277,11 +278,17 @@ public class AdminController {
 	
 	// 게시판 페이지(페이지 입장)
 	@GetMapping("adminBoard")
-	public String adminBoard() {
+	public String adminBoard(@AuthenticationPrincipal UserDetails user, Model model) {
+		// 회사코드, 관리자 내용 가져오기
+		Employee admin = service.readAdmin(user.getUsername());
+		Company company = service.readCompany(admin.getCompany_code());
+		ArrayList<AdminBoard> board = service.readAdminBoard(admin.getCompany_code());
+						
+		model.addAttribute("employee", admin);
+		model.addAttribute("company", company);
+		model.addAttribute("board", board);
 
 		return "adminView/adminBoard";
 	}
-	
-	// 게시판 저장, 수정, 삭제 페이지 및 DB 변경 페이지 → 미구현
 	
 }

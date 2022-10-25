@@ -151,4 +151,32 @@ public interface AdminService {
 	 */
 	public DocumentForm findDocByCode(String document_form_code);
 
+	/**
+	 * insert + select : 게시판에 글 추가 후 시퀀스 가져오기
+	 * @param adminboard
+	 * @return
+	 */
+	public void addAdminBoard(AdminBoard adminboard);
+
+	/**
+	 * insert : 게시판 첨부파일 테이블에 저장
+	 * @param file
+	 * @return
+	 */
+	public int addDraftAttFile(AttachedFile file);
+
+	/**
+	 * select : 게시판 타입에 선택에 따라 달라진 게시판 불러오기
+	 * @param board
+	 * @return
+	 */
+	public ArrayList<AdminBoard> findByType(AdminBoard board);
+
+	/**
+	 * select : 게시판 불러오기
+	 * @param company_code
+	 * @return
+	 */
+	public ArrayList<AdminBoard> readAdminBoard(String company_code);
+
 }

@@ -1,15 +1,17 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
+<html lang="ko"  
+	  xmlns:th="http://thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="utf-8">
-    <title>KUROWARE 회사생성 페이지</title>
+    <title>KUROWARE SignUp</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
 
     <!-- Favicon : 탭 창에서 보이는 이모티콘-->
-    <link th:href="@{assets/img/favicon.png}" th:rel="icon">
+    <link th:href="@{/assets/img/favicon.png}" th:rel="icon">
 
     <!-- Google Web Fonts -->
   	<link href="https://fonts.gstatic.com" rel="preconnect">
@@ -35,21 +37,18 @@
 	<script>
 		$(document).ready(function() {
 			$('#findcompany').hide();
-			$('#company_business_num').on('keyup', validation);
-			$('#employee_id').on('keyup', idvalidation);
-			$('#employee_pwd2').on('keyup', pwdvalidation);
-			
+			$('#company_business_num').on('keyup keypress', validation);
+			$('#employee_id').on('keyup keypress', idvalidation);
+			$('#employee_pwd2').on('keyup keypress', pwdvalidation);
 			$('#findcompany').on('click', findCompany)
-			
 			$('#submitButton').on('click', joinCompany);
 		});
 		
 		function validation() {
 			let company_business_num = $(this).val();
 			
-			
 			if(company_business_num.length != 10){
-				$('#businessnummsg').html('<p>올바른 사업자 번호를 입력해주세요.</p>');
+				$('#businessnummsg').html('<p class="small">* 올바른 사업자 번호를 입력해주세요.</p>');
 				$('#submitButton').attr('disabled', true);
 				return;
 			} else {
@@ -62,7 +61,7 @@
 							$('#businessnummsg').html('');
 							$('#submitButton').attr('disabled', false);
 						} else{
-							$('#businessnummsg').html('<p><b style="color : red">등록된 회사</b> 입니다. 계정 찾기를 이용해주세요</p>');
+							$('#businessnummsg').html('<p class="small">* <b style="color : red">등록된 회사</b> 입니다.<br>계정 찾기를 이용해주세요.</p>');
 							$('#findcompany').show();
 							$('#submitButton').attr('disabled', true);
 						}
@@ -85,7 +84,7 @@
 				type : 'get',
 				data : {company_business_num : company_business_num},
 				success : function (result) {
-					$('#businessnummsg').html('<span>등록된 관리자ID : </span>' + result);
+					$('#businessnummsg').html('<span class="small">* 등록된 관리자ID : </span>' + result);
 				},
 				error : function () {
 					alert('불러오기 실패');
@@ -103,34 +102,10 @@
 					data : {employee_id : id},
 					success : function (result) {
 						if(result == 0){
-							$('#idmsg').html('');
+							$('#idmsg').html('<p class="small">* <b style="color : red">올바른 ID</b> 입니다.</p>');
 							$('#submitButton').attr('disabled', false);
 						} else{
-							$('#idmsg').html('<p><b style="color : red">중복된 ID</b> 입니다. 다른 ID를 입력해주세요.</p>');
-							$('#submitButton').attr('disabled', true);
-						}
-					},
-					error : function () {
-						alert('중복체크 실패');
-					}
-				});
-			}
-		}
-		
-		function idvalidation() {
-			let id = $(this).val();
-
-			if(id.length > 3){
-				$.ajax({
-					url : 'checkid',
-					type : 'post',
-					data : {employee_id : id},
-					success : function (result) {
-						if(result == 0){
-							$('#idmsg').html('');
-							$('#submitButton').attr('disabled', false);
-						} else{
-							$('#idmsg').html('<p><b style="color : red">중복된 ID</b> 입니다. 다른 ID를 입력해주세요.</p>');
+							$('#idmsg').html('<p class="small">* <b style="color : red">중복된 ID</b> 입니다. 다른 ID를 입력해주세요.</p>');
 							$('#submitButton').attr('disabled', true);
 						}
 					},
@@ -149,11 +124,11 @@
 			console.log(employee_pwd2);
 			
 			if(employee_pwd != employee_pwd2){
-				$('#passwordmsg').html('<p>올바른 비밀번호를 입력해주세요.</p>');
+				$('#passwordmsg').html('<p class="small">* 올바른 비밀번호를 입력해주세요.</p>');
 				$('#submitButton').attr('disabled', true);
 				return;
 			} else {
-				$('#passwordmsg').html('');
+				$('#passwordmsg').html('<p class="small">* 올바른 비밀번호입니다.</p>');
 				$('#submitButton').attr('disabled', false);
 			}
 		}
@@ -238,7 +213,6 @@
 			}
 			
 			$('#joinMember').submit();
-			
 		}
 	</script>
 </head>
@@ -269,34 +243,34 @@
                         </div>
                         
                         <form th:action="@{/company/join}" method="post" id="joinMember">
-							<div class="row mb-3">
-								<div class="form-group col-lg-6">
-									<label for="company_name" class="form-label">회사명</label>
-				                	<input type="text" id="company_name" class="form-control" name="company_name" placeholder="회사명을 입력해주세요." required="required">
-								</div>
-								<div class="form-group col-lg-4">
-									<label for="company_business_num" class="form-label">사업자 번호</label>
-				                	<input type="text" id="company_business_num" class="form-control mb-1" name="company_business_num" placeholder="사업자번호를 입력해주세요." required="required">
-								</div>
-								<div class="d-flex align-items-end form-group col-lg-2">
-									<input class="btn btn-outline-primary" type="button" id="findcompany" value="계정 찾기">
-								</div>
-							</div>
 							<div class="row">
 								<div class="form-group col-lg-6">
+									<label for="company_name" class="form-label">회사명</label>
+				                	<input type="text" id="company_name" class="form-control" name="company_name" placeholder="(Ex) Kuro Company Inc." required="required">
 								</div>
 								<div class="form-group col-lg-6">
-									<div id="businessnummsg"></div>
+									<label for="company_business_num" class="form-label">사업자 번호</label>
+				                	<input type="text" id="company_business_num" class="form-control mb-1" name="company_business_num"
+				                		   placeholder="(Ex) 1234567890" required="required" maxlength="10">
+								</div>
+								<div class="col-lg-6"><p class="small">* <b style="color:red;">(필수)</b>회사명을 입력해주세요.</p></div>
+								<div class="col-lg-4">
+									<div id="businessnummsg"><p class="small">* <b style="color:red;">(필수)</b>하이픈(-)없이 10자리를 입력해주세요.</p></div>
+								</div>
+								<div class="d-flex col-lg-2 text-center align-items-center">
+									&nbsp;<input class="btn btn-outline-primary" type="button" id="findcompany" value="계정 찾기">
 								</div>
 							</div>
 							<div class="row mb-3">
 								<div class="form-group col-lg-6 ">
 									<label for="company_ceo_name" class="form-label">대표자</label>
-				                	<input type="text" id="company_ceo_name" class="form-control" name="company_ceo_name" placeholder="대표자명을 입력해주세요." required="required">
+				                	<input type="text" id="company_ceo_name" class="form-control" name="company_ceo_name" placeholder="(Ex) 김지은" required="required">
+									<p class="small">* <b style="color:red;">(필수)</b>대표자명을 입력해주세요.</p>
 								</div>
 								<div class="form-group col-lg-6">
 									<label for="company_est_date" class="form-label">설립연도</label>
 				                	<input type="date" id="company_est_date" class="form-control" name="company_est_date" required="required">
+				                	<p class="small">* <b style="color:red;">(필수)</b>설립연도를 입력해주세요.</p>
 								</div>
 							</div>
 							
@@ -306,8 +280,13 @@
 								    <label for="company_adress" class="form-label">사업장 소재지</label>
 					                <input type="text" id="company_postcode" class="form-control" name="company_postcode" placeholder="우편번호" required="required" readonly="readonly">
 								</div>
-								<div class="d-flex align-items-end form-group col-lg-3">
+								<div class="d-flex align-items-end form-group col-lg-2 py-1">
 									<button type="button" class="btn btn-outline-secondary" onclick="sample6_execDaumPostcode()">우편번호 찾기</button>
+								</div>
+								<div class="d-flex col-lg-7 align-items-center">
+									<p class="small" style="margin: 25px 0px 0px 0px;">
+										* <b style="color:red;">(필수)</b><b>우편번호 찾기</b>를 통해 주소 검색 후 사업장 소재지를 입력해주세요
+									</p>
 								</div>
 							</div>
 							<div class="row mb-3">
@@ -323,6 +302,9 @@
 									<input type="text" class="form-control" id="company_extraaddress" name="company_extraaddress" placeholder="참고항목" readonly="readonly">
 		                            <label for="company_extraaddress">&nbsp;&nbsp;참고항목</label>
 								</div>
+		                        <div class="col-lg-12">
+		                        	<p class="small">* <b style="color:red;">(필수)</b><b>상세주소</b>를 입력해주세요. 우편번호, 주소, 참고항목은 자동으로 입력됩니다.</p>
+		                        </div>
 							</div>
 							<!-- 다음 주소 api end -->
 							
@@ -330,23 +312,26 @@
 								<hr>
 								<div class="form-group col-lg-6">
 									<label for="employee_id" class="form-label">관리자 ID</label>
-				                	<input type="text" id="employee_id" class="form-control" name="employee_id" placeholder="3~20자 이내로 입력" maxlength="20" required="required">
-									<div id="idmsg"></div>
+				                	<input type="text" id="employee_id" class="form-control" name="employee_id" placeholder="(Ex) kuroadmin" maxlength="20" required="required">
+									<div id="idmsg"><p class="small">* <b style="color:red;">(필수)</b>ID는 3~20자 이내로 입력해주세요.</p></div>
 								</div>
 								<div class="form-group col-lg-6">
 									<label for="employee_email" class="form-label">관리자 이메일주소</label>
-				                	<input type="email" id="employee_email" class="form-control" name="employee_email" placeholder="***@**.***형식으로 입력" maxlength="50" required="required">
+				                	<input type="email" id="employee_email" class="form-control" name="employee_email" placeholder="(Ex) kuroadmin@gmail.com" maxlength="50" required="required">
+									<p class="small">* <b style="color:red;">(필수)</b>이메일 주소는 ***@**.***형식으로 입력해주세요.</p>
 								</div>
 							</div>
 							<div class="row mb-3">
-								<div class="form-group col-lg-6">
+								<div class="col-lg-6">
 									<label for="employee_pwd" class="form-label">관리자 비밀번호</label>
-				                	<input type="password" id="employee_pwd" class="form-control" name="employee_pwd" placeholder="3~20자 이내로 입력" maxlength="20" required="required">
+				                	<input type="password" id="employee_pwd" class="form-control" name="employee_pwd" maxlength="20" required="required">
 								</div>
-								<div class="form-group col-lg-6">
+								<div class="col-lg-6">
 									<label for="employee_pwd2" class="form-label">비밀번호 확인</label>
 				                	<input type="password" id="employee_pwd2" class="form-control" placeholder="다시 한 번 입력해주세요." maxlength="20" required="required">
-									<div id="passwordmsg"></div>
+								</div>
+								<div class=" col-lg-12">
+									<div id="passwordmsg"><p class="small">* <b style="color:red;">(필수)</b>비밀번호는 3~20자 이내로 입력해주세요.</p></div>
 								</div>
 							</div>		  	
 	                        <button type="button" id="submitButton" class="btn btn-primary py-3 w-100 mb-4" disabled="disabled">Sign Up</button>

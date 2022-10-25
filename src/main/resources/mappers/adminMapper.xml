@@ -257,4 +257,70 @@
 		from team4_document_form
 		where document_form_code = #{document_form_code}
 	</select>
+	
+	<!-- 관리자 게시판 저장 -->
+	<insert id="addAdminBoard" parameterType="AdminBoard">
+		<selectKey keyProperty="admin_board_code" resultType="String" order="AFTER">
+			SELECT 'NO'||LPAD(team4_noticeboard_seq.currval, 4, 0)
+			FROM DUAL
+		</selectKey>
+		
+		insert into team4_admin_board
+			(company_code
+			, admin_board_code
+			, admin_board_type
+			, admin_board_title
+			, admin_board_contents
+			, writer_code)
+			values
+			(#{company_code}
+			,LPAD(team4_noticeboard_seq.nextval, 4, 0)
+			,#{admin_board_type}
+			,#{admin_board_title}
+			,#{admin_board_contents}
+			,#{writer_code})
+	</insert>
+	
+	<!-- 기안 첨부파일 추가 -->
+	<insert id="addDraftAttFile" parameterType="AttachedFile">
+		insert into team4_attached_file
+		(company_code
+		,attached_file_code
+		,document_code
+		,attached_file_origin_name
+		,attached_file_save_name
+		,attached_file_ext
+		,employee_code
+		,employee_id
+		,employee_name
+		)
+		values
+		(#{company_code}
+		,'File'||LPAD(team4_attached_file_seq.nextval, 4, 0)
+		, #{document_code}
+		,#{attached_file_origin_name}
+		,#{attached_file_save_name}
+		,#{attached_file_ext}
+		,#{employee_code}
+		,#{employee_id}
+		,#{employee_name}
+		)
+	</insert>
+	
+	<!-- 게시판 내용 불러오기 -->
+	<select id="findByType" parameterType="AdminBoard" resultType="AdminBoard">
+		select *
+		from team4_admin_board
+		where company_code = #{company_code} 
+			  <if test="admin_board_type != 'all'">
+			  	and admin_board_type = #{admin_board_type}
+			  </if>
+	</select>
+	
+	<!-- 전체 게시판 내용 불러오기 -->
+	<select id="readAdminBoard" parameterType="String" resultType="AdminBoard">
+		select *
+		from team4_admin_board
+		where company_code = #{company_code}
+	</select>
 </mapper>

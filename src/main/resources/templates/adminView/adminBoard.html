@@ -46,26 +46,80 @@
 </head>
 <body>
   <!-- ======= Header ======= -->
-  <header th:replace="/admincommon/header :: header"></header><!-- End Header -->
+  <header id="header" class="header fixed-top d-flex align-items-center">
+    <div class="d-flex align-items-center justify-content-between">
+      <a th:href="@{/admin}" class="logo d-flex align-items-center">
+        <img th:src="@{/assets/img/logo.png}" alt="">
+        <span class="d-none d-lg-block">KUROWARE</span>
+      </a>
+      <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+
+    <nav class="header-nav ms-auto">
+      <ul class="d-flex align-items-center">
+        <li class="nav-item dropdown pe-3">
+          <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+	      	<span th:if="${company.company_logo} == null"><img th:src="@{/image/caticon.png}"></span>
+	        <span th:if="${company.company_logo} != null"><img th:src="@{/assets/upload/admin/} + ${company.company_logo}" alt="Profile" class="rounded-circle" style="height: 60px;"></span>
+            <span class="d-none d-md-block dropdown-toggle ps-2" th:text="${company.company_name}"></span>
+          </a><!-- End Profile Iamge Icon -->
+
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+            <li class="dropdown-header">
+              <h6 th:text="${company.company_name}"></h6>
+              <span>관리자페이지</span>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center" th:href="@{/admin/companyInfo}">
+                <i class="bi bi-person"></i>
+                <span>Company Profile</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center" th:href="@{/admin/adminInfo}">
+                <i class="bi bi-gear"></i>
+                <span>Admin Profile</span>
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center" th:href="@{/logout}">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Sign Out</span>
+              </a>
+            </li>
+          </ul><!-- End Profile Dropdown Items -->
+        </li><!-- End Profile Nav -->
+      </ul>
+    </nav><!-- End Icons Navigation -->
+  </header><!-- End Header -->
   <!-- ======= Sidebar ======= -->
   <aside th:replace="/admincommon/aside :: aside"></aside><!-- End Sidebar-->
-	
-	<main id="main" class="main">
 
-    <div class="pagetitle">
+  <main id="main" class="main">
+  <div class="pagetitle">
       <h1>관리자 게시판</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a th:href="@{/admin}">Home</a></li>
-          <li class="breadcrumb-item active">Admin page</li>
           <li class="breadcrumb-item active">관리자 게시판</li>
         </ol>
       </nav>
-    </div><!-- End Page Title -->
+   </div><!-- End Page Title -->
 
-    <section class="section dashboard">
+   	<section class="section dashboard">
    		 <div class="card">
-            <div class="card-body">
+            <div class="card-body" style="height: 1000px;">
+            
+              <!-- 선택 탭 nav -->
    			  <ul class="nav nav-tabs nav-tabs-bordered d-flex" id="borderedTabJustified" role="tablist">
                 <li class="nav-item flex-fill" role="presentation">
                   <button class="nav-link w-100 active" id="home-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-home" type="button" role="tab" aria-controls="home" aria-selected="true">게시판 작성</button>
@@ -74,75 +128,67 @@
                   <button class="nav-link w-100" id="profile-tab" data-bs-toggle="tab" data-bs-target="#bordered-justified-profile" type="button" role="tab" aria-controls="profile" aria-selected="false">게시판 수정 및 삭제</button>
                 </li>
               </ul>
-              <div class="tab-content pt-2" id="borderedTabJustifiedContent">
+              
+              <!-- 게시판 작성 nav -->
+              <div class="tab-content pt-2 my-2" id="borderedTabJustifiedContent">
                 <div class="tab-pane fade show active" id="bordered-justified-home" role="tabpanel" aria-labelledby="home-tab">
-                <div class="card" style="height: auto;">
-				<div class="card-body">
 					<!-- start 게시판 선택 -->
+					<form id="saveBoardForm">
                     <div class="row">
-                    	<div class="col-lg-4 my-2">
-                    		<h5>● 게시판 선택</h5>
-                    		<div class="input-group mb-3">
+                    	<div class="col-lg-6">
+                    		<div class="input-group text-center">
+                    			<span class="input-group-text">글 제목</span>
+                    			<input type="text" class="form-control" id="admin_board_title">
+                    		</div>
+                    		<p class="small">* <b style="color:red;">(필수)</b>글 제목을 입력해주세요.</p>
+                    	</div>
+                    	<div class="col-lg-6">
+                    		<div class="input-group">
                     			<span class="input-group-text">게시판 선택</span>
-                    			<select class="form-select text-center">
+                    			<select id="admin_board_type" class="form-select text-center">
                     				<option selected>게시판 종류 선택</option>
-				                    <option value="전사 공지">전사공지</option>
-				                    <option value="사내 소프트웨어">사내 소프트웨어</option>
-				                    <option value="자유게시판">자유게시판</option>
+				                    <option value="notice">전사공지</option>
+				                    <option value="software">사내 소프트웨어</option>
+				                    <option value="freeboard">자유게시판</option>
                     			</select>
                     		</div>
+                    		<p class="small">* <b style="color:red;">(필수)</b>게시판을 선택해주세요.</p>
                     	</div>
-                    	
-	                    <!-- start 기안내용 -->
-	                	<div class="row">
-	                    	<div class="col-lg-12">
-	                    		<hr>
-	                    		<!-- 기안 시작 -->
-	                    		<h5>● 게시판 작성</h5>
-	                    		<!-- 웹 에디터 시작 -->
-	                    		<div class="quill-editor-full">
-	                    			<textarea rows="10" cols="50"></textarea>
-								</div> 
-								<hr>
-								<!-- 파일 첨부 시작 -->
-								<h5>● 파일 첨부</h5>
-						        <div class="card">
-						            <div class="card-body">
-						            	<input class="form-control form-control-user" type="file" size="30"
-												   name="upload" id="product_image" onchange="setThumbnail(event);">
-									    <ul>
-									    	<li>테스트~</li>
-									      	<li>테스트~</li>
-									      	<li>테스트~</li>
-									   </ul>
-						            </div>
-						        </div>
+	                   	<div class="col-lg-12">
+	                    	<!-- 웹 에디터 시작 -->
+	                    	<div id="admin_board_contents" class="quill-editor-full mb-2" style="height: 500px;"><p class="small">* <b style="color:red;">(필수)</b>글 내용을 입력해주세요.</p></div> 
+							<!-- 파일 첨부 시작 -->
+							<h5>● 파일 첨부</h5>
+							<div class="input-group">
+								<input class="form-control form-control-user product_files" type="file" name="upload" multiple="multiple">
+								<div class="input-group-append">
+                                	<button class="btn btn-primary" type="button" id="attachedFilesButton">업로드</button>
+                                </div>
 							</div>
-	                    </div>
-	                </div>
-	                           </div>
-	                </div>
-            </div>
-                </div>
+						</div>
+						<div class="col-lg-12 text-center">
+							<input type="button" class="btn btn-primary" value="저장" id="saveBoardButton">
+						</div>
+	            	</div>
+				</form>
+	            </div>
+	            
+	            <!-- 게시판 목록 nav -->
                 <div class="tab-pane fade" id="bordered-justified-profile" role="tabpanel" aria-labelledby="profile-tab">
-                	
                 	<!-- start 게시판 선택 -->
                     <div class="row">
                     	<div class="col-lg-4 my-2">
                     		<h5>● 게시판 선택</h5>
                     		<div class="input-group mb-3">
                     			<span class="input-group-text">게시판 선택</span>
-                    			<select class="form-select text-center">
-                    				<option selected>게시판 종류 선택</option>
-				                    <option value="전사 공지">전사공지</option>
-				                    <option value="사내 소프트웨어">사내 소프트웨어</option>
-				                    <option value="자유게시판">자유게시판</option>
+                    			<select id="readBoardType" class="form-select text-center">
+                    				<option value="all" selected="selected">게시판 종류 선택</option>
+				                    <option value="notice">전사공지</option>
+				                    <option value="software">사내 소프트웨어</option>
+				                    <option value="freeboard">자유게시판</option>
                     			</select>
                     		</div>
                   	  	</div>
-               	 	</div>
-               	 	
-               	 	<div class="row">
                	 		<div class="col-lg-12 my-2">
                	 			<table id="dataTable" class="table">
 							    <thead>
@@ -150,250 +196,14 @@
 						      			<th>게시글 번호</th>
 							      		<th>제목</th>
 							      		<th>업로드 날짜</th>
-							      		<th>수정</th>
-							      		<th>삭제</th>
 						      		</tr>
 					      		</thead>
-					      		<tbody>
-					      			<tr>
-										<td class="center">fr11</td>
-										<td>통모짜핫도그의 반대말은?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td>fr9</td>
-										<td>데이터베이스 소켓 오류</td>
-										<td>2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-										
-									</tr>
-									<tr>
-										<td class="center">fr8</td>
-										<td>로그 분석 중 오류가 나요</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr7</td>
-										<td>여러분 도보 5분거리 인도커리 맛집 찾았습니다.</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr6</td>
-										<td>강아지랑 한컷</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr5</td>
-										<td>아루아루 프로젝트 프론트 담당자님 누구셨죠?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr4</td>
-										<td>혹시 인터넷 접속 속도 향상하는 방법 아시는 분 계신가요?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr3</td>
-										<td>오늘 하늘이 진짜 예쁘네요</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr2</td>
-										<td>부트스트랩4 그리드 오류가 나요</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr10</td>
-										<td>와이파이 비밀번호 아시는 분?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr10</td>
-										<td>와이파이 비밀번호 아시는 분?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr10</td>
-										<td>와이파이 비밀번호 아시는 분?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr10</td>
-										<td>와이파이 비밀번호 아시는 분?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr10</td>
-										<td>와이파이 비밀번호 아시는 분?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr10</td>
-										<td>와이파이 비밀번호 아시는 분?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr10</td>
-										<td>와이파이 비밀번호 아시는 분?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr10</td>
-										<td>와이파이 비밀번호 아시는 분?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr10</td>
-										<td>와이파이 비밀번호 아시는 분?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr10</td>
-										<td>와이파이 비밀번호 아시는 분?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr10</td>
-										<td>와이파이 비밀번호 아시는 분?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr10</td>
-										<td>와이파이 비밀번호 아시는 분?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr10</td>
-										<td>와이파이 비밀번호 아시는 분?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr10</td>
-										<td>와이파이 비밀번호 아시는 분?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr10</td>
-										<td>와이파이 비밀번호 아시는 분?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr10</td>
-										<td>와이파이 비밀번호 아시는 분?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr10</td>
-										<td>와이파이 비밀번호 아시는 분?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr10</td>
-										<td>와이파이 비밀번호 아시는 분?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr10</td>
-										<td>와이파이 비밀번호 아시는 분?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr10</td>
-										<td>와이파이 비밀번호 아시는 분?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr10</td>
-										<td>와이파이 비밀번호 아시는 분?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr10</td>
-										<td>와이파이 비밀번호 아시는 분?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr10</td>
-										<td>와이파이 비밀번호 아시는 분?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr10</td>
-										<td>와이파이 비밀번호 아시는 분?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
-									<tr>
-										<td class="center">fr10</td>
-										<td>와이파이 비밀번호 아시는 분?</td>
-										<td class="center">2022-09-29</td>
-										<td><input class="btn btn-primary" type="button" value="수정"></td>
-										<td><input class="btn btn-danger" type="button" value="삭제"></td>
-									</tr>
+					      		<tbody id="boardData">
+					      			<tr th:each="board : ${board}">
+					      				<td th:text="${board.admin_board_code}"></td>
+					      				<td><a th:href="|read?admin_board_code=${board.admin_board_code}|"><span th:text="${board.admin_board_title}"></span></a></td>
+					      				<td th:text="${board.admin_board_inputdate}"></td>
+					      			</tr>
 					      		</tbody>
 	      					</table>
                	 		</div>
@@ -401,8 +211,8 @@
     			</div>
     		</div>
     	</div>
+    </div>
     </section>
-
   </main><!-- End #main -->
 <!-- ======= Footer ======= -->
   <footer id="footer" class="footer">
@@ -440,7 +250,112 @@
 	<script>
 		$(document).ready(function() {
 			$('#dataTable').DataTable();
+			$('#saveBoardButton').on('click',validation);
+			
+			$('#readBoardType').on('change', function(){
+				let readBoardType = $('#readBoardType option:selected').val();
+				console.log(readBoardType);
+				
+				$.ajax({
+					url: 'selectBoardType',
+					type: 'post',
+					data : {admin_board_type : readBoardType},
+					dataType : 'json',
+					success: function (data) {
+						console.log(data);
+						if(data == null || data == '' || data == []){
+							let s;
+							s = '<tr class="text-center">';
+							s += '<th colspan=3>'
+							s += '<img class="my-5" src="../assets/img/no-results.png" alt="no-results" width="400px">';
+							s += '<h3 class="my-5"><b>게시글이 없습니다.</b></h3>';
+							s += '</th></tr>';
+							
+							$('#boardData').html(s);
+						} else {
+							let s;
+							
+							$.each(data, function(idx, ob){
+								s += '<tr>';
+								s += '<td>' + ob.admin_board_code + '</td>';
+								s += '<td><a href="read?admin_board_code='+ob.admin_board_code+'">' + ob.admin_board_title + '</a></td>';
+								s += '<td>' + ob.admin_board_inputdate + '</td>';
+								s += '</tr>';
+							});
+							
+							$('#boardData').html(s);
+						}
+					},
+					error: function (e) {
+						console.log(e.responseText);
+					}
+				});
+			});
 		});
+		
+		function validation() {
+			/* 에디터 입력 내용 */
+			let admin_board_title = $('#admin_board_title').val();
+			let admin_board_type = $('#admin_board_type option:selected').val();
+			let contents = $('.ql-editor').html();
+			let admin_board_contents = encodeURIComponent(contents);
+			
+			if(admin_board_title == null || admin_board_title == ''){
+				alert('글 제목을 입력해주세요.');
+				return false;
+			}
+			
+			if(admin_board_type == null || admin_board_type == ''){
+				alert('게시판을 선택해주세요.');
+				return false;
+			}
+			
+			if(contents == null || contents == ''){
+				alert('글 내용을 입력해주세요.');
+				return false;
+			}
+			
+			$.ajax({
+				url: 'saveBoard',
+				type: 'post',
+				data : {admin_board_title : admin_board_title, admin_board_type : admin_board_type, admin_board_contents : admin_board_contents},
+				dataType : 'text',
+				success: function (data) {
+					console.log(data);
+					var formData = new FormData();
+					
+					var inputFile = $("input[name='upload']");
+					
+					var files = inputFile[0].files;
+					
+					console.log(files);
+					
+					for(var i = 0; i < files.length; i++){
+						formData.append("upload", files[i]);
+					}
+					formData.append("document_code", data);
+					
+					$.ajax({
+						url: 'uploadFile',
+						type: 'post',
+						data : formData,
+						processData : false,
+						contentType : false,
+						success: function (data) {
+							console.log(data);
+							let url = '/team4/admin/adminBoard'
+							location.replace(url);
+						},
+						error: function (e) {
+							console.log(e.responseText);
+						}
+					});
+				},
+				error: function (e) {
+					console.log(e.responseText);
+				}
+			});
+		};
 	</script>
 </body>
 </html>

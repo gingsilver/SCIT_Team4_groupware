@@ -1,23 +1,29 @@
 package net.softsociety.Team4GroupWare.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.Team4GroupWare.domain.AdminBoard;
+import net.softsociety.Team4GroupWare.domain.AttachedFile;
 import net.softsociety.Team4GroupWare.domain.Company;
 import net.softsociety.Team4GroupWare.domain.DocumentForm;
 import net.softsociety.Team4GroupWare.domain.Employee;
 import net.softsociety.Team4GroupWare.domain.Organization;
 import net.softsociety.Team4GroupWare.service.AdminService;
+import net.softsociety.Team4GroupWare.util.FileService;
 import oracle.jdbc.proxy.annotation.Post;
 
 @Slf4j
@@ -29,6 +35,10 @@ public class AdminRestController {
 	// 서비스 선언
 	@Autowired
 	AdminService service;
+	
+	// 기안 첨부파일 저장 위치 경로
+	@Value("${uploadpath.board}")
+	String uploadPhotoPath;
 
 	// 신규 회사/조직원 정보(신규 조직원 등록) - 관리자/사원 아이디 중복 검사
 	@PostMapping({ "checkid" })
@@ -144,4 +154,79 @@ public class AdminRestController {
 		return result;
 	}
 	
+	// 게시판 저장, 수정, 삭제 페이지 및 DB 변경 페이지 → 미구현
+	@PostMapping("saveBoard")
+	public String saveBoard(@AuthenticationPrincipal UserDetails user, AdminBoard adminboard) {
+		log.debug("게시판 내용 : {}", adminboard);
+		
+		// 로그인 한 관리자의 내용 가져오기
+		Employee admin = service.readAdmin(user.getUsername());
+		adminboard.setCompany_code(admin.getCompany_code());
+		adminboard.setWriter_code(admin.getEmployee_code());
+		
+		service.addAdminBoard(adminboard);
+		
+		return adminboard.getAdmin_board_code();
+	}
+	
+	// 전자결재 - 기안 작성 - 파일 업로드 : 다중 파일 업로드
+	@PostMapping("uploadFile")
+	public void uploadFile(@AuthenticationPrincipal UserDetails user, AttachedFile file,
+							MultipartFile[] upload) {
+		// 회사코드, 관리자 내용 가져오기
+		Employee admin = service.readAdmin(user.getUsername());
+		log.debug("가져온 파일 : {}, 가져온 코드 : {}", upload.length, file.getDocument_code());
+			
+		// 파일 객체에 회사코드, 기안코드, 사원 코드/아이디/이름 입력하기
+		file.setCompany_code(admin.getCompany_code());
+		file.setEmployee_code(admin.getEmployee_code());
+		file.setEmployee_id(admin.getEmployee_id());
+		file.setEmployee_name(admin.getEmployee_name());
+			
+		// 반복문으로 모든 모든 파일 저장
+		for(MultipartFile multipartFile : upload) {
+			log.debug("----------------------------------");
+			log.debug("upload file name : " + multipartFile.getOriginalFilename());
+			log.debug("upload file size : " + multipartFile.getSize());
+				
+			if (multipartFile != null && !multipartFile.isEmpty() && multipartFile.getSize() != 0) {
+				try {
+					String absoluteUploadPath = new ClassPathResource(uploadPhotoPath).getFile().getAbsolutePath();
+					String savedfile = FileService.saveFile(multipartFile, absoluteUploadPath);
+					log.debug("absoluteUploadPath : {}", absoluteUploadPath);
+
+					// 확장자 추출
+					String originalFilename = multipartFile.getOriginalFilename();
+					int lastIndex = originalFilename.lastIndexOf('.');
+					String ext = lastIndex == -1 ? "" : originalFilename.substring(lastIndex);
+
+					// 추출한 확장자, 원래 파일 이름, 저장된 파일 이름을 파일객체에 입력
+					file.setAttached_file_ext(ext);
+					file.setAttached_file_origin_name(originalFilename);
+					file.setAttached_file_save_name(savedfile);
+						
+					// 입력한 파일 객체를 파일 테이블에 저장
+					int result = service.addDraftAttFile(file);
+					log.debug("파일 데이터 : {}", file);
+				} catch (IOException e) {
+					log.debug(e.getMessage());
+				}
+			}
+		}
+	}
+		
+	@PostMapping("selectBoardType")
+	public ArrayList<AdminBoard> selectBoardType(String admin_board_type, @AuthenticationPrincipal UserDetails user){
+		Employee admin = service.readAdmin(user.getUsername());
+		
+		log.debug("가져온 데이터 : {}", admin_board_type);
+		
+		AdminBoard board = new AdminBoard();
+		board.setAdmin_board_type(admin_board_type);
+		board.setCompany_code(admin.getCompany_code());
+		
+		ArrayList<AdminBoard> boardList = service.findByType(board);
+		
+		return boardList;
+	}
 }

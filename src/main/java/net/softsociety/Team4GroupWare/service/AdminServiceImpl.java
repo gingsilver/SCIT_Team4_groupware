@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 import net.softsociety.Team4GroupWare.dao.AdminDAO;
+import net.softsociety.Team4GroupWare.domain.AdminBoard;
 import net.softsociety.Team4GroupWare.domain.AttachedFile;
 import net.softsociety.Team4GroupWare.domain.Company;
 import net.softsociety.Team4GroupWare.domain.DocumentForm;
@@ -286,6 +287,37 @@ public class AdminServiceImpl implements AdminService {
 		DocumentForm docform = dao.findDocByCode(document_form_code);
 		
 		return docform;
+	}
+
+	/**
+	 * insert + select : 게시판에 글 추가 후 시퀀스 가져오기
+	 * @param adminboard
+	 * @return
+	 */
+	@Override
+	public void addAdminBoard(AdminBoard adminboard) {
+		dao.addAdminBoard(adminboard);
+	}
+
+	@Override
+	public int addDraftAttFile(AttachedFile file) {
+		int result = dao.addDraftAttFile(file);
+		
+		return result;
+	}
+
+	@Override
+	public ArrayList<AdminBoard> findByType(AdminBoard board) {
+		ArrayList<AdminBoard> boardList = dao.findByType(board);
+		
+		return boardList;
+	}
+
+	@Override
+	public ArrayList<AdminBoard> readAdminBoard(String company_code) {
+		ArrayList<AdminBoard> board = dao.readAdminBoard(company_code);
+		
+		return board;
 	}
 
 }

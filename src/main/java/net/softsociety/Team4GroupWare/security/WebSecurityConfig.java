@@ -47,7 +47,11 @@ public class WebSecurityConfig implements WebMvcConfigurer { // 클래스 이름
                             , "/assets/img/**"
                             , "/assets/js/**"
                             , "/assets/lib/**"
-                            , "/assets/vendor/**")
+                            , "/assets/vendor/**"
+                            , "/image/**"
+                            , "/js/**"
+                            , "/ko/**"
+                            , "/zTree/**")
                 .permitAll() // 설정한 리소스의 접근을 인증절차 없이 허용
                 .anyRequest().authenticated() // 위의 경로 외에는 모두 로그인을 해야 함
                 .and()

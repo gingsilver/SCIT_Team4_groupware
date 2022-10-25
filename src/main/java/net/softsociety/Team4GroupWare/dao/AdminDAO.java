@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import net.softsociety.Team4GroupWare.domain.AdminBoard;
 import net.softsociety.Team4GroupWare.domain.AttachedFile;
 import net.softsociety.Team4GroupWare.domain.Company;
 import net.softsociety.Team4GroupWare.domain.DocumentForm;
@@ -138,5 +139,33 @@ public interface AdminDAO {
 	 * @return
 	 */
 	public DocumentForm findDocByCode(String document_form_code);
+
+	/**
+	 * insert + select : 게시판에 글 추가 후 시퀀스 가져오기
+	 * @param adminboard
+	 * @return
+	 */
+	public void addAdminBoard(AdminBoard adminboard);
+
+	/**
+	 * insert : 게시판 첨부파일 테이블에 저장
+	 * @param file
+	 * @return
+	 */
+	public int addDraftAttFile(AttachedFile file);
+
+	/**
+	 * select : 게시판 불러오기
+	 * @param board
+	 * @return
+	 */
+	public ArrayList<AdminBoard> findByType(AdminBoard board);
+
+	/**
+	 * select : 게시판 불러오기
+	 * @param company_code
+	 * @return
+	 */
+	public ArrayList<AdminBoard> readAdminBoard(String company_code);
 
 }
